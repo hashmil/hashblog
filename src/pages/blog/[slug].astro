@@ -6,6 +6,8 @@ import Navigation from '../../components/Navigation.astro';
 import Share from '../../components/Share.astro';
 import { getCollection } from 'astro:content';
 
+export const prerender = true;
+
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
   return posts.map((post) => ({
@@ -52,11 +54,10 @@ const canonicalURL = new URL(`/blog/${post.slug}`, Astro.site);
   title={post.data.title} 
   description={post.data.description} 
   image={post.data.heroImage}
-  type="article"
-  publishedTime={post.data.pubDate.toISOString()}
-  modifiedTime={post.data.updatedDate?.toISOString()}
   author="Hash Milhan"
-  canonicalURL={canonicalURL.toString()}
+  pubDate={post.data.pubDate}
+  tags={post.data.tags}
+  canonical={canonicalURL.toString()}
 >
   <!-- Enhanced SEO meta tags -->
   <Fragment slot="head">
