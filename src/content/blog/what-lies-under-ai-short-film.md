@@ -1,9 +1,14 @@
 ---
-title: "What Lies Under — AI Short Film"
-description: "This is a short AI film I made in under 4 hours. It was for a competition where we had to make something in 48 hours. Work and life got in the way, so I had less than 4 hours."
+title: What Lies Under — AI Short Film
+description: This is a short AI film I made in under 4 hours. It was for a competition where we had to make something in 48 hours. Work and life got in the way, so I had less than 4 hours.
 pubDate: 2024-05-13
-heroImage: "/blog/what-lies-under.png"
-tags: ["AI", "Film", "Creative", "Competition"]
+heroImage: /blog/what-lies-under.png
+tags:
+  - AI
+  - Film
+  - Creative
+  - Competition
+preview: /blog/what-lies-under.png
 ---
 
 This is a short AI film I made in under 4 hours. It was for a competition where we had to make something in 48 hours. Work and life got in the way, so I had less than 4 hours.
