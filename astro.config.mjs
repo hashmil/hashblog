@@ -2,10 +2,15 @@
 import { defineConfig } from "astro/config";
 import vue from "@astrojs/vue";
 import tailwind from "@astrojs/tailwind";
+import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://blog.hashir.net", // Update this with your actual domain
+  output: "server", // Server-side rendering for Cloudflare
+  adapter: cloudflare({
+    imageService: "cloudflare",
+  }),
 
   integrations: [
     vue(),
