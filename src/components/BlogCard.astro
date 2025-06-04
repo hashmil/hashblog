@@ -1,0 +1,82 @@
+---
+export interface Props {
+  slug: string;
+  title: string;
+  description: string;
+  pubDate: Date;
+  heroImage?: string;
+  tags?: string[];
+  featured?: boolean;
+}
+
+const { slug, title, description, pubDate, heroImage, tags = [], featured = false } = Astro.props;
+
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(date);
+}
+---
+
+<article class={`group ${featured ? 'featured-card' : 'blog-card'}`}>
+  <a href={`/blog/${slug}`} class="block">
+    {heroImage && (
+      <div class="relative overflow-hidden rounded-lg mb-4">
+        <img 
+          src={heroImage} 
+          alt={title}
+          class={`w-full object-cover transition-transform duration-300 group-hover:scale-105 ${
+            featured ? 'h-64 md:h-80' : 'h-48'
+          }`}
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      </div>
+    )}
+    
+    <div class="space-y-3">
+      <div class="flex items-center justify-between text-sm text-text-muted">
+        <time>{formatDate(pubDate)}</time>
+        {tags.length > 0 && (
+          <div class="flex gap-2">
+            {tags.slice(0, 2).map((tag) => (
+              <span class="px-2 py-1 bg-dark-lighter text-xs rounded">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+      
+      <h3 class={`font-bold text-white group-hover:text-primary transition-colors duration-200 leading-tight ${
+        featured ? 'text-2xl md:text-3xl' : 'text-xl'
+      }`}>
+        {title}
+      </h3>
+      
+      <p class={`text-text-light leading-relaxed ${
+        featured ? 'text-lg' : 'text-base'
+      }`}>
+        {description}
+      </p>
+      
+      <div class="flex items-center text-primary group-hover:text-secondary transition-colors duration-200 font-medium">
+        Read More 
+        <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .blog-card {
+    @apply p-6 bg-dark-lighter rounded-lg border border-gray-800 hover:border-gray-700 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10;
+  }
+  
+  .featured-card {
+    @apply p-8 bg-gradient-to-br from-dark-lighter to-dark rounded-xl border border-gray-700 hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20;
+  }
+</style> 

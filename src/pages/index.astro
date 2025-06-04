@@ -13,8 +13,6 @@ const sortedPosts = allPosts.sort((a, b) =>
 	new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
 );
 
-const [latestPost, ...olderPosts] = sortedPosts;
-
 function formatDate(date: Date) {
 	return new Intl.DateTimeFormat('en-US', {
 		year: 'numeric',
@@ -27,82 +25,59 @@ function formatDate(date: Date) {
 <Layout title="Hash Milhan - Creative Technology Director">
 	<Header />
 	
-	<main class="container py-8">
-		<!-- Latest Post - Featured -->
-		{latestPost && (
+	<main class="container py-12">
+		<!-- Featured/Latest Post -->
+		{sortedPosts[0] && (
 			<article class="mb-16">
-				<div class="mb-4">
-					<time class="text-text-muted text-sm">
-						{formatDate(latestPost.data.pubDate)}
-					</time>
+				<div class="post-meta mb-4">
+					{formatDate(sortedPosts[0].data.pubDate)}
 				</div>
 				
-				<h1 class="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-					<a href={`/blog/${latestPost.slug}`} class="hover:text-primary transition-colors duration-200">
-						{latestPost.data.title}
+				<h1 class="text-3xl md:text-5xl font-primary text-white mb-6 leading-tight">
+					<a href={`/blog/${sortedPosts[0].slug}`} class="hover:text-accent transition-colors duration-200">
+						{sortedPosts[0].data.title}
 					</a>
 				</h1>
 				
-				{latestPost.data.heroImage && (
-					<div class="mb-6 rounded-lg overflow-hidden">
-						<img 
-							src={latestPost.data.heroImage} 
-							alt={latestPost.data.title}
-							class="w-full h-64 md:h-96 object-cover"
-						/>
-					</div>
-				)}
-				
-				<div class="prose-dark mb-6">
-					<p class="text-xl text-text-light leading-relaxed">
-						{latestPost.data.description}
-					</p>
-				</div>
+				<p class="text-lg text-text-light font-text leading-relaxed mb-6">
+					{sortedPosts[0].data.description}
+				</p>
 				
 				<a 
-					href={`/blog/${latestPost.slug}`}
-					class="inline-flex items-center text-primary hover:text-secondary transition-colors duration-200 font-medium"
+					href={`/blog/${sortedPosts[0].slug}`}
+					class="font-accent transition-colors duration-200"
+					style="color: #fff; border-bottom: dotted 1px #FF5682; text-decoration: none;"
+					onmouseover="this.style.color='#FF5682'; this.style.borderBottomColor='#fff';"
+					onmouseout="this.style.color='#fff'; this.style.borderBottomColor='#FF5682';"
 				>
 					Read More →
 				</a>
 			</article>
 		)}
 		
-		<!-- Previous Posts -->
-		{olderPosts.length > 0 && (
+		<!-- Previous Posts List -->
+		{sortedPosts.length > 1 && (
 			<section>
-				<h2 class="text-2xl font-bold text-primary mb-8">Previous Posts</h2>
+				<h2 class="text-xl font-primary text-accent mb-8">Previous Posts</h2>
 				
-				<div class="space-y-6">
-					{olderPosts.map((post) => (
-						<article class="border-b border-gray-800 pb-6 last:border-b-0">
-							<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-								<div class="flex-1">
-									<h3 class="text-xl font-semibold text-white mb-2 leading-tight">
-										<a 
-											href={`/blog/${post.slug}`}
-											class="hover:text-primary transition-colors duration-200"
-										>
+				<div class="space-y-0">
+					{sortedPosts.slice(1).map((post) => (
+						<article class="post-list-item">
+							<div class="flex flex-col md:flex-row md:items-baseline md:justify-between gap-2 md:gap-8">
+								<div class="flex-1 min-w-0">
+									<h3 class="post-title">
+										<a href={`/blog/${post.slug}`}>
 											{post.data.title}
 										</a>
 									</h3>
-									
-									<p class="text-text-light mb-2">
-										{post.data.description}
-									</p>
-									
-									{post.data.tags && post.data.tags.length > 0 && (
-										<div class="flex flex-wrap gap-2">
-											{post.data.tags.map((tag) => (
-												<span class="px-2 py-1 bg-dark-lighter text-text-muted text-xs rounded">
-													{tag}
-												</span>
-											))}
-										</div>
+									{post.data.description && (
+										<p class="post-excerpt">
+											{post.data.description}
+										</p>
 									)}
 								</div>
 								
-								<div class="text-text-muted text-sm md:text-right md:min-w-[120px]">
+								<div class="post-meta md:text-right md:flex-shrink-0">
 									{formatDate(post.data.pubDate)}
 								</div>
 							</div>

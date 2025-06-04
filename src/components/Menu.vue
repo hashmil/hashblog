@@ -47,14 +47,14 @@
             <a
               href="/"
               @click="closeMenu"
-              class="block text-4xl lg:text-6xl font-bold text-white hover:text-primary transition-all duration-300 animate-slide-up-1">
+              class="block text-4xl lg:text-6xl font-primary text-white hover:text-accent transition-all duration-300 animate-slide-up-1">
               Blog Home
             </a>
 
             <a
               href="/about"
               @click="closeMenu"
-              class="block text-4xl lg:text-6xl font-bold text-white hover:text-primary transition-all duration-300 animate-slide-up-2">
+              class="block text-4xl lg:text-6xl font-primary text-white hover:text-accent transition-all duration-300 animate-slide-up-2">
               About Hash
             </a>
 
@@ -63,7 +63,7 @@
               target="_blank"
               rel="noopener noreferrer"
               @click="closeMenu"
-              class="block text-4xl lg:text-6xl font-bold text-white hover:text-primary transition-all duration-300 flex items-center justify-center gap-4 animate-slide-up-3">
+              class="block text-4xl lg:text-6xl font-primary text-white hover:text-accent transition-all duration-300 flex items-center justify-center gap-4 animate-slide-up-3">
               Portfolio
               <svg
                 class="w-8 h-8 lg:w-12 lg:h-12"
@@ -89,7 +89,7 @@
                 v-model="searchQuery"
                 type="text"
                 placeholder="Search..."
-                class="w-full bg-dark-lighter border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-text-muted focus:outline-none focus:border-primary transition-colors duration-200"
+                class="w-full bg-dark-lighter border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-text-muted focus:outline-none focus:border-accent transition-colors duration-200 font-text"
                 @input="performSearch" />
               <svg
                 class="absolute right-3 top-3 w-5 h-5 text-text-muted"
@@ -122,18 +122,22 @@
                   class="block p-4 bg-dark-lighter rounded-lg hover:bg-gray-700 transition-all duration-200 animate-fade-in"
                   :style="{ animationDelay: `${index * 100}ms` }">
                   <h4 class="font-medium text-white mb-1">
-                    {{ result.data.title }}
+                    {{ result.data?.title || result.title }}
                   </h4>
                   <p class="text-sm text-text-muted line-clamp-2">
-                    {{ result.data.description }}
+                    {{ result.data?.description || result.description }}
                   </p>
                   <div class="flex items-center gap-2 mt-2">
                     <span class="text-xs text-text-muted">{{
-                      formatDate(result.data.pubDate)
+                      formatDate(result.data?.pubDate || result.pubDate)
                     }}</span>
                     <div class="flex gap-1">
                       <span
-                        v-for="tag in result.data.tags.slice(0, 2)"
+                        v-for="tag in (
+                          result.data?.tags ||
+                          result.tags ||
+                          []
+                        ).slice(0, 2)"
                         :key="tag"
                         class="px-2 py-0.5 bg-dark text-xs rounded text-text-muted">
                         {{ tag }}
@@ -173,6 +177,11 @@ const openMenu = async () => {
   isOpen.value = true;
   document.body.style.overflow = "hidden";
 
+  // Load posts when menu opens (in case they weren't loaded on mount)
+  if (allPosts.value.length === 0) {
+    await loadPosts();
+  }
+
   // Delay to trigger enter animation
   await nextTick();
   setTimeout(() => {
@@ -192,6 +201,31 @@ const closeMenu = async () => {
   }, 300);
 };
 
+// Load posts for search
+const loadPosts = async () => {
+  try {
+    const response = await fetch("/api/search.json");
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    // Handle both response formats: array or object with posts property
+    let posts = [];
+    if (Array.isArray(data)) {
+      posts = data;
+    } else if (data.posts && Array.isArray(data.posts)) {
+      posts = data.posts;
+    }
+
+    allPosts.value = posts;
+  } catch (error) {
+    console.error("Failed to load posts for search:", error);
+  }
+};
+
 // Search functionality
 const performSearch = async () => {
   if (!searchQuery.value.trim()) {
@@ -200,23 +234,24 @@ const performSearch = async () => {
   }
 
   const query = searchQuery.value.toLowerCase();
-  searchResults.value = allPosts.value.filter(
-    (post) =>
-      post.data.title.toLowerCase().includes(query) ||
-      post.data.description.toLowerCase().includes(query) ||
-      post.data.tags.some((tag: string) => tag.toLowerCase().includes(query))
-  );
-};
+  const filteredResults = allPosts.value.filter((post) => {
+    // More robust data access
+    const title = post?.data?.title || post?.title || "";
+    const description = post?.data?.description || post?.description || "";
+    const tags = post?.data?.tags || post?.tags || [];
+    const body = post?.body || "";
 
-// Load posts for search
-const loadPosts = async () => {
-  try {
-    const response = await fetch("/api/search.json");
-    const data = await response.json();
-    allPosts.value = data.posts || [];
-  } catch (error) {
-    console.error("Failed to load posts for search:", error);
-  }
+    const titleMatch = title.toLowerCase().includes(query);
+    const descriptionMatch = description.toLowerCase().includes(query);
+    const tagsMatch =
+      Array.isArray(tags) &&
+      tags.some((tag: string) => tag.toLowerCase().includes(query));
+    const contentMatch = body && body.toLowerCase().includes(query);
+
+    return titleMatch || descriptionMatch || tagsMatch || contentMatch;
+  });
+
+  searchResults.value = filteredResults.slice(0, 10);
 };
 
 // Format date helper
