@@ -3,118 +3,104 @@ export interface Props {
   title: string;
   description?: string;
   image?: string;
-  type?: 'website' | 'article';
-  publishedTime?: string;
-  modifiedTime?: string;
   author?: string;
-  canonicalURL?: string;
+  pubDate?: Date;
+  tags?: string[];
+  canonical?: string;
+  noindex?: boolean;
 }
 
-const { 
-  title, 
-  description = "Hash Milhan's blog - Creative Technology Director sharing insights on AI, web development, and creative projects.", 
-  image = "/og-image.jpg",
-  type = "website",
-  publishedTime,
-  modifiedTime,
+const {
+  title,
+  description = "Notes by Hash Milhan - Creative Technology Director sharing insights on AI, web development, and creative projects.",
+  image = "/images/og-default.jpg",
   author = "Hash Milhan",
-  canonicalURL: providedCanonicalURL
+  pubDate,
+  tags = [],
+  canonical,
+  noindex = false
 } = Astro.props;
 
-const siteUrl = Astro.site || "https://localhost:4321";
-const canonicalURL = providedCanonicalURL || new URL(Astro.url.pathname, siteUrl).toString();
-const imageURL = new URL(image, siteUrl);
+const canonicalURL = canonical || new URL(Astro.url.pathname, Astro.site);
+const socialImage = new URL(image, Astro.url);
+
+// Schema.org structured data
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Notes by Hash Milhan",
+  "description": description,
+  "url": Astro.site,
+  "author": {
+    "@type": "Person",
+    "name": "Hash Milhan"
+  }
+};
 ---
 
-<!DOCTYPE html>
-<html lang="en" class="dark">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <meta name="generator" content={Astro.generator} />
-  
-  <!-- Primary Meta Tags -->
-  <title>{title}</title>
-  <meta name="title" content={title} />
-  <meta name="description" content={description} />
-  <meta name="author" content={author} />
-  <link rel="canonical" href={canonicalURL} />
-  
-  <!-- RSS Feed -->
-  <link rel="alternate" type="application/rss+xml" title="Hash Milhan's Blog" href="/rss.xml" />
-  
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content={type} />
-  <meta property="og:url" content={canonicalURL} />
-  <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
-  <meta property="og:image" content={imageURL} />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:site_name" content="Hash Milhan's Blog" />
-  <meta property="og:locale" content="en_US" />
-  {type === 'article' && publishedTime && (
-    <meta property="article:published_time" content={publishedTime} />
-  )}
-  {type === 'article' && modifiedTime && (
-    <meta property="article:modified_time" content={modifiedTime} />
-  )}
-  {type === 'article' && (
-    <meta property="article:author" content={author} />
-  )}
-  
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content={canonicalURL} />
-  <meta property="twitter:title" content={title} />
-  <meta property="twitter:description" content={description} />
-  <meta property="twitter:image" content={imageURL} />
-  <meta property="twitter:creator" content="@hashir" />
-  <meta property="twitter:site" content="@hashir" />
-  
-  <!-- Additional SEO -->
-  <meta name="robots" content="index, follow" />
-  <meta name="googlebot" content="index, follow" />
-  <meta name="theme-color" content="#1a1a1a" />
-  <meta name="color-scheme" content="dark" />
-  
-  <!-- Preload fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": type === "article" ? "BlogPosting" : "WebSite",
-      "headline": title,
-      "description": description,
-      "image": imageURL,
-      "url": canonicalURL,
-      "datePublished": publishedTime,
-      "dateModified": modifiedTime || publishedTime,
-      "author": {
-        "@type": "Person",
-        "name": author,
-        "url": "https://hashir.net"
-      },
-      "publisher": {
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalURL} />
+    
+    <!-- RSS Feed -->
+    <link rel="alternate" type="application/rss+xml" title="Notes by Hash Milhan" href="/rss.xml" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:site_name" content="Notes by Hash Milhan" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={socialImage} />
+    
+    <!-- Additional meta tags -->
+    <meta name="author" content={author} />
+    {pubDate && <meta property="article:published_time" content={pubDate.toISOString()} />}
+    {tags.length > 0 && <meta name="keywords" content={tags.join(", ")} />}
+    
+    <!-- Robots -->
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  </head>
+  <body>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
         "@type": "Person",
         "name": "Hash Milhan",
-        "url": "https://hashir.net"
+        "jobTitle": "Creative Technology Director",
+        "url": "https://hashir.net",
+        "sameAs": [
+          "https://twitter.com/hashir",
+          "https://instagram.com/hashirmilhan"
+        ]
       }
-    }
-  </script>
-  
-  <!-- Additional meta tags from page-specific slots -->
-  <slot name="head" />
-</head>
-<body>
-  <div id="app" class="min-h-screen bg-dark">
+    </script>
+    
     <slot />
-  </div>
-</body>
+  </body>
 </html>
 
 <style is:global>

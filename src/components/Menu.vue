@@ -10,13 +10,11 @@
       <div
         class="flex justify-between items-center p-6 border-b border-gray-800 animate-slide-down">
         <div class="flex items-center space-x-2">
-          <div
-            class="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-            <span class="text-white font-bold text-sm">HM</span>
-          </div>
-          <div>
-            <div class="text-sm font-medium text-text-muted">MONDAYS</div>
-            <div class="text-sm font-bold text-white">HASH MILHAN</div>
+          <div class="flex items-center">
+            <img
+              src="/images/logo.png"
+              alt="Notes by Hash Milhan"
+              class="h-8 object-contain" />
           </div>
         </div>
 
