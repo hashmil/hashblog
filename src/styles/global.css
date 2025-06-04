@@ -1,0 +1,42 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: "Inter", system-ui, sans-serif;
+  }
+
+  body {
+    @apply bg-dark text-white;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .prose-dark {
+    @apply prose prose-invert prose-lg max-w-none;
+    @apply prose-headings:text-white prose-p:text-text-light;
+    @apply prose-a:text-primary prose-a:no-underline hover:prose-a:underline;
+    @apply prose-strong:text-white prose-code:text-primary;
+    @apply prose-blockquote:border-l-primary prose-blockquote:text-text-light;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-primary bg-clip-text text-transparent;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-primary text-white px-6 py-3 rounded-lg font-medium;
+    @apply hover:shadow-lg hover:scale-105 transition-all duration-200;
+  }
+
+  .backdrop-blur-menu {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+}

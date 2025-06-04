@@ -1,16 +1,118 @@
 ---
+import Layout from '../components/Layout.astro';
+import Header from '../components/Header.astro';
+import Menu from '../components/Menu.vue';
+import { getCollection } from 'astro:content';
 
+// Get all blog posts and sort by date
+const allPosts = await getCollection('blog', ({ data }) => {
+	return !data.draft;
+});
+
+const sortedPosts = allPosts.sort((a, b) => 
+	new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+);
+
+const [latestPost, ...olderPosts] = sortedPosts;
+
+function formatDate(date: Date) {
+	return new Intl.DateTimeFormat('en-US', {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric'
+	}).format(date);
+}
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="Hash Milhan - Creative Technology Director">
+	<Header />
+	
+	<main class="container py-8">
+		<!-- Latest Post - Featured -->
+		{latestPost && (
+			<article class="mb-16">
+				<div class="mb-4">
+					<time class="text-text-muted text-sm">
+						{formatDate(latestPost.data.pubDate)}
+					</time>
+				</div>
+				
+				<h1 class="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+					<a href={`/blog/${latestPost.slug}`} class="hover:text-primary transition-colors duration-200">
+						{latestPost.data.title}
+					</a>
+				</h1>
+				
+				{latestPost.data.heroImage && (
+					<div class="mb-6 rounded-lg overflow-hidden">
+						<img 
+							src={latestPost.data.heroImage} 
+							alt={latestPost.data.title}
+							class="w-full h-64 md:h-96 object-cover"
+						/>
+					</div>
+				)}
+				
+				<div class="prose-dark mb-6">
+					<p class="text-xl text-text-light leading-relaxed">
+						{latestPost.data.description}
+					</p>
+				</div>
+				
+				<a 
+					href={`/blog/${latestPost.slug}`}
+					class="inline-flex items-center text-primary hover:text-secondary transition-colors duration-200 font-medium"
+				>
+					Read More →
+				</a>
+			</article>
+		)}
+		
+		<!-- Previous Posts -->
+		{olderPosts.length > 0 && (
+			<section>
+				<h2 class="text-2xl font-bold text-primary mb-8">Previous Posts</h2>
+				
+				<div class="space-y-6">
+					{olderPosts.map((post) => (
+						<article class="border-b border-gray-800 pb-6 last:border-b-0">
+							<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+								<div class="flex-1">
+									<h3 class="text-xl font-semibold text-white mb-2 leading-tight">
+										<a 
+											href={`/blog/${post.slug}`}
+											class="hover:text-primary transition-colors duration-200"
+										>
+											{post.data.title}
+										</a>
+									</h3>
+									
+									<p class="text-text-light mb-2">
+										{post.data.description}
+									</p>
+									
+									{post.data.tags && post.data.tags.length > 0 && (
+										<div class="flex flex-wrap gap-2">
+											{post.data.tags.map((tag) => (
+												<span class="px-2 py-1 bg-dark-lighter text-text-muted text-xs rounded">
+													{tag}
+												</span>
+											))}
+										</div>
+									)}
+								</div>
+								
+								<div class="text-text-muted text-sm md:text-right md:min-w-[120px]">
+									{formatDate(post.data.pubDate)}
+								</div>
+							</div>
+						</article>
+					))}
+				</div>
+			</section>
+		)}
+	</main>
+	
+	<!-- Menu Component -->
+	<Menu client:load />
+</Layout>

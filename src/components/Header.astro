@@ -1,0 +1,47 @@
+---
+// No props needed for now
+---
+
+<header class="sticky top-0 z-40 bg-dark/80 backdrop-blur-md border-b border-gray-800">
+  <div class="container py-4">
+    <div class="flex items-center justify-between">
+      <!-- Logo -->
+      <a href="/" class="flex items-center space-x-2 group">
+        <div class="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+          <span class="text-white font-bold text-sm">HM</span>
+        </div>
+        <div class="hidden sm:block">
+          <div class="text-sm font-medium text-text-muted">MONDAYS</div>
+          <div class="text-sm font-bold text-white">HASH MILHAN</div>
+        </div>
+      </a>
+      
+      <!-- Menu Button -->
+      <button 
+        id="menu-button"
+        class="flex items-center space-x-2 text-white hover:text-primary transition-colors duration-200"
+        aria-label="Open menu"
+      >
+        <span class="font-medium">Menu</span>
+        <div class="flex flex-col space-y-1">
+          <div class="w-4 h-0.5 bg-current"></div>
+          <div class="w-4 h-0.5 bg-current"></div>
+          <div class="w-4 h-0.5 bg-current"></div>
+        </div>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Menu button functionality will be handled by the Menu Vue component
+  document.addEventListener('DOMContentLoaded', () => {
+    const menuButton = document.getElementById('menu-button');
+    if (menuButton) {
+      menuButton.addEventListener('click', () => {
+        // Dispatch custom event for Vue component to handle
+        document.dispatchEvent(new CustomEvent('toggle-menu'));
+      });
+    }
+  });
+</script> 

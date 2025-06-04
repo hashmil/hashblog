@@ -1,0 +1,112 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  publishedTime?: string;
+  author?: string;
+}
+
+const { 
+  title, 
+  description = "Hash Milhan's blog - Creative Technology Director sharing insights on AI, web development, and creative projects.", 
+  image = "/og-image.jpg",
+  type = "website",
+  publishedTime,
+  author = "Hash Milhan"
+} = Astro.props;
+
+const siteUrl = Astro.site || "https://localhost:4321";
+const canonicalURL = new URL(Astro.url.pathname, siteUrl);
+const imageURL = new URL(image, siteUrl);
+---
+
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="generator" content={Astro.generator} />
+  
+  <!-- Primary Meta Tags -->
+  <title>{title}</title>
+  <meta name="title" content={title} />
+  <meta name="description" content={description} />
+  <meta name="author" content={author} />
+  <link rel="canonical" href={canonicalURL} />
+  
+  <!-- RSS Feed -->
+  <link rel="alternate" type="application/rss+xml" title="Hash Milhan's Blog" href="/rss.xml" />
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content={type} />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={imageURL} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="Hash Milhan's Blog" />
+  <meta property="og:locale" content="en_US" />
+  {type === 'article' && publishedTime && (
+    <meta property="article:published_time" content={publishedTime} />
+  )}
+  {type === 'article' && (
+    <meta property="article:author" content={author} />
+  )}
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content={canonicalURL} />
+  <meta property="twitter:title" content={title} />
+  <meta property="twitter:description" content={description} />
+  <meta property="twitter:image" content={imageURL} />
+  <meta property="twitter:creator" content="@hashir" />
+  <meta property="twitter:site" content="@hashir" />
+  
+  <!-- Additional SEO -->
+  <meta name="robots" content="index, follow" />
+  <meta name="googlebot" content="index, follow" />
+  <meta name="theme-color" content="#1a1a1a" />
+  <meta name="color-scheme" content="dark" />
+  
+  <!-- Preload fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": type === "article" ? "BlogPosting" : "WebSite",
+      "headline": title,
+      "description": description,
+      "image": imageURL,
+      "url": canonicalURL,
+      "datePublished": publishedTime,
+      "author": {
+        "@type": "Person",
+        "name": author,
+        "url": "https://hashir.net"
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Hash Milhan",
+        "url": "https://hashir.net"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="app" class="min-h-screen bg-dark">
+    <slot />
+  </div>
+</body>
+</html>
+
+<style is:global>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  @import '../styles/global.css';
+</style> 
