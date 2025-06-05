@@ -4,6 +4,7 @@ import Header from '../../components/Header.astro';
 import Menu from '../../components/Menu.vue';
 import Navigation from '../../components/Navigation.astro';
 import Share from '../../components/Share.astro';
+import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 
 export const prerender = true;
@@ -48,12 +49,15 @@ const readingTime = Math.ceil(wordCount / wordsPerMinute);
 
 // Generate canonical URL
 const canonicalURL = new URL(`/blog/${post.slug}`, Astro.site);
+
+// Handle heroImage for social meta and structured data
+const heroImageUrl = post.data.heroImage ? post.data.heroImage.src : undefined;
 ---
 
 <Layout 
   title={post.data.title} 
   description={post.data.description} 
-  image={post.data.heroImage}
+  image={heroImageUrl}
   author="Hash Milhan"
   pubDate={post.data.pubDate}
   tags={post.data.tags}
@@ -77,7 +81,7 @@ const canonicalURL = new URL(`/blog/${post.slug}`, Astro.site);
       "@type": "BlogPosting",
       "headline": post.data.title,
       "description": post.data.description,
-      "image": post.data.heroImage ? new URL(post.data.heroImage, Astro.site).toString() : undefined,
+      "image": heroImageUrl ? new URL(heroImageUrl, Astro.site).toString() : undefined,
       "datePublished": post.data.pubDate.toISOString(),
       "dateModified": post.data.updatedDate?.toISOString() || post.data.pubDate.toISOString(),
       "author": {
@@ -96,8 +100,8 @@ const canonicalURL = new URL(`/blog/${post.slug}`, Astro.site);
 
   <Header />
   
-  <main class="container py-12">
-    <article class="max-w-3xl mx-auto">
+  <main class="container py-12" transition:name="main-content">
+    <article class="max-w-3xl mx-auto" transition:name={`post-preview-${post.slug}`}>
       <!-- Post Header -->
       <header class="mb-12">
         <!-- Breadcrumb -->
@@ -110,17 +114,17 @@ const canonicalURL = new URL(`/blog/${post.slug}`, Astro.site);
           </a>
         </nav>
 
-        <div class="post-meta mb-6">
+        <div class="post-meta mb-6" transition:name="post-meta">
           {formatDate(post.data.pubDate)} • {readingTime} min read
         </div>
         
-        <h1 class="text-3xl md:text-5xl font-primary text-white mb-8 leading-tight">
+        <h1 class="text-3xl md:text-5xl font-primary text-white mb-8 leading-tight" transition:name={`post-title-${post.slug}`}>
           {post.data.title}
         </h1>
         
         {post.data.heroImage && (
-          <div class="mb-12 rounded-lg overflow-hidden">
-            <img 
+          <div class="mb-12 rounded-lg overflow-hidden" transition:name={`post-hero-${post.slug}`}>
+            <Image 
               src={post.data.heroImage} 
               alt={post.data.title}
               class="w-full h-64 md:h-96 object-cover"
@@ -131,12 +135,12 @@ const canonicalURL = new URL(`/blog/${post.slug}`, Astro.site);
       </header>
       
       <!-- Post Content -->
-      <div class="prose-minimal">
+      <div class="prose-minimal" transition:name={`post-content-${post.slug}`}>
         <Content />
       </div>
       
       <!-- Share Component -->
-      <div class="mt-16">
+      <div class="mt-16" transition:name={`post-share-${post.slug}`}>
         <Share 
           title={post.data.title}
           url={canonicalURL.toString()}

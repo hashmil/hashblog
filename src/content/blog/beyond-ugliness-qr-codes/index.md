@@ -1,13 +1,8 @@
 ---
-title: "Beyond Ugliness: Reimagining QR Codes with AI"
-description: Exploring how AI can transform the aesthetically challenged QR code into something beautiful and functional.
-pubDate: 2023-07-09
-heroImage: /blog/qr-codes-ai.jpg
-tags:
-  - AI
-  - Design
-  - QR Codes
-  - Innovation
+title: "Beyond Ugliness: QR Codes"
+description: "QR codes have always been functional but never beautiful. These pixelated squares serve their purpose but often feel like an eyesore in otherwise elegant designs. But what if we could change that?"
+pubDate: 2024-07-09
+tags: ["Design", "QR Codes", "Innovation"]
 slug: ugliness-reimagining-qr-codes-ai
 ---
 

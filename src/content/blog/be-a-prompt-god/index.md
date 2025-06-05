@@ -2,7 +2,6 @@
 title: "Be a Prompt God"
 description: "I've made tens of thousands of AI generations on Midjourney, Stable Diffusion, Dall-E, and Firefly. Almost always, I get asked, 'How did you prompt that?' The answer isn't straightforward."
 pubDate: 2024-04-30
-heroImage: "/blog/be-a-prompt-god.jpg"
 tags: ["AI", "Prompting", "Midjourney", "Tutorial"]
 ---
 

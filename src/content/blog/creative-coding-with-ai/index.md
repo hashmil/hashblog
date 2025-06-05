@@ -1,8 +1,7 @@
 ---
 title: "Creative Coding with AI: Building Interactive Art"
-description: "Discover how artificial intelligence is transforming creative coding, from generative art to interactive installations."
-pubDate: 2024-01-10
-heroImage: "/images/blog/creative-ai.jpg"
+description: "The intersection of artificial intelligence and creative coding is opening up new possibilities for interactive art. Explore how AI can enhance and inspire creative coding projects."
+pubDate: 2024-06-20
 tags: ["Creative Coding", "AI", "Generative Art", "Interactive Design"]
 ---
 
