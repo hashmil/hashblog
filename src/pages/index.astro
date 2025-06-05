@@ -26,6 +26,7 @@ function formatDate(date: Date) {
 	<Header />
 	
 	<main class="container py-12" transition:name="main-content">
+		<div class="max-w-3xl mx-auto">
 		<!-- Featured/Latest Post -->
 		{sortedPosts[0] && (
 			<article class="mb-16" transition:name={`post-preview-${sortedPosts[0].slug}`}>
@@ -87,6 +88,7 @@ function formatDate(date: Date) {
 				</div>
 			</section>
 		)}
+		</div>
 	</main>
 	
 	<!-- Menu Component -->
