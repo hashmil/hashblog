@@ -10,6 +10,11 @@ export default defineConfig({
   output: "server", // Server-side rendering for Cloudflare
   adapter: cloudflare({
     imageService: "cloudflare",
+    routes: {
+      extend: {
+        exclude: [{ pattern: "/assets/*" }],
+      },
+    },
   }),
 
   integrations: [
