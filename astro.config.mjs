@@ -9,7 +9,7 @@ export default defineConfig({
   site: "https://magenta-motion.pages.dev", // Update to your actual Cloudflare Pages URL
   output: "server", // Server-side rendering for Cloudflare
   adapter: cloudflare({
-    imageService: "cloudflare",
+    imageService: "compile",
     routes: {
       extend: {
         exclude: [{ pattern: "/assets/*" }],
