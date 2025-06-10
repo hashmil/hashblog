@@ -6,7 +6,7 @@ import node from "@astrojs/node";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://your-app-name.fly.dev", // Update this with your actual Fly.io app name
+  site: "https://hashblog.fly.dev", // Your Fly.io app URL
   output: "server", // Server-side rendering for Fly.io
   adapter: node({
     mode: "standalone",
@@ -32,7 +32,7 @@ export default defineConfig({
       "localhost",
       "images.unsplash.com",
       "via.placeholder.com",
-      "your-app-name.fly.dev",
+      "hashblog.fly.dev",
     ],
     remotePatterns: [
       {
