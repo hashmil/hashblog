@@ -2,19 +2,14 @@
 import { defineConfig } from "astro/config";
 import vue from "@astrojs/vue";
 import tailwind from "@astrojs/tailwind";
-import cloudflare from "@astrojs/cloudflare";
+import node from "@astrojs/node";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://magenta-motion.pages.dev", // Update to your actual Cloudflare Pages URL
-  output: "server", // Server-side rendering for Cloudflare
-  adapter: cloudflare({
-    imageService: "compile",
-    routes: {
-      extend: {
-        exclude: [{ pattern: "/assets/*" }],
-      },
-    },
+  site: "https://your-app-name.fly.dev", // Update this with your actual Fly.io app name
+  output: "server", // Server-side rendering for Fly.io
+  adapter: node({
+    mode: "standalone",
   }),
 
   integrations: [
@@ -37,7 +32,7 @@ export default defineConfig({
       "localhost",
       "images.unsplash.com",
       "via.placeholder.com",
-      "magenta-motion.pages.dev",
+      "your-app-name.fly.dev",
     ],
     remotePatterns: [
       {
