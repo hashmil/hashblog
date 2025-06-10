@@ -6,7 +6,7 @@ import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://magenta-motion.pages.dev", // Update to your actual Cloudflare Pages URL
+  site: "https://hashblog.pages.dev", // Update to your actual Cloudflare Pages URL
   output: "server", // Server-side rendering for Cloudflare
   adapter: cloudflare({
     imageService: "compile",
@@ -37,7 +37,7 @@ export default defineConfig({
       "localhost",
       "images.unsplash.com",
       "via.placeholder.com",
-      "magenta-motion.pages.dev",
+      "hashblog.pages.dev",
     ],
     remotePatterns: [
       {

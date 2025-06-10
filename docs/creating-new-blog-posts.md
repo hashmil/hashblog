@@ -31,14 +31,14 @@ Create a new file in `src/content/blog/` with a descriptive slug:
 
 ```bash
 # Good examples:
-future-of-web-development.md
-creative-coding-with-ai.md
-my-thoughts-on-design.md
+2024-03-15-future-of-web-development/
+2024-06-20-creative-coding-with-ai/
+2024-01-15-my-thoughts-on-design/
 
 # Avoid:
-post1.md
-blog-post.md
-untitled.md
+post1/
+blog-post/
+untitled/
 ```
 
 ### 2. Add Frontmatter
