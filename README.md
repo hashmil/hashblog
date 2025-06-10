@@ -106,86 +106,92 @@ Your content here...
 
 ### 3. Embedding Videos
 
-To embed videos, use the following methods.
+To embed videos from providers like YouTube and Vimeo, import the required component from the `@astro-community/astro-embed` package directly in your `.mdx` file.
 
 #### YouTube
 
-The most reliable method is to use a standard responsive `<iframe>`.
-
-```html
-<div
-  style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
-  <iframe
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
-    title="YouTube video player"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    allowfullscreen></iframe>
-</div>
-```
+1.  **Import the component**:
+    ```js
+    import { YouTube } from "@astro-community/astro-embed-youtube";
+    ```
+2.  **Use the component**:
+    Pass the YouTube video ID to the `id` prop. You can find the ID in the YouTube video URL (`https://www.youtube.com/watch?v=VIDEO_ID`).
+    ```astro
+    <YouTube id="your-video-id-here" />
+    ```
 
 #### Vimeo
 
-The dedicated `<Vimeo>` component works well in all environments.
+1.  **Import the component**:
+    ```js
+    import { Vimeo } from "@astro-community/astro-embed-vimeo";
+    ```
+2.  **Use the component**:
+    Pass the full Vimeo video URL to the `id` prop.
+    ```astro
+    <Vimeo id="https://vimeo.com/your-video-id" />
+    ```
 
-```jsx
-import { Vimeo } from "@astro-community/astro-embed-vimeo";
+#### TikTok
 
-<Vimeo id="https://vimeo.com/your_video_id" />;
-```
-
-#### TikTok & Other Platforms
-
-For other platforms, use the `<LinkPreview>` component.
-
-```jsx
-import { LinkPreview } from "@astro-community/astro-embed-link-preview";
-
-<LinkPreview id="https://www.tiktok.com/@username/video/video_id" />;
-```
+TikTok videos are currently embedded using a `LinkPreview` component.
 
 ### 4. Organization
 
 - **Folder naming**: `YYYY-MM-DD-descriptive-title/`
-- **Images**: Store in an `images` sub-directory within the post folder. Reference them like `heroImage: "./images/hero.jpg"`.
-- **Slugs**: The `slug` frontmatter property is required and determines the post's URL.
+- **Images**: Store in an `images` sub-directory within
+  the post folder. Reference them like `heroImage: "./
+images/hero.jpg"`.
+- **Slugs**: The `slug` frontmatter property is required
+  and determines the post's URL.
 
-See `docs/creating-new-blog-posts.md` for detailed guidelines.
+See `docs/creating-new-blog-posts.md` for detailed
+guidelines.
 
 ## 🚀 Deployment
 
-The site automatically deploys to Cloudflare Pages when pushing to the `main` branch via GitHub Actions.
+The site automatically deploys to Cloudflare Pages when
+pushing to the `main` branch via GitHub Actions.
 
 ### Required Secrets
 
 Add these to your GitHub repository secrets:
 
-- `CLOUDFLARE_API_TOKEN` - Cloudflare API token with Pages:Edit permissions
+- `CLOUDFLARE_API_TOKEN` - Cloudflare API token with
+  Pages:Edit permissions
 - `CLOUDFLARE_ACCOUNT_ID` - Your Cloudflare account ID
 
 ## 🎨 Features
 
-- **Fast Loading** - Astro's static generation with minimal JavaScript
-- **SEO Optimized** - Meta tags, structured data, and sitemap generation
-- **Responsive Design** - Mobile-first approach with Tailwind CSS
-- **Interactive Elements** - Vue components for enhanced UX
-- **Content Management** - Markdown-based with automatic blog post discovery
+- **Fast Loading** - Astro's static generation with
+  minimal JavaScript
+- **SEO Optimized** - Meta tags, structured data, and
+  sitemap generation
+- **Responsive Design** - Mobile-first approach with
+  Tailwind CSS
+- **Interactive Elements** - Vue components for enhanced
+  UX
+- **Content Management** - Markdown-based with automatic
+  blog post discovery
 - **Social Sharing** - Built-in share functionality
-- **RSS Feed** - Automatic feed generation for subscribers
+- **RSS Feed** - Automatic feed generation for
+  subscribers
 
 ## 📄 License
 
-This project is open source and available under the [MIT License](LICENSE).
+This project is open source and available under the [MIT
+License](LICENSE).
 
 ## 👨‍💻 Author
 
 **Hash Milhan** - Creative Technology Director
 
-- 🌐 Website: [hashblog.pages.dev](https://hashblog.pages.dev)
+- 🌐 Website: [hashblog.pages.dev](https://hashblog.
+  pages.dev)
 - 🐦 Twitter: [@hashir](https://twitter.com/hashir)
 - 📧 Email: blog@hashir.net
 
 ---
 
-_Built with ❤️ using Astro, Vue, and modern web technologies_
+_Built with ❤️ using Astro, Vue, and modern web
+technologies_
