@@ -106,17 +106,28 @@ Your content here...
 
 ### 3. Embedding Videos
 
-To embed videos from services like YouTube and Vimeo, import the specific component at the top of your `.mdx` file and then use the component with the full video URL.
+To embed videos, use the following methods.
 
 #### YouTube
 
-```jsx
-import { YouTube } from "@astro-community/astro-embed-youtube";
+The most reliable method is to use a standard responsive `<iframe>`.
 
-<YouTube id="https://www.youtube.com/watch?v=your_video_id" />;
+```html
+<div
+  style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+  <iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen></iframe>
+</div>
 ```
 
 #### Vimeo
+
+The dedicated `<Vimeo>` component works well in all environments.
 
 ```jsx
 import { Vimeo } from "@astro-community/astro-embed-vimeo";
@@ -124,9 +135,9 @@ import { Vimeo } from "@astro-community/astro-embed-vimeo";
 <Vimeo id="https://vimeo.com/your_video_id" />;
 ```
 
-#### Other Platforms (e.g., TikTok)
+#### TikTok & Other Platforms
 
-For other platforms, use the `<LinkPreview>` component which generates a preview card from the URL.
+For other platforms, use the `<LinkPreview>` component.
 
 ```jsx
 import { LinkPreview } from "@astro-community/astro-embed-link-preview";
