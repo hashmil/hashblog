@@ -2,10 +2,20 @@
 import { defineConfig } from "astro/config";
 import vue from "@astrojs/vue";
 import tailwind from "@astrojs/tailwind";
+import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://blog.hashir.net", // Update this with your actual domain
+  site: "https://hashblog.pages.dev", // Update to your actual Cloudflare Pages URL
+  output: "server", // Server-side rendering for Cloudflare
+  adapter: cloudflare({
+    imageService: "compile",
+    routes: {
+      extend: {
+        exclude: [{ pattern: "/assets/*" }],
+      },
+    },
+  }),
 
   integrations: [
     vue(),
@@ -23,7 +33,12 @@ export default defineConfig({
   },
 
   image: {
-    domains: ["localhost", "images.unsplash.com", "via.placeholder.com"],
+    domains: [
+      "localhost",
+      "images.unsplash.com",
+      "via.placeholder.com",
+      "hashblog.pages.dev",
+    ],
     remotePatterns: [
       {
         protocol: "https",
@@ -33,7 +48,8 @@ export default defineConfig({
   },
 
   build: {
-    inlineStylesheets: "auto",
+    inlineStylesheets: "always",
+    assetsPrefix: "/", // Ensure assets are served from root
   },
 
   compressHTML: true,

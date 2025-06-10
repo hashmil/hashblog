@@ -12,6 +12,8 @@
 
   body {
     @apply bg-dark text-white;
+    /* Prevent layout shift from scrollbar appearance/disappearance */
+    overflow-y: scroll;
   }
 
   /* Focus styles for accessibility */

@@ -1,8 +1,7 @@
 ---
 title: "The Future of Web Development: Beyond React and Vue"
-description: "Exploring emerging frameworks, edge computing, and the next generation of web technologies that will shape how we build applications."
-pubDate: 2024-01-15
-heroImage: "/images/blog/future-web-dev.jpg"
+description: "Exploring emerging technologies and frameworks that are shaping the next generation of web development, from edge computing to AI-powered development tools."
+pubDate: 2024-03-15
 tags: ["Web Development", "Technology", "Future Trends", "Edge Computing"]
 ---
 

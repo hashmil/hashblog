@@ -25,21 +25,22 @@ function formatDate(date: Date) {
 <Layout title="Notes by Hash Milhan - Creative Technology Director">
 	<Header />
 	
-	<main class="container py-12">
+	<main class="container py-12" transition:name="main-content">
+		<div class="max-w-3xl mx-auto">
 		<!-- Featured/Latest Post -->
 		{sortedPosts[0] && (
-			<article class="mb-16">
-				<div class="post-meta mb-4">
+			<article class="mb-16" transition:name={`post-preview-${sortedPosts[0].slug}`}>
+				<div class="post-meta mb-4" transition:name="post-meta">
 					{formatDate(sortedPosts[0].data.pubDate)}
 				</div>
 				
-				<h1 class="text-3xl md:text-5xl font-primary text-white mb-6 leading-tight">
+				<h1 class="text-3xl md:text-5xl font-primary text-white mb-6 leading-tight" transition:name={`post-title-${sortedPosts[0].slug}`}>
 					<a href={`/blog/${sortedPosts[0].slug}`} class="hover:text-accent transition-colors duration-200">
 						{sortedPosts[0].data.title}
 					</a>
 				</h1>
 				
-				<p class="text-lg text-text-light font-text leading-relaxed mb-6">
+				<p class="text-lg text-text-light font-text leading-relaxed mb-6" transition:name={`post-description-${sortedPosts[0].slug}`}>
 					{sortedPosts[0].data.description}
 				</p>
 				
@@ -49,6 +50,7 @@ function formatDate(date: Date) {
 					style="color: #fff; border-bottom: dotted 1px #FF5682; text-decoration: none;"
 					onmouseover="this.style.color='#FF5682'; this.style.borderBottomColor='#fff';"
 					onmouseout="this.style.color='#fff'; this.style.borderBottomColor='#FF5682';"
+					transition:name="read-more-link"
 				>
 					Read More →
 				</a>
@@ -57,16 +59,16 @@ function formatDate(date: Date) {
 		
 		<!-- Previous Posts List -->
 		{sortedPosts.length > 1 && (
-			<section>
+			<section transition:name="posts-list">
 				<h2 class="text-xl font-primary text-accent mb-8">Previous Posts</h2>
 				
 				<div class="space-y-0">
 					{sortedPosts.slice(1).map((post) => (
-						<article class="post-list-item">
+						<article class="post-list-item" transition:name={`post-item-${post.slug}`}>
 							<div class="flex flex-col md:flex-row md:items-baseline md:justify-between gap-2 md:gap-8">
 								<div class="flex-1 min-w-0">
 									<h3 class="post-title">
-										<a href={`/blog/${post.slug}`}>
+										<a href={`/blog/${post.slug}`} transition:name={`post-link-${post.slug}`}>
 											{post.data.title}
 										</a>
 									</h3>
@@ -86,6 +88,7 @@ function formatDate(date: Date) {
 				</div>
 			</section>
 		)}
+		</div>
 	</main>
 	
 	<!-- Menu Component -->

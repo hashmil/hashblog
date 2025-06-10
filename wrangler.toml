@@ -1,0 +1,13 @@
+name = "magenta-motion"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "dist"
+
+[env.production]
+name = "magenta-motion"
+
+[env.preview]
+name = "magenta-motion-preview"
+
+# Enable experimental features if needed
+# [experimental]
+# nodejs_compat = true 

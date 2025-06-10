@@ -1,28 +1,36 @@
 ---
+// No logo import needed - using public folder
 // No props needed for now
 ---
 
-<header class="sticky top-0 z-40 bg-dark/80 backdrop-blur-md border-b border-gray-800">
+<header class="sticky top-0 z-40 bg-dark/80 backdrop-blur-md border-b border-gray-800" transition:name="site-header">
   <div class="container py-4">
-    <div class="flex items-center justify-between">
+    <div class="max-w-3xl mx-auto">
+      <div class="flex items-center justify-between w-full">
       <!-- Logo -->
-      <a href="/" class="flex items-center group hover:opacity-80 transition-opacity duration-200">
-        <img src="/images/logo.png" alt="Notes by Hash Milhan" class="h-8 object-contain" />
-      </a>
+      <div class="flex-shrink-0">
+        <a href="/" class="flex items-center group hover:opacity-80 transition-opacity duration-200" transition:name="site-logo">
+          <img src="/images/logo.png" alt="Notes by Hash Milhan" class="h-8 object-contain" />
+        </a>
+      </div>
       
       <!-- Menu Button -->
-      <button 
-        id="menu-button"
-        class="flex items-center space-x-2 text-white hover:text-accent transition-colors duration-200"
-        aria-label="Open menu"
-      >
-        <span class="font-accent">Menu</span>
-        <div class="flex flex-col space-y-1">
-          <div class="w-4 h-0.5 bg-current"></div>
-          <div class="w-4 h-0.5 bg-current"></div>
-          <div class="w-4 h-0.5 bg-current"></div>
-        </div>
-      </button>
+      <div class="flex-shrink-0">
+        <button 
+          id="menu-button"
+          class="flex items-center space-x-2 text-white hover:text-accent transition-colors duration-200"
+          aria-label="Open menu"
+          transition:name="menu-button"
+        >
+          <span class="font-accent">Menu</span>
+          <div class="flex flex-col space-y-1">
+            <div class="w-4 h-0.5 bg-current"></div>
+            <div class="w-4 h-0.5 bg-current"></div>
+            <div class="w-4 h-0.5 bg-current"></div>
+          </div>
+        </button>
+      </div>
+      </div>
     </div>
   </div>
 </header>
