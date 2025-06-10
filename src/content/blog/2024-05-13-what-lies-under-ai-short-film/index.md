@@ -1,37 +1,20 @@
 ---
-title: What Lies Under — AI Short Film
-description: This is a short AI film I made in under 4 hours. It was for a competition where we had to make something in 48 hours. Work and life got in the way, so I had less than 4 hours.
+title: "What Lies Under — AI Short Film"
+description: "A short AI film made in under 4 hours for a 48-hour competition, showcasing the creative potential of current generative AI tools."
 pubDate: 2024-05-13
-heroImage: ./what-lies-under.png
-tags:
-  - AI
-  - Film
-  - Creative
-  - Competition
-preview: ./what-lies-under.png
+heroImage: "./images/thumb.png"
+tags: ["ai", "tech"]
+slug: what-lies-under-ai-short-film
 ---
 
 This is a short AI film I made in under 4 hours. It was for a competition where we had to make something in 48 hours. Work and life got in the way, so I had less than 4 hours.
 
-The challenge was intense, but sometimes constraints force the most creative solutions. Working with AI tools like Midjourney, Runway, and various editing software, I managed to craft a narrative that explores themes of discovery and hidden depths.
+<YouTube id="F53svE8ymYQ" />
 
-## The Process
+Gen AI video has come a long way. It may not be perfect, and until we get access to something like Sora, the tools we have seem to allow creators to do tremendous things. As long as we can embrace its quirks, we can do some incredible things.
 
-The entire film was created using:
+The original story for this was written by my wife [](https://www.linkedin.com/in/ACoAABU5clMBHeTxT2atlifyGXTngWOgZsS2V0k)[Laaiqah](https://www.linkedin.com/in/laaiqahaslam/), but with the time restraints, I ended up shortening and butchering the story (Maybe it's something for another day!). I used [Pika](https://pika.art/) for the video, [ElevenLabs](https://elevenlabs.io/) for the voice-over, [Udio](https://udio.com/) for the music, and [Claude](https://www.linkedin.com/feed/hashtag/?keywords=claude&highlightedUpdateUrns=urn%3Ali%3Aactivity%3A7195207661162844160) for some script help. The imags were first made using Midjourney, and then used them to generate the videos
 
-- **Midjourney** for generating concept art and storyboards
-- **Runway** for AI video generation
-- **Adobe After Effects** for compositing and effects
-- **Premiere Pro** for final editing and sound design
+![](images/image-1024x663.png)
 
-## Creative Challenges
-
-With such a tight timeline, every decision had to be immediate and purposeful. The AI tools allowed for rapid iteration, but the real challenge was maintaining a coherent narrative thread throughout the piece.
-
-The film explores what lies beneath the surface - both literally and metaphorically. It's about the hidden depths in all of us, the stories we don't tell, and the worlds that exist just out of sight.
-
-## Technical Innovation
-
-This project pushed the boundaries of what's possible with AI-assisted filmmaking in an extremely limited timeframe. The workflow had to be streamlined, with each tool serving a specific purpose in the pipeline.
-
-The result is a piece that showcases not just the potential of AI in creative work, but also the importance of human creativity in guiding and shaping that potential into something meaningful.
+This will not win any awards, I know that. (It didn't!) But it was so much fun experimenting and working with the tools to actually make something!

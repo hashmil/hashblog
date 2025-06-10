@@ -80,21 +80,22 @@ npm run dev
 
 ```sh
 # Create folder with date prefix
-mkdir "src/content/blog/2024-MM-DD-your-post-title"
-cd "src/content/blog/2024-MM-DD-your-post-title"
+mkdir "src/content/blog/YYYY-MM-DD-your-post-title"
+cd "src/content/blog/YYYY-MM-DD-your-post-title"
 ```
 
 ### 2. Add Content
 
-Create `index.md` with frontmatter:
+Create an `index.mdx` file inside the new directory. Using the `.mdx` extension is required to embed components like videos directly into your content.
 
 ```markdown
 ---
 title: "Your Post Title"
-description: "Compelling description for SEO and previews"
-pubDate: 2024-MM-DD
-heroImage: "./hero-image.jpg" # Optional
+description: "Compelling description for SEO and previews."
+pubDate: YYYY-MM-DD
+heroImage: "./images/hero-image.jpg"
 tags: ["AI", "Web Development", "Creative Coding"]
+slug: "your-post-slug"
 draft: false # Set to true to hide from production
 ---
 
@@ -103,11 +104,41 @@ draft: false # Set to true to hide from production
 Your content here...
 ```
 
-### 3. Organization
+### 3. Embedding Videos
+
+To embed videos from services like YouTube and Vimeo, import the specific component at the top of your `.mdx` file and then use the component with the full video URL.
+
+#### YouTube
+
+```jsx
+import { YouTube } from "@astro-community/astro-embed-youtube";
+
+<YouTube id="https://www.youtube.com/watch?v=your_video_id" />;
+```
+
+#### Vimeo
+
+```jsx
+import { Vimeo } from "@astro-community/astro-embed-vimeo";
+
+<Vimeo id="https://vimeo.com/your_video_id" />;
+```
+
+#### Other Platforms (e.g., TikTok)
+
+For other platforms, use the `<LinkPreview>` component which generates a preview card from the URL.
+
+```jsx
+import { LinkPreview } from "@astro-community/astro-embed-link-preview";
+
+<LinkPreview id="https://www.tiktok.com/@username/video/video_id" />;
+```
+
+### 4. Organization
 
 - **Folder naming**: `YYYY-MM-DD-descriptive-title/`
-- **Images**: Store in the same folder as your post
-- **Custom slugs**: Add `slug: custom-url` to frontmatter if needed
+- **Images**: Store in an `images` sub-directory within the post folder. Reference them like `heroImage: "./images/hero.jpg"`.
+- **Slugs**: The `slug` frontmatter property is required and determines the post's URL.
 
 See `docs/creating-new-blog-posts.md` for detailed guidelines.
 

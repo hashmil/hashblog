@@ -1,0 +1,59 @@
+---
+title: "Building a banner ad with GPT-4"
+description: "I tested GPT-4's ability to create an animated HTML5 banner ad from a simple brief. This post documents the process, from the initial boilerplate code to a more refined final version after providing feedback."
+pubDate: 2023-04-17
+heroImage: "./images/gpt4-banner.png"
+tags: ["ai", "coding", "design", "dev", "tech"]
+slug: building-a-banner-ad-with-gpt-4
+---
+
+import { Vimeo } from "@astro-community/astro-embed-vimeo";
+
+I've done a ton of banner ads in my career. I have been using chatGPT (and GPT-4) to play around with a few coding projects. So, I thought why not test if it can build an animated banner ad. How cool would that be?
+
+# Can AI build an animated banner ad?
+
+So I gave it a brief for a made up brand:
+
+```raw
+You are OnlineAdGPT: an expert online banner designer and programmer.
+
+I want to create a HTML5 banner that uses the GSAP library for animation.
+- Banner size: 300x250
+- Background colour: yellow
+- Logo: use Arial Bold font to write the brand name "ImaginAI Labs"
+- The banner will have 3 frames that will animate between.
+- Animate each line of text one at a time.
+- Please generate short ad copy for the 3 frames. It needs to be about ImaginAI Labs venturing into the world of generative AI with text and image generations.
+- the 3rd frame, which is the final frame needs to sell the fact that ImaginAI Labs are offering a unique service. There needs to be a blue call-to-action button which says "Learn More".
+
+```
+
+The generated code looked decent. The [code block had HTML, CSS, and JavaScript](https://github.com/hashmil/gpt4-banner-test/blob/main/v1.html) all in one place. After copying the code, I pasted it into Replit, and I was blown away by what I saw. Sure, the design isn't great and this might be boilerplate stuff in the world of Digital Display Advertising, but coding something simple would still take a bit of time – definitely not a couple of minutes! Oh, and don't forget that in my brief, I asked chatGPT to also write the copy for the banner ad too!
+
+<Vimeo id="https://vimeo.com/818550369" />
+
+It was a great starting point to see its capability. Then I started giving it feedback just like a creative director or client would.
+
+## The Final Version
+
+After a bit of [back and forth](https://github.com/hashmil/gpt4-banner-test/blob/main/GPT4-banner-prompts.md), and a few cheeky manual tweaks in the code, I finally got a [final version](https://replit.com/@hashmil/CandA-Labs-Banner-v2) made. Now, we have a background image, some snazzy custom Google fonts, staggered animation, and a tidy look and feel. This banner might not be taking home any awards, but it's pretty insane what I managed to pull off in just 10 to 15 minutes!
+
+<Vimeo id="https://vimeo.com/818550388" />
+
+## The Future
+
+This opens up some wild possibilities, especially when you're using the GPT-4 API to build custom apps and programmes. Just picture the likes of online ad servers getting in on this AI action. Or ad agencies and digital production houses whipping up their own tools to automate making thousands of banners, paving the way for a mega creative programmatic stack.
+
+The prospect of AI-driven banner ad creation is undeniably tantalising. With the GPT-4's abilities to generate code and content rapidly, we can envision a future where the process of building online ads is streamlined, efficient, and highly customisable. It's quite the marvel that even with minimal input, GPT-4 was able to produce a functional banner ad with a smattering of creativity, in a fraction of the time it would take a human developer.
+
+Of course, there will always be a need for human intervention and guidance to perfect the output, but the combination of AI and human expertise could revolutionise the digital advertising landscape. As ad servers and digital production agencies begin to explore the potential of AI, we'll likely see a boom in creative programmatic advertising and a whole new era of digital advertising innovation.
+
+GPT-4 has demonstrated that AI can indeed build an online banner ad, and the possibilities are boundless. It's time to embrace this technological advancement and witness the transformation of the digital advertising industry as we know it. Cheers to a future where man and machine work together to push the creative boundaries of online advertising!
+
+---
+
+🔗 [Prompts used in chatGPT](https://github.com/hashmil/gpt4-banner-test/blob/main/GPT4-banner-prompts.md)  
+🔗 [Version 1 of the HTML code for the banner](https://github.com/hashmil/gpt4-banner-test/blob/main/v1.html)  
+🔗 [Final version of the HTML code for the banner](https://github.com/hashmil/gpt4-banner-test/blob/main/v2.html)  
+🔗 [Live Replit link](https://replit.com/@hashmil/CandA-Labs-Banner-v2)

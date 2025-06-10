@@ -1,0 +1,49 @@
+---
+title: "Be a Prompt God"
+description: "Learn how to craft powerful AI image prompts with a 'super prompt' for GPT, Claude, or Llama, designed to help you control the creative output of tools like Midjourney and Stable Diffusion."
+pubDate: 2024-04-30
+heroImage: "./images/hashmil_deep_Underwater_scene_woman_with_auburn_wavy_hair_bei_aeeaf5cf-efca-44d9-a927-e564f1e5ab5f_3.png"
+tags: ["ai", "design", "graphic-design", "tech"]
+slug: be-a-prompt-god
+---
+
+![Deep underwater scene, woman with auburn wavy hair being pulled by an unseen force, iridescent portal glowing brightly, bubbles and light trails swirling around her, sense of urgency and mystery, dramatic lighting, cinematic composition, photorealistic 3D render, orange and blue colours](images/hashmil_deep_Underwater_scene_woman_with_auburn_wavy_hair_bei_aeeaf5cf-efca-44d9-a927-e564f1e5ab5f_3-1024x576.png)
+
+I've made tens of thousands of AI generations on Midjourney, Stable Diffusion, Dall-E, and Firefly. Almost always, I get asked, "How did you prompt that?" The answer isn't straightforward. I rarely rely on Gen AI's slot machine-like output to give me a random image. Using tools like ControlNet, IP-adapter, and custom Loras (in Stable Diffusion), I've learnt how to _somewhat_ control the beast that is AI to get the output I want. Sometimes this work is very manual. That being said, sometimes I am lazy and just want a cool-looking image. And prompting is hard.
+
+So I wrote this "super prompt" that gets GPT (or Claude/Llama/Gemini) to help me craft a good prompt based on my idea. It considers things like lighting conditions, weather, environment, colour palette, hues, mood, tone, visual theme, artistic style, etc. - all based on a figment of your idea.
+
+Just copy and paste the entire text found in this link (works best with GPT-4, Claude 3 Opus, or Llama 3 70b), and then the LLM will prompt you for your idea.
+
+```
+Act as an expert in generating prompts for Images. Help me craft a visually compelling narrative based on a story or theme I provide.
+
+#Rules
+* Follow my instructions and rules precisely.
+* Ask me: "Please write your idea for an image"
+* The prompt for the image should contain between 60 and 70 words.
+
+#Image Prompts
+* Create a detailed prompt.
+* The prompts should be comma separated descriptive words, adjectives can be used, and needs to be just one long sentence.
+* Provide detail descriptions of the scene, lighting, conditions, weather, environment, colour palate, hues, mood, tone, visual theme, artistic style.
+* Follow this order for the prompt: style, composition, medium, film type/camera, subject description, subject styling, environment, lighting, atmosphere, mood.
+
+#Output
+* Provide me with only the prompt text and nothing else. Don't generate any images.
+
+Ask me to write my idea.
+```
+
+🔗 [https://github.com/hashmil/stablediffusion-midjourney-prompts/blob/main/GenericPromptGeneratorGPT.txt](https://github.com/hashmil/stablediffusion-midjourney-prompts/blob/main/GenericPromptGeneratorGPT.txt)
+
+You can be as vague or descriptive as you like, and if you don't like the image prompt you get, you can just converse with it to amend or update it according to your vision.
+
+There's no true way to be a prompt god, but GPT may help you get there. 🫡
+
+![Gritty, low-angle shot, closeup, shot on kodak portra, film grain, weathered fisherman with a rugged beard working tirelessly on his boat, stormy gray clouds looming overhead, wind-whipped waves crashing against the hull, raindrops streaking across the frame, harsh shadows cast by the diffused light, highlighting the fisherman's determined expression and strong, calloused hands, evoking a mood of resilience, hard work, and the raw power of nature.](images/hashmil_Gritty_low-angle_shot_closeup_shot_on_kodak_portra_fi_994f7f21-a030-46dd-b4aa-8798d7f79a94_1-1024x574.png)
+
+![
+Minimalist, centered composition, high-resolution product photography, sleek and elegant perfume bottle with intricate design floating in mid-air, delicate flower petals and lush green leaves gently swirling around the bottle, pure white studio background providing a clean and uncluttered setting, soft and even lighting casting gentle shadows and highlights, emphasizing the bottle's form and details, creating a sense of sophistication and luxury, evoking a mood of serenity and refinement. pink, purple and green colour palette](images/hashmil_Minimalist_centered_composition_high-resolution_produ_21263fa6-3194-4e11-9025-c917fee962eb_2-1024x574.png)
+
+![Whimsical, medium shot, frame from a 80's VHS video, young girl with eyes wide in wonder and amazement, standing in a fantastical candy land, colorful lollipop trees and gummy bear bushes surrounding her, chocolate river winding through the landscape, cotton candy clouds floating in the pastel-hued sky, girl's face illuminated by the soft, dreamy light, capturing her expression of pure joy and enchantment, evoking a sense of childhood innocence and limitless imagination.](images/hashmil_Whimsical_medium_shot_frame_from_a_80s_VHS_video_youn_e5a9d2d1-7334-41e0-991d-ddcf1b2fdc02_2-1024x574.png)

@@ -1,0 +1,85 @@
+---
+title: "Automating Boring Time Sheets with Python"
+description: "Hate filling out timesheets? This post shows how I used Python and BeautifulSoup to automate the tedious process of filling out my agency timesheets, turning a monthly chore into a quick script."
+pubDate: 2023-01-23
+heroImage: "./images/hash_bored_male_office_worker_filling_in_time_sheets_on_a_compu_aa1df17e-d4ac-4fb3-9fb5-c04903e19083.png"
+tags: ["coding", "dev", "tech", "python"]
+slug: automating-boring-time-sheets-with-python
+---
+
+Time sheets. The bane of my life. It's something I know I've got to do, and obviously something I just put away. Somehow I've managed to not do months of time sheets. Months! Now I've got the finance department of my agency chasing me up to update the time sheets.
+
+I'm currently starting to re-learn and play around with coding. Python, among many others. And what a perfect thing to start automating stuff that's boring and that I really don't enjoy doing.
+
+So here's a little bit of something, that if you too want to use to automate your time sheet filling, you can use. I've stripped out stuff that's specific to my agency so it's more generic. Hope it helps someone.
+
+#### Let's get coding!
+
+First install [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) with [pip](https://pypi.org/project/beautifulsoup4/). This is what we'll be using to scrape the right fields and enter the data we need.
+
+```
+pip install beautifulsoup4
+```
+
+Create a new python file, such as `app.py`. Then start with the following lines to import the BeautifulSoup and requests libraries.
+
+Then create variables with your `username` and `password`. Then create a request session to login to the website. Use 'inspect element' on your browser to find the fields and their ID in the HTML. You may have to adjust the code to fit what you find in your time sheet website.
+
+the `job_number_field` is where you can enter the job ID or job number for your project. And the `monday_hours_field` (and subsequent days) are where you can enter the number of hours worked on.
+
+```python
+import requests
+from bs4 import BeautifulSoup
+
+# Enter your login credentials
+username = "your_username"
+password = "your_password"
+
+# Login to the website
+session = requests.Session()
+login_url = "https://yourwebsite.com/login"
+login_data = {"username": username, "password": password}
+session.post(login_url, data=login_data)
+
+# Navigate to the time sheet page
+timesheet_url = "https://yourwebsite.com/timesheet"
+timesheet_page = session.get(timesheet_url)
+
+# Parse the HTML of the time sheet page
+soup = BeautifulSoup(timesheet_page.content, "html.parser")
+
+# Find the job number field and enter the job number
+job_number_field = soup.find("input", {"name": "job_number"})
+job_number_field["value"] = "123456"
+
+# Find the number of hours field for Monday and enter the hours
+monday_hours_field = soup.find("input", {"name": "monday_hours"})
+monday_hours_field["value"] = "8"
+
+# Repeat for the other days of the week
+tuesday_hours_field = soup.find("input", {"name": "tuesday_hours"})
+tuesday_hours_field["value"] = "8"
+
+wednesday_hours_field = soup.find("input", {"name": "wednesday_hours"})
+wednesday_hours_field["value"] = "8"
+
+thursday_hours_field = soup.find("input", {"name": "thursday_hours"})
+thursday_hours_field["value"] = "8"
+
+friday_hours_field = soup.find("input", {"name": "friday_hours"})
+friday_hours_field["value"] = "8"
+
+# Submit the form
+submit_button = soup.find("input", {"type": "submit"})
+session.post(timesheet_url, data=submit_button)
+
+print("Time sheet submitted successfully!")
+```
+
+I could improve this code by adding a pop-up that comes up to enter the job number and the number of hours. But for now, this was enough for me.
+
+---
+
+### Links
+
+👉 [Github source code](https://github.com/hashmil/timesheets-automation) for this project
