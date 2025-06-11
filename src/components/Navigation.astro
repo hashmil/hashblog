@@ -1,12 +1,16 @@
 ---
+import { getPostUrl } from '../utils/url';
+
 export interface Props {
   prevPost?: {
     slug: string;
     title: string;
+    pubDate: Date;
   };
   nextPost?: {
     slug: string;
     title: string;
+    pubDate: Date;
   };
 }
 
@@ -19,7 +23,7 @@ const { prevPost, nextPost } = Astro.props;
       {prevPost && (
         <div class="flex-1">
           <a 
-            href={`/blog/${prevPost.slug}`}
+            href={getPostUrl(prevPost.slug, prevPost.pubDate)}
             class="group flex items-start gap-4 p-6 bg-dark-lighter rounded-lg border border-gray-800 hover:border-gray-700 transition-all duration-300 hover:shadow-lg hover:shadow-accent/10"
           >
             <div class="flex-shrink-0 w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
@@ -40,7 +44,7 @@ const { prevPost, nextPost } = Astro.props;
       {nextPost && (
         <div class="flex-1">
           <a 
-            href={`/blog/${nextPost.slug}`}
+            href={getPostUrl(nextPost.slug, nextPost.pubDate)}
             class="group flex items-start gap-4 p-6 bg-dark-lighter rounded-lg border border-gray-800 hover:border-gray-700 transition-all duration-300 hover:shadow-lg hover:shadow-accent/10 text-right"
           >
             <div class="flex-1 min-w-0 order-2">

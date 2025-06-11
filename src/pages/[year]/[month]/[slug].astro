@@ -1,9 +1,9 @@
 ---
-import Layout from '../../components/Layout.astro';
-import Header from '../../components/Header.astro';
-import Menu from '../../components/Menu.vue';
-import Navigation from '../../components/Navigation.astro';
-import Share from '../../components/Share.astro';
+import Layout from '../../../components/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Menu from '../../../components/Menu.vue';
+import Navigation from '../../../components/Navigation.astro';
+import Share from '../../../components/Share.astro';
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 
@@ -11,10 +11,20 @@ export const prerender = true;
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: post,
-  }));
+  return posts.map((post) => {
+    const pubDate = new Date(post.data.pubDate);
+    const year = pubDate.getFullYear().toString();
+    const month = (pubDate.getMonth() + 1).toString().padStart(2, '0');
+    
+    return {
+      params: { 
+        year: year,
+        month: month,
+        slug: post.slug 
+      },
+      props: post,
+    };
+  });
 }
 
 const post = Astro.props;
@@ -47,8 +57,11 @@ const wordsPerMinute = 200;
 const wordCount = post.body.split(/\s+/).length;
 const readingTime = Math.ceil(wordCount / wordsPerMinute);
 
-// Generate canonical URL
-const canonicalURL = new URL(`/blog/${post.slug}`, Astro.site);
+// Generate canonical URL with new format
+const pubDate = new Date(post.data.pubDate);
+const year = pubDate.getFullYear();
+const month = (pubDate.getMonth() + 1).toString().padStart(2, '0');
+const canonicalURL = new URL(`/${year}/${month}/${post.slug}`, Astro.site);
 
 // Handle heroImage for social meta and structured data
 const heroImageUrl = post.data.heroImage ? post.data.heroImage.src : undefined;
@@ -150,8 +163,8 @@ const heroImageUrl = post.data.heroImage ? post.data.heroImage.src : undefined;
       
       <!-- Navigation Component -->
       <Navigation 
-        prevPost={prevPost ? { slug: prevPost.slug, title: prevPost.data.title } : undefined}
-        nextPost={nextPost ? { slug: nextPost.slug, title: nextPost.data.title } : undefined}
+        prevPost={prevPost ? { slug: prevPost.slug, title: prevPost.data.title, pubDate: prevPost.data.pubDate } : undefined}
+        nextPost={nextPost ? { slug: nextPost.slug, title: nextPost.data.title, pubDate: nextPost.data.pubDate } : undefined}
       />
     </article>
   </main>

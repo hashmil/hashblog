@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
+import { getPostUrl } from "../utils/url";
 
 export const GET: APIRoute = async ({ site }) => {
   const siteUrl = site || "https://localhost:4321";
@@ -38,7 +39,7 @@ export const GET: APIRoute = async ({ site }) => {
     .map(
       (post) => `
   <url>
-    <loc>${siteUrl}/blog/${post.slug}</loc>
+    <loc>${siteUrl}${getPostUrl(post.slug, post.data.pubDate)}</loc>
     <lastmod>${
       post.data.updatedDate
         ? post.data.updatedDate.toISOString()
