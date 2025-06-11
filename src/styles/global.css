@@ -14,6 +14,8 @@
     @apply bg-dark text-white;
     /* Prevent layout shift from scrollbar appearance/disappearance */
     overflow-y: scroll;
+    /* Prevent horizontal overflow on mobile */
+    overflow-x: hidden;
   }
 
   /* Focus styles for accessibility */
@@ -107,6 +109,23 @@
     @apply prose-ul:text-text-light prose-ol:text-text-light prose-ul:font-text prose-ol:font-text;
     @apply prose-li:mb-2;
     @apply prose-img:rounded-lg prose-img:shadow-lg;
+    /* Prevent horizontal overflow on mobile */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    max-width: 100%;
+  }
+
+  /* Ensure code blocks and pre elements don't cause horizontal overflow */
+  .prose-minimal pre {
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .prose-minimal code {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   /* Custom link styling for blog posts */
@@ -115,6 +134,11 @@
     border-bottom: dotted 1px #ff5682;
     text-decoration: none;
     transition: all 0.2s ease;
+    /* Ensure long URLs wrap properly on mobile */
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
   }
 
   .prose-minimal a:hover {
@@ -149,6 +173,15 @@
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  /* Mobile-friendly text wrapping for long content */
+  .mobile-wrap {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    max-width: 100%;
   }
 }
 
