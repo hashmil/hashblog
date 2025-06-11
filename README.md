@@ -15,10 +15,12 @@ This blog explores the intersection of technology and creativity, featuring post
 
 ## Tech Stack
 
-- **Framework**: [Astro](https://astro.build) - Fast, content-focused static site generator
-- **UI Components**: [Vue.js](https://vuejs.org) - Interactive components and menu system
+- **Framework**: [Astro](https://astro.build) - Static site generator with component islands
+- **UI Components**: [Vue 3](https://vuejs.org) - Interactive components (menu, search)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com) - Utility-first CSS framework
-- **Content**: Markdown with frontmatter - Blog posts organized by date
+- **TypeScript** - Type safety and better developer experience
+- **Content**: Markdown/MDX with frontmatter for blog posts
+- **Embeds**: `@astro-community/astro-embed` - YouTube, Vimeo, TikTok video embeds
 - **Deployment**: [Cloudflare Pages](https://pages.cloudflare.com) - Edge deployment with global CDN
 - **CI/CD**: GitHub Actions - Automated deployment pipeline
 
@@ -26,22 +28,43 @@ This blog explores the intersection of technology and creativity, featuring post
 
 ```text
 /
-├── public/                 # Static assets (images, fonts, etc.)
+├── public/                 # Static assets (favicon, manifest, etc.)
 ├── src/
-│   ├── components/        # Vue components and Astro components
-│   │   └── pages/
-│   │       └── index.astro
+│   ├── components/        # Vue and Astro components
+│   │   ├── Layout.astro   # Base layout with header/footer
+│   │   ├── Menu.vue       # Full-screen navigation with integrated search
+│   │   ├── Header.astro   # Site header with menu toggle
+│   │   ├── Navigation.astro  # Post navigation (prev/next)
+│   │   ├── BlogCard.astro    # Blog post card component
+│   │   └── Share.astro       # Social sharing component
 │   ├── content/
-│   │   └── blog/         # Blog posts (organized by date)
-│   │       ├── 2024-03-15-future-of-web-development/
-│   │       ├── 2024-04-30-be-a-prompt-god/
-│   │       └── ...
+│   │   ├── blog/         # Blog posts (organized by date)
+│   │   │   ├── YYYY-MM-DD-post-title/
+│   │   │   │   ├── index.mdx      # Post content (MDX for embeds)
+│   │   │   │   ├── images/        # Post-specific images
+│   │   │   │   └── videos/        # Post-specific videos (imported as assets)
+│   │   │   └── ...
+│   │   └── config.ts     # Content collection configuration
 │   ├── pages/            # Route pages
-│   │   ├── blog/[slug].astro  # Dynamic blog post pages
-│   │   └── index.astro        # Homepage
-│   └── styles/           # Global styles
+│   │   ├── index.astro   # Homepage with latest + previous posts
+│   │   ├── about.astro   # About page
+│   │   ├── [year]/       # Year-based routing
+│   │   │   └── [month]/  # Month-based routing
+│   │   │       └── [slug].astro  # Dynamic blog post pages (/YYYY/MM/slug)
+│   │   ├── api/
+│   │   │   └── search.json.ts  # Search API endpoint
+│   │   ├── rss.xml.ts    # RSS feed generation
+│   │   └── sitemap.xml.ts  # Sitemap generation
+│   ├── utils/            # Utility functions
+│   │   └── url.ts        # URL generation helpers
+│   ├── styles/           # Global styles
+│   │   └── global.css    # Tailwind imports and custom styles
+│   └── images/           # Site-wide images
 ├── .github/workflows/    # GitHub Actions for deployment
-└── docs/                # Documentation for content creation
+├── docs/                 # Documentation
+│   ├── plan.md          # Project planning and architecture
+│   └── creating-new-blog-posts.md  # Content creation guide
+└── astro.config.mjs     # Astro configuration
 ```
 
 ## 🛠️ Development
@@ -104,11 +127,42 @@ draft: false # Set to true to hide from production
 Your content here...
 ```
 
-### 3. Embedding Videos
+### 3. Adding Videos
 
-To embed videos from providers like YouTube and Vimeo, import the required component from the `@astro-community/astro-embed` package directly in your `.mdx` file.
+#### Local Videos
 
-#### YouTube
+For videos stored in your post directory:
+
+1. **Store videos** in a `videos/` subdirectory within your post folder
+2. **Import the video** at the top of your MDX file:
+   ```js
+   import myVideo from "./videos/video-file.mp4";
+   ```
+3. **Use in HTML video element** with desired attributes:
+   ```jsx
+   <video
+     src={myVideo}
+     autoplay
+     loop
+     muted
+     playsinline
+     style="width: 100%; height: auto; border-radius: 8px; margin: 1rem 0;">
+     Your browser does not support the video tag.
+   </video>
+   ```
+
+**Video Attributes for Different Use Cases:**
+
+- **Background/Demo videos**: `autoplay`, `loop`, `muted`, `playsinline` (no `controls`)
+- **Interactive content**: Add `controls` attribute for user control
+- **Audio narration**: Remove `muted` for videos with important audio
+- **Single playthrough**: Remove `loop` for one-time viewing
+
+#### External Video Embedding
+
+For videos from providers like YouTube and Vimeo, import the required component from the `@astro-community/astro-embed` package directly in your `.mdx` file.
+
+**YouTube**
 
 1.  **Import the component**:
     ```js
@@ -120,7 +174,7 @@ To embed videos from providers like YouTube and Vimeo, import the required compo
     <YouTube id="your-video-id-here" />
     ```
 
-#### Vimeo
+**Vimeo**
 
 1.  **Import the component**:
     ```js
@@ -132,21 +186,19 @@ To embed videos from providers like YouTube and Vimeo, import the required compo
     <Vimeo id="https://vimeo.com/your-video-id" />
     ```
 
-#### TikTok
+**TikTok**
 
 TikTok videos are currently embedded using a `LinkPreview` component.
 
 ### 4. Organization
 
 - **Folder naming**: `YYYY-MM-DD-descriptive-title/`
-- **Images**: Store in an `images` sub-directory within
-  the post folder. Reference them like `heroImage: "./
-images/hero.jpg"`.
-- **Slugs**: The `slug` frontmatter property is required
-  and determines the post's URL.
+- **Images**: Store in an `images/` sub-directory within the post folder. Reference them like `heroImage: "./images/hero.jpg"`
+- **Videos**: Store in a `videos/` sub-directory and import as assets in your MDX file
+- **Slugs**: The `slug` frontmatter property is required and determines the post's URL
+- **URL Structure**: Posts are accessible at `/YYYY/MM/slug` (e.g., `/2024/05/what-lies-under-ai-short-film`)
 
-See `docs/creating-new-blog-posts.md` for detailed
-guidelines.
+See `docs/creating-new-blog-posts.md` and `docs/plan.md` for detailed guidelines.
 
 ## 🚀 Deployment
 
@@ -163,19 +215,18 @@ Add these to your GitHub repository secrets:
 
 ## 🎨 Features
 
-- **Fast Loading** - Astro's static generation with
-  minimal JavaScript
-- **SEO Optimized** - Meta tags, structured data, and
-  sitemap generation
-- **Responsive Design** - Mobile-first approach with
-  Tailwind CSS
-- **Interactive Elements** - Vue components for enhanced
-  UX
-- **Content Management** - Markdown-based with automatic
-  blog post discovery
+- **Fast Loading** - Astro's static generation with minimal JavaScript
+- **SEO Optimized** - Meta tags, structured data, and sitemap generation
+- **Responsive Design** - Mobile-first approach with Tailwind CSS
+- **Interactive Elements** - Vue components for enhanced UX
+- **Full-Screen Navigation** - Integrated search within navigation menu
+- **Content Management** - MDX-based with automatic blog post discovery
+- **Local Video Support** - Import and embed videos from post directories
+- **External Video Embeds** - YouTube, Vimeo, and TikTok integration
+- **Date-Based URLs** - Clean `/YYYY/MM/slug` URL structure for better SEO
 - **Social Sharing** - Built-in share functionality
-- **RSS Feed** - Automatic feed generation for
-  subscribers
+- **RSS Feed** - Automatic feed generation for subscribers
+- **Search Functionality** - Real-time search across all content
 
 ## 📄 License
 
