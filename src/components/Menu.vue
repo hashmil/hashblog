@@ -80,9 +80,9 @@
 
         <!-- Search Section -->
         <div
-          class="lg:w-96 p-8 lg:p-16 border-t lg:border-t-0 lg:border-l border-gray-800 animate-slide-left">
-          <div class="space-y-6">
-            <div class="relative">
+          class="lg:w-96 p-8 lg:p-16 border-t lg:border-t-0 lg:border-l border-gray-800 animate-slide-left flex flex-col">
+          <div class="space-y-6 flex flex-col flex-1">
+            <div class="relative flex-shrink-0">
               <input
                 v-model="searchQuery"
                 type="text"
@@ -107,7 +107,11 @@
               name="search-results"
               tag="div"
               v-if="searchQuery && searchResults.length > 0"
-              class="space-y-4 max-h-96 overflow-y-auto">
+              class="space-y-4 flex-1 overflow-y-auto rounded-lg bg-dark-lighter search-results-container"
+              style="
+                max-height: calc(100vh - 300px);
+                padding: 16px 20px 16px 16px;
+              ">
               <h3 key="title" class="text-lg font-semibold text-white">
                 Search Results
               </h3>
@@ -117,7 +121,7 @@
                   :key="result.slug"
                   :href="`/blog/${result.slug}`"
                   @click="closeMenu"
-                  class="block p-4 bg-dark-lighter rounded-lg hover:bg-gray-700 transition-all duration-200 animate-fade-in"
+                  class="block p-4 bg-dark rounded-lg hover:bg-gray-800 transition-all duration-200 animate-fade-in"
                   :style="{ animationDelay: `${index * 100}ms` }">
                   <h4 class="font-medium text-white mb-1">
                     {{ result.data?.title || result.title }}
@@ -150,7 +154,7 @@
             <transition name="no-results" mode="out-in">
               <div
                 v-if="searchQuery && searchResults.length === 0"
-                class="text-text-muted text-center py-8">
+                class="text-text-muted text-center py-8 flex-shrink-0">
                 No posts found matching "{{ searchQuery }}"
               </div>
             </transition>
@@ -388,5 +392,27 @@ onUnmounted(() => {
 /* Hover effects */
 nav a:hover {
   transform: translateY(-2px);
+}
+
+/* Custom scrollbar for search results */
+.search-results-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.search-results-container::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 8px 4px;
+}
+
+.search-results-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+  border: 1px solid transparent;
+  background-clip: content-box;
+}
+
+.search-results-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+  background-clip: content-box;
 }
 </style>
