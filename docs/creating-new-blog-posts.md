@@ -4,54 +4,83 @@ This guide covers everything you need to know about creating and publishing new 
 
 ## Quick Start
 
-1. Create a new `.md` file in `src/content/blog/`
-2. Add frontmatter at the top
-3. Write your content in Markdown
-4. Build and deploy
+1. Create a new date-prefixed directory in `src/content/blog/`
+2. Create an `index.mdx` file inside the directory
+3. Add frontmatter at the top
+4. Write your content in MDX (Markdown with components)
+5. Build and deploy
 
 ## File Structure
 
 ```
 src/content/blog/
-├── your-post-slug.md
-├── another-post.md
-└── draft-post.md
-
-public/images/blog/
-├── your-post-hero.jpg
-├── inline-image.png
-└── another-image.webp
+├── YYYY-MM-DD-post-title/
+│   ├── index.mdx           # Post content (MDX for embeds)
+│   ├── images/             # Post-specific images
+│   │   ├── hero.jpg
+│   │   ├── screenshot.png
+│   │   └── diagram.svg
+│   └── videos/             # Post-specific videos
+│       ├── demo.mp4
+│       └── prototype.webm
+├── 2024-05-13-another-post/
+│   ├── index.mdx
+│   └── images/
+│       └── cover.jpg
+└── 2021-02-16-draft-post/
+    ├── index.mdx
+    └── videos/
+        └── example.mp4
 ```
 
 ## Creating a New Post
 
-### 1. Create the File
+### 1. Create the Directory Structure
 
-Create a new file in `src/content/blog/` with a descriptive slug:
+Create a new date-prefixed directory in `src/content/blog/` with a descriptive title:
 
 ```bash
-# Good examples:
+# Create the directory
+mkdir "src/content/blog/YYYY-MM-DD-descriptive-title"
+cd "src/content/blog/YYYY-MM-DD-descriptive-title"
+
+# Create subdirectories for assets
+mkdir images videos
+
+# Create the main content file
+touch index.mdx
+```
+
+**Good directory examples:**
+
+```bash
 2024-03-15-future-of-web-development/
 2024-06-20-creative-coding-with-ai/
 2024-01-15-my-thoughts-on-design/
+2021-02-16-can-an-app-make-you-be-kinder/
+```
 
-# Avoid:
+**Avoid:**
+
+```bash
 post1/
 blog-post/
 untitled/
+my post with spaces/
 ```
 
 ### 2. Add Frontmatter
 
-Every blog post must start with frontmatter (YAML between `---`):
+Every blog post must start with frontmatter (YAML between `---`) in your `index.mdx` file:
 
 ```yaml
 ---
 title: "Your Post Title"
 description: "A compelling description that appears in previews and SEO"
 pubDate: 2024-01-15
-heroImage: "/images/blog/your-hero-image.jpg"
+heroImage: "./images/hero.jpg"
 tags: ["Web Development", "AI", "Creative Coding"]
+slug: "your-post-slug"
 draft: false
 ---
 ```
@@ -63,21 +92,25 @@ draft: false
 | `title`       | ✅       | Post title (shows in browser tab, social shares) |
 | `description` | ✅       | Brief summary (160 chars max for SEO)            |
 | `pubDate`     | ✅       | Publication date (YYYY-MM-DD format)             |
-| `heroImage`   | ❌       | Header image path (relative to `public/`)        |
+| `slug`        | ✅       | URL slug (determines post URL)                   |
+| `heroImage`   | ❌       | Header image path (relative to post directory)   |
 | `tags`        | ❌       | Array of tags for categorization                 |
 | `draft`       | ❌       | Set to `true` to hide from production            |
 | `updatedDate` | ❌       | Last modified date (YYYY-MM-DD)                  |
 
 ### 3. Write Your Content
 
-After the frontmatter, write your post in Markdown:
+After the frontmatter, write your post in MDX (Markdown with component support):
 
 ```markdown
 ---
 title: "My Amazing Post"
 description: "This post will blow your mind"
 pubDate: 2024-01-15
+slug: "my-amazing-post"
 ---
+
+import myVideo from "./videos/demo.mp4";
 
 # My Amazing Post
 
@@ -86,6 +119,14 @@ This is the introduction paragraph that hooks readers.
 ## Section Heading
 
 Here's some content with **bold text** and _italic text_.
+
+<video
+src={myVideo}
+controls
+style="width: 100%; height: auto; border-radius: 8px; margin: 1rem 0;"
+
+> Your browser does not support the video tag.
+> </video>
 
 ### Subsection
 
@@ -98,32 +139,45 @@ Here's some content with **bold text** and _italic text_.
 3. Final item
 ```
 
+**Key differences with MDX:**
+
+- You can import assets (images, videos) at the top
+- You can use HTML elements with React-style attributes
+- You can embed components directly in your content
+
 ## Working with Images
 
 ### Image Storage
 
-Store all blog images in `public/images/blog/`:
+Store all blog images in the `images/` directory within each post folder:
 
 ```
-public/
-└── images/
-    └── blog/
-        ├── post-slug/
-        │   ├── hero.jpg
-        │   ├── screenshot1.png
-        │   └── diagram.svg
-        └── shared/
-            ├── author-avatar.jpg
-            └── default-hero.jpg
+src/content/blog/
+└── YYYY-MM-DD-post-title/
+    ├── index.mdx
+    └── images/
+        ├── hero.jpg            # Hero/cover image
+        ├── screenshot1.png     # Inline images
+        ├── diagram.svg         # Diagrams/illustrations
+        └── gallery/            # Optional subdirectory
+            ├── photo1.jpg
+            └── photo2.jpg
 ```
+
+**Benefits of this approach:**
+
+- ✅ **Organized**: All post assets stay with the post
+- ✅ **Portable**: Easy to move or archive entire posts
+- ✅ **No conflicts**: Each post has its own namespace
+- ✅ **Automatic optimization**: Astro processes these images
 
 ### Hero Images
 
-Set the main post image in frontmatter:
+Set the main post image in frontmatter using a relative path:
 
 ```yaml
 ---
-heroImage: "/images/blog/my-post/hero.jpg"
+heroImage: "./images/hero.jpg"
 ---
 ```
 
@@ -136,15 +190,23 @@ heroImage: "/images/blog/my-post/hero.jpg"
 
 ### Inline Images
 
-Reference images in your content:
+Reference images in your content using relative paths:
 
 ```markdown
-![Alt text description](../../public/images/blog/my-post/screenshot.png)
+![Alt text description](./images/screenshot.png)
 
 <!-- Or with a caption -->
 
-![My amazing screenshot](../../public/images/blog/my-post/screenshot.png)
+![My amazing screenshot](./images/screenshot.png)
 _Caption: This is what the interface looks like_
+
+<!-- For more complex layouts, you can use HTML -->
+<figure>
+  <img src="./images/diagram.svg" alt="System architecture diagram" />
+  <figcaption>
+    Figure 1: How the system components interact
+  </figcaption>
+</figure>
 ```
 
 ### Image Optimization Tips
@@ -154,64 +216,132 @@ _Caption: This is what the interface looks like_
 3. **Add alt text** for accessibility
 4. **Consider WebP format** for better compression
 
-## Embedding Videos
+## Working with Videos
 
-### YouTube Videos
+### Local Videos
+
+For videos stored in your post directory:
+
+#### 1. Store Videos
+
+Place video files in the `videos/` subdirectory within your post folder:
+
+```
+src/content/blog/YYYY-MM-DD-post-title/
+├── index.mdx
+├── images/
+└── videos/
+    ├── demo.mp4
+    ├── prototype.webm
+    └── tutorial.mov
+```
+
+#### 2. Import and Use Videos
+
+Import videos at the top of your MDX file, then use them in HTML video elements:
 
 ```markdown
+---
+title: "My Video Post"
+description: "A post with local videos"
+pubDate: 2024-01-15
+slug: "my-video-post"
+---
+
+import demoVideo from "./videos/demo.mp4";
+import prototypeVideo from "./videos/prototype.webm";
+
+# My Video Post
+
+Here's a demo of the feature in action:
+
+<video
+src={demoVideo}
+controls
+style="width: 100%; height: auto; border-radius: 8px; margin: 1rem 0;"
+
+> Your browser does not support the video tag.
+> </video>
+
+And here's an autoplay background video:
+
+<video
+src={prototypeVideo}
+autoplay
+loop
+muted
+playsinline
+style="width: 100%; height: auto; border-radius: 8px; margin: 1rem 0;"
+
+> Your browser does not support the video tag.
+> </video>
+```
+
+#### 3. Video Attributes for Different Use Cases
+
+**Interactive Content (User Controls)**
+
+```jsx
+<video src={myVideo} controls>
+  Your browser does not support the video tag.
+</video>
+```
+
+**Background/Demo Videos (Auto-playing)**
+
+```jsx
+<video src={myVideo} autoplay loop muted playsinline>
+  Your browser does not support the video tag.
+</video>
+```
+
+**Audio Narration (With Sound)**
+
+```jsx
+<video src={myVideo} controls style="width: 100%; height: auto;">
+  Your browser does not support the video tag.
+</video>
+```
+
+**Single Playthrough**
+
+```jsx
+<video src={myVideo} controls preload="metadata">
+  Your browser does not support the video tag.
+</video>
+```
+
+### External Video Embedding
+
+For videos hosted on external platforms, use the embed components:
+
+#### YouTube Videos
+
+```markdown
+import { YouTube } from "@astro-community/astro-embed-youtube";
+
 ## Check out this demo
 
-<div class="video-container">
-  <iframe 
-    width="560" 
-    height="315" 
-    src="https://www.youtube.com/embed/VIDEO_ID" 
-    title="YouTube video player" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-    allowfullscreen>
-  </iframe>
-</div>
+<YouTube id="VIDEO_ID" />
+
+<!-- Or with custom poster -->
+<YouTube id="VIDEO_ID" poster="https://example.com/poster.jpg" />
 ```
 
-### Vimeo Videos
+#### Vimeo Videos
 
 ```markdown
-<div class="video-container">
-  <iframe 
-    src="https://player.vimeo.com/video/VIDEO_ID" 
-    width="560" 
-    height="315" 
-    frameborder="0" 
-    allow="autoplay; fullscreen; picture-in-picture" 
-    allowfullscreen>
-  </iframe>
-</div>
+import { Vimeo } from "@astro-community/astro-embed-vimeo";
+
+<Vimeo id="https://vimeo.com/VIDEO_ID" />
 ```
 
-### Video Styling
-
-Add this CSS class (already included in your theme):
+#### TikTok Videos
 
 ```markdown
-<style>
-.video-container {
-  position: relative;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
-  height: 0;
-  overflow: hidden;
-  margin: 2rem 0;
-}
+import { LinkPreview } from "@astro-community/astro-embed-link-preview";
 
-.video-container iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-}
-</style>
+<LinkPreview id="https://www.tiktok.com/@username/video/VIDEO_ID" />
 ```
 
 ## Advanced Markdown Features
@@ -331,25 +461,34 @@ npm run preview
 npm run astro check
 ```
 
-## File Naming Conventions
+## Directory Naming Conventions
 
 ### Good Examples
 
 ```
-advanced-css-techniques.md
-my-journey-with-nextjs.md
-2024-web-design-trends.md
-building-accessible-components.md
+2024-03-15-advanced-css-techniques/
+2024-06-20-my-journey-with-nextjs/
+2024-01-10-web-design-trends/
+2021-02-16-can-an-app-make-you-be-kinder/
+2023-07-08-animating-superheroes-with-ai-deforum/
 ```
 
 ### Avoid
 
 ```
-post1.md
-new-blog-post.md
-untitled.md
-my post with spaces.md
+post1/
+new-blog-post/
+untitled/
+my post with spaces/
+2024-3-5-bad-date-format/  # Use zero-padding: 2024-03-05
 ```
+
+**Directory naming rules:**
+
+- Always start with `YYYY-MM-DD-` format
+- Use lowercase letters and hyphens
+- Be descriptive but concise
+- No spaces or special characters
 
 ## Troubleshooting
 
@@ -358,14 +497,24 @@ my post with spaces.md
 **Post not showing up?**
 
 - Check `draft: false` in frontmatter
-- Verify file is in `src/content/blog/`
-- Ensure frontmatter is valid YAML
+- Verify directory is in `src/content/blog/` with proper date format
+- Ensure `index.mdx` exists in the post directory
+- Verify frontmatter is valid YAML
+- Check that `slug` field is present and unique
 
 **Images not loading?**
 
-- Check path starts with `/` (e.g., `/images/blog/...`)
-- Verify file exists in `public/` directory
-- Check file permissions
+- Check path is relative: `./images/filename.jpg` (not `/images/...`)
+- Verify file exists in post's `images/` directory
+- Check file permissions and filename spelling
+- Ensure image file extensions are lowercase
+
+**Videos not loading?**
+
+- Check video is imported at top of MDX file
+- Verify file exists in post's `videos/` directory
+- Ensure video is used with `{variableName}` syntax in JSX
+- Check video file format is supported (mp4, webm, mov)
 
 **Build errors?**
 
@@ -385,17 +534,20 @@ my post with spaces.md
 
 ### New Post Template
 
-Copy this template for new posts:
+Copy this template for new posts (`index.mdx`):
 
 ```yaml
 ---
 title: "Your Post Title Here"
 description: "A compelling description for SEO and social sharing"
 pubDate: 2024-01-15
-heroImage: "/images/blog/post-slug/hero.jpg"
+heroImage: "./images/hero.jpg"
 tags: ["Tag1", "Tag2", "Tag3"]
+slug: "your-post-slug"
 draft: false
 ---
+
+import myVideo from "./videos/demo.mp4";
 
 # Your Post Title Here
 
@@ -403,7 +555,18 @@ Introduction paragraph that hooks the reader and explains what they'll learn.
 
 ## Main Section
 
-Your content goes here with proper markdown formatting.
+Your content goes here with proper MDX formatting.
+
+![Screenshot](./images/screenshot.png)
+_Caption: This shows the interface in action_
+
+<video
+  src={myVideo}
+  controls
+  style="width: 100%; height: auto; border-radius: 8px; margin: 1rem 0;"
+>
+  Your browser does not support the video tag.
+</video>
 
 ### Subsection
 
@@ -412,6 +575,8 @@ More detailed content with examples.
 ## Conclusion
 
 Wrap up your thoughts and include a call to action.
+
+**URL**: This post will be available at `/YYYY/MM/your-post-slug`
 
 *What are your thoughts on this topic? Let me know on [Twitter](https://twitter.com/hashir)!*
 ```
