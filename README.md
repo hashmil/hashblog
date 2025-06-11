@@ -96,6 +96,13 @@ npm run dev
 | `npm run build`           | Build production site to `./dist/`         |
 | `npm run preview`         | Preview build locally                      |
 | `npm run astro -- --help` | Get help with Astro CLI                    |
+| `npm test`                | Run unit tests                             |
+
+### Running Tests
+
+```sh
+npm test
+```
 
 ## 📝 Creating Blog Posts
 
