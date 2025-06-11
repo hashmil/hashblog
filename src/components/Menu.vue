@@ -119,7 +119,12 @@
                 <a
                   v-for="(result, index) in searchResults"
                   :key="result.slug"
-                  :href="`/blog/${result.slug}`"
+                  :href="
+                    getPostUrl(
+                      result.slug,
+                      result.data?.pubDate || result.pubDate
+                    )
+                  "
                   @click="closeMenu"
                   class="block p-4 bg-dark rounded-lg hover:bg-gray-800 transition-all duration-200 animate-fade-in"
                   :style="{ animationDelay: `${index * 100}ms` }">
@@ -263,6 +268,14 @@ const formatDate = (date: string | Date) => {
     month: "short",
     day: "numeric",
   }).format(new Date(date));
+};
+
+// Generate post URL in format /yyyy/mm/slug
+const getPostUrl = (slug: string, pubDate: string | Date): string => {
+  const date = new Date(pubDate);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  return `/${year}/${month}/${slug}`;
 };
 
 // Event listeners

@@ -3,6 +3,7 @@ import Layout from '../components/Layout.astro';
 import Header from '../components/Header.astro';
 import Menu from '../components/Menu.vue';
 import { getCollection } from 'astro:content';
+import { getPostUrl } from '../utils/url';
 
 // Get all blog posts and sort by date
 const allPosts = await getCollection('blog', ({ data }) => {
@@ -35,7 +36,7 @@ function formatDate(date: Date) {
 				</div>
 				
 				<h1 class="text-3xl md:text-5xl font-primary text-white mb-6 leading-tight" transition:name={`post-title-${sortedPosts[0].slug}`}>
-					<a href={`/blog/${sortedPosts[0].slug}`} class="hover:text-accent transition-colors duration-200">
+					<a href={getPostUrl(sortedPosts[0].slug, sortedPosts[0].data.pubDate)} class="hover:text-accent transition-colors duration-200">
 						{sortedPosts[0].data.title}
 					</a>
 				</h1>
@@ -45,7 +46,7 @@ function formatDate(date: Date) {
 				</p>
 				
 				<a 
-					href={`/blog/${sortedPosts[0].slug}`}
+					href={getPostUrl(sortedPosts[0].slug, sortedPosts[0].data.pubDate)}
 					class="font-accent transition-colors duration-200"
 					style="color: #fff; border-bottom: dotted 1px #FF5682; text-decoration: none;"
 					onmouseover="this.style.color='#FF5682'; this.style.borderBottomColor='#fff';"
@@ -68,7 +69,7 @@ function formatDate(date: Date) {
 							<div class="flex flex-col md:flex-row md:items-baseline md:justify-between gap-2 md:gap-8">
 								<div class="flex-1 min-w-0">
 									<h3 class="post-title">
-										<a href={`/blog/${post.slug}`} transition:name={`post-link-${post.slug}`}>
+										<a href={getPostUrl(post.slug, post.data.pubDate)} transition:name={`post-link-${post.slug}`}>
 											{post.data.title}
 										</a>
 									</h3>
