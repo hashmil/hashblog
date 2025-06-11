@@ -64,7 +64,11 @@ const month = (pubDate.getMonth() + 1).toString().padStart(2, '0');
 const canonicalURL = new URL(`/${year}/${month}/${post.slug}`, Astro.site);
 
 // Handle heroImage for social meta and structured data
-const heroImageUrl = post.data.heroImage ? post.data.heroImage.src : undefined;
+let heroImageUrl: string | undefined;
+if (post.data.heroImage) {
+  // Convert the image to a full URL for social sharing
+  heroImageUrl = new URL(post.data.heroImage.src, Astro.site).toString();
+}
 ---
 
 <Layout 
