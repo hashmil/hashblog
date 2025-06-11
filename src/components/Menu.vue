@@ -279,18 +279,21 @@ const getPostUrl = (slug: string, pubDate: string | Date): string => {
 };
 
 // Event listeners
+const handleKeydown = (e: KeyboardEvent) => {
+  if (e.key === "Escape" && isOpen.value) {
+    closeMenu();
+  }
+};
+
 onMounted(() => {
   document.addEventListener("toggle-menu", openMenu);
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && isOpen.value) {
-      closeMenu();
-    }
-  });
+  document.addEventListener("keydown", handleKeydown);
   loadPosts();
 });
 
 onUnmounted(() => {
   document.removeEventListener("toggle-menu", openMenu);
+  document.removeEventListener("keydown", handleKeydown);
   document.body.style.overflow = "";
 });
 </script>
