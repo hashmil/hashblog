@@ -28,7 +28,10 @@ A modern, fast-loading blog website showcasing insights on AI, web development, 
 │   ├── components/        # Vue and Astro components
 │   │   ├── Layout.astro   # Base layout with header/footer
 │   │   ├── Menu.vue       # Full-screen navigation with integrated search
-│   │   └── Header.astro   # Site header with menu toggle
+│   │   ├── Header.astro   # Site header with menu toggle
+│   │   ├── Navigation.astro  # Post navigation (prev/next)
+│   │   ├── BlogCard.astro    # Blog post card component
+│   │   └── Share.astro       # Social sharing component
 │   ├── content/
 │   │   ├── blog/         # Blog posts (organized by date)
 │   │   │   ├── YYYY-MM-DD-post-title/
@@ -39,10 +42,15 @@ A modern, fast-loading blog website showcasing insights on AI, web development, 
 │   ├── pages/            # Route pages
 │   │   ├── index.astro   # Homepage with latest + previous posts
 │   │   ├── about.astro   # About page
-│   │   ├── blog/
-│   │   │   └── [slug].astro    # Dynamic blog post pages
-│   │   └── api/
-│   │       └── search.json.ts  # Search API endpoint
+│   │   ├── [year]/       # Year-based routing
+│   │   │   └── [month]/  # Month-based routing
+│   │   │       └── [slug].astro  # Dynamic blog post pages (/YYYY/MM/slug)
+│   │   ├── api/
+│   │   │   └── search.json.ts  # Search API endpoint
+│   │   ├── rss.xml.ts    # RSS feed generation
+│   │   └── sitemap.xml.ts  # Sitemap generation
+│   ├── utils/            # Utility functions
+│   │   └── url.ts        # URL generation helpers
 │   ├── styles/           # Global styles
 │   │   └── global.css    # Tailwind imports and custom styles
 │   └── images/           # Site-wide images
@@ -81,12 +89,14 @@ A modern, fast-loading blog website showcasing insights on AI, web development, 
 
 ### ✅ 4. Blog Post Pages
 
-- **Dynamic Routing**: [slug].astro for individual posts with proper SEO
+- **Dynamic Routing**: `/[year]/[month]/[slug].astro` for SEO-friendly date-based URLs
+- **URL Structure**: Clean URLs in format `/YYYY/MM/post-slug` (e.g., `/2024/05/what-lies-under-ai-short-film`)
 - **Rich Content**: MDX support for embedding YouTube, Vimeo, TikTok videos
 - **Typography**: Beautiful reading experience with custom prose styling
 - **Metadata**: Date, tags, descriptions with proper frontmatter
 - **Hero Images**: Support for post-specific hero images
 - **Responsive Images**: Optimized images with proper alt text
+- **Post Navigation**: Previous/Next post links with proper URL generation
 
 ### ✅ 5. About Page
 
@@ -115,6 +125,15 @@ A modern, fast-loading blog website showcasing insights on AI, web development, 
 - **GitHub Actions**: Automated CI/CD pipeline
 - **Static Generation**: Fast loading with minimal JavaScript
 - **Performance Optimized**: Lighthouse scores 90+ across all metrics
+- **SEO-Friendly URLs**: Date-based URL structure for better organization and SEO
+
+### ✅ 9. URL Structure & Navigation
+
+- **Date-Based URLs**: Clean `/YYYY/MM/slug` format for all blog posts
+- **URL Utility**: Centralized URL generation via `src/utils/url.ts`
+- **Search Integration**: Menu search results use the new URL format
+- **Sitemap & RSS**: Auto-generated with correct URL structure
+- **Legacy Redirect**: Old `/blog/slug` format replaced with new structure
 
 ## Design System
 
@@ -197,14 +216,22 @@ Some typography and colours from my older wordpress site that we can use
 - ✅ Cross-browser testing completed
 - ✅ Performance audit completed
 
+**Phase 6: URL Structure Optimization (December 2024)**
+
+- ✅ Implemented date-based URL structure (`/YYYY/MM/slug`)
+- ✅ Created centralized URL utility functions
+- ✅ Updated all components to use new URL format
+- ✅ Updated sitemap and RSS feed generation
+- ✅ Implemented post navigation with correct URLs
+- ✅ Updated search functionality for new URL structure
+
 ### 🚀 Future Enhancements
 
-- **Post Navigation**: Previous/Next post links within articles
 - **Social Sharing**: Twitter, Facebook, LinkedIn share buttons
-- **RSS Feed**: Auto-generated RSS feed for subscribers
-- **Reading Time**: Estimated reading time calculation
+- **Reading Time**: Estimated reading time calculation (partially implemented)
 - **Categories/Tags**: Enhanced taxonomy system
 - **Comments**: Potential integration with comment system
+- **Custom 404 Page**: Better error handling for missing posts
 
 ## Technical Considerations
 
@@ -212,7 +239,9 @@ Some typography and colours from my older wordpress site that we can use
 
 - **Static Generation**: Fast loading with Astro's static output
 - **Meta Tags**: Dynamic SEO metadata for each page
-- **Sitemap**: Auto-generated sitemap
+- **Sitemap**: Auto-generated sitemap with date-based URLs
+- **RSS Feed**: Auto-generated RSS feed with proper URL structure
+- **URL Structure**: SEO-friendly date-based URLs (`/YYYY/MM/slug`)
 - **Image Optimization**: Responsive images with proper formats
 - **Lighthouse Score**: Target 90+ on all metrics
 
@@ -227,6 +256,7 @@ Some typography and colours from my older wordpress site that we can use
 ### Content Strategy
 
 - **Blog Posts**: Technical articles, tutorials, personal projects
+- **URL Structure**: Date-based organization for better content discovery
 - **Categories/Tags**: Optional taxonomy system
 - **RSS Feed**: Auto-generated RSS for subscribers
 - **Reading Time**: Estimated reading time calculation
@@ -272,4 +302,4 @@ draft: false
 - **Cumulative Layout Shift**: < 0.1
 - **Bundle Size**: Minimal JavaScript, optimized CSS
 
-This blog represents a fully functional, modern web application that successfully balances performance, user experience, and maintainability while showcasing cutting-edge web development practices.
+This blog represents a fully functional, modern web application that successfully balances performance, user experience, and maintainability while showcasing cutting-edge web development practices. The recent implementation of date-based URLs (`/YYYY/MM/slug`) enhances SEO and provides better content organization for both users and search engines.
