@@ -36,7 +36,8 @@ A modern, fast-loading blog website showcasing insights on AI, web development, 
 │   │   ├── blog/         # Blog posts (organized by date)
 │   │   │   ├── YYYY-MM-DD-post-title/
 │   │   │   │   ├── index.mdx      # Post content (MDX for embeds)
-│   │   │   │   └── images/        # Post-specific images
+│   │   │   │   ├── images/        # Post-specific images
+│   │   │   │   └── videos/        # Post-specific videos (imported as assets)
 │   │   │   └── ...
 │   │   └── config.ts     # Content collection configuration
 │   ├── pages/            # Route pages
@@ -108,7 +109,7 @@ A modern, fast-loading blog website showcasing insights on AI, web development, 
 
 - **MDX Files**: Easy content creation with component embedding support
 - **Frontmatter**: Complete metadata (title, description, pubDate, tags, heroImage, slug, draft)
-- **Organized Structure**: Date-prefixed folders with post-specific image directories
+- **Organized Structure**: Date-prefixed folders with post-specific image and video directories
 - **Content Collections**: Type-safe content with Astro's built-in system
 - **Draft Support**: Hide posts from production with `draft: true`
 
@@ -117,7 +118,9 @@ A modern, fast-loading blog website showcasing insights on AI, web development, 
 - **YouTube Integration**: Direct embedding with `@astro-community/astro-embed-youtube`
 - **Vimeo Support**: Full Vimeo video embedding capabilities
 - **TikTok Videos**: LinkPreview component for TikTok content
+- **Local Video Support**: Import local videos as assets from post directories
 - **Responsive Embeds**: All video embeds are mobile-responsive
+- **Flexible Video Controls**: Custom attributes (autoplay, loop, muted, controls) for different use cases
 
 ### ✅ 8. Deployment & Performance
 
@@ -276,9 +279,39 @@ Some typography and colours from my older wordpress site that we can use
 1. **Create Directory**: `src/content/blog/YYYY-MM-DD-post-title/`
 2. **Add Content**: Create `index.mdx` with proper frontmatter
 3. **Add Images**: Store in `images/` subdirectory within post folder
-4. **Embed Videos**: Import and use embed components in MDX
-5. **Preview**: Use `npm run dev` to preview locally
-6. **Deploy**: Push to `main` branch for automatic deployment
+4. **Add Videos**: Store local videos in `videos/` subdirectory, import as assets in MDX
+5. **Embed External Videos**: Import and use embed components for YouTube/Vimeo/TikTok in MDX
+6. **Preview**: Use `npm run dev` to preview locally
+7. **Deploy**: Push to `main` branch for automatic deployment
+
+### Local Video Implementation
+
+For local videos stored in post directories:
+
+1. **Store videos** in `videos/` subdirectory within your post folder
+2. **Import videos** at the top of your MDX file:
+   ```js
+   import myVideo from "./videos/video-file.mp4";
+   ```
+3. **Use in HTML video element** with desired attributes:
+   ```jsx
+   <video
+     src={myVideo}
+     autoplay
+     loop
+     muted
+     playsinline
+     style="width: 100%; height: auto; border-radius: 8px; margin: 1rem 0;">
+     Your browser does not support the video tag.
+   </video>
+   ```
+
+**Video Attributes for Different Use Cases:**
+
+- **Background/Demo videos**: `autoplay`, `loop`, `muted`, `playsinline` (no `controls`)
+- **Interactive content**: Add `controls` attribute for user control
+- **Audio narration**: Remove `muted` for videos with important audio
+- **Single playthrough**: Remove `loop` for one-time viewing
 
 ### Required Frontmatter
 
