@@ -101,18 +101,28 @@
     @apply prose-h1:text-4xl prose-h1:mb-8;
     @apply prose-h2:text-3xl prose-h2:mb-6 prose-h2:mt-12;
     @apply prose-h3:text-2xl prose-h3:mb-4 prose-h3:mt-8;
-    @apply prose-p:font-text prose-p:text-text-light prose-p:leading-relaxed prose-p:mb-6;
+    @apply prose-p:font-text prose-p:mb-6;
     @apply prose-strong:text-white prose-strong:font-semibold;
     @apply prose-code:text-accent prose-code:bg-dark-lighter prose-code:px-2 prose-code:py-1 prose-code:rounded;
     @apply prose-pre:bg-dark-lighter prose-pre:border prose-pre:border-gray-800;
     @apply prose-blockquote:border-l-accent prose-blockquote:bg-dark-lighter prose-blockquote:p-6 prose-blockquote:rounded-r-lg;
-    @apply prose-ul:text-text-light prose-ol:text-text-light prose-ul:font-text prose-ol:font-text;
+    @apply prose-ul:font-text prose-ol:font-text;
     @apply prose-li:mb-2;
     @apply prose-img:rounded-lg prose-img:shadow-lg;
     /* Prevent horizontal overflow on mobile */
     overflow-wrap: break-word;
     word-wrap: break-word;
     max-width: 100%;
+  }
+
+  /* Custom body text styling for prose-minimal */
+  .prose-minimal p,
+  .prose-minimal ul,
+  .prose-minimal ol,
+  .prose-minimal li {
+    font-size: 1rem !important;
+    line-height: 1.8 !important;
+    color: #d1d5db !important;
   }
 
   /* Ensure code blocks and pre elements don't cause horizontal overflow */
