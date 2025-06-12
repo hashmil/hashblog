@@ -24,6 +24,9 @@ A modern, fast-loading blog website showcasing insights on AI, web development, 
 ```
 /
 ├── public/                 # Static assets (images, fonts, etc.)
+│   └── videos/            # Local videos organized by post
+│       └── YYYY-MM-DD-post-slug/
+│           └── video.mp4
 ├── src/
 │   ├── components/        # Vue and Astro components
 │   │   ├── Layout.astro   # Base layout with header/footer
@@ -36,8 +39,7 @@ A modern, fast-loading blog website showcasing insights on AI, web development, 
 │   │   ├── blog/         # Blog posts (organized by date)
 │   │   │   ├── YYYY-MM-DD-post-title/
 │   │   │   │   ├── index.mdx      # Post content (MDX for embeds)
-│   │   │   │   ├── images/        # Post-specific images
-│   │   │   │   └── videos/        # Post-specific videos (imported as assets)
+│   │   │   │   └── images/        # Post-specific images
 │   │   │   └── ...
 │   │   └── config.ts     # Content collection configuration
 │   ├── pages/            # Route pages
@@ -279,24 +281,26 @@ Some typography and colours from my older wordpress site that we can use
 1. **Create Directory**: `src/content/blog/YYYY-MM-DD-post-title/`
 2. **Add Content**: Create `index.mdx` with proper frontmatter
 3. **Add Images**: Store in `images/` subdirectory within post folder
-4. **Add Videos**: Store local videos in `videos/` subdirectory, import as assets in MDX
+4. **Add Videos**: Store local videos in `public/videos/YYYY-MM-DD-post-title/` and reference directly in MDX
 5. **Embed External Videos**: Import and use embed components for YouTube/Vimeo/TikTok in MDX
 6. **Preview**: Use `npm run dev` to preview locally
 7. **Deploy**: Push to `main` branch for automatic deployment
 
 ### Local Video Implementation
 
-For local videos stored in post directories:
+For local videos, we use an organized public folder approach that ensures reliable loading across all deployment platforms:
 
-1. **Store videos** in `videos/` subdirectory within your post folder
-2. **Import videos** at the top of your MDX file:
-   ```js
-   import myVideo from "./videos/video-file.mp4";
+1. **Store videos** in organized `public/videos/` directory structure:
    ```
-3. **Use in HTML video element** with desired attributes:
+   public/
+   └── videos/
+       └── YYYY-MM-DD-post-slug/
+           └── video-file.mp4
+   ```
+2. **Reference videos directly** in your MDX file (no imports needed):
    ```jsx
    <video
-     src={myVideo}
+     src="/videos/YYYY-MM-DD-post-slug/video-file.mp4"
      autoplay
      loop
      muted

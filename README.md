@@ -29,6 +29,9 @@ This blog explores the intersection of technology and creativity, featuring post
 ```text
 /
 ├── public/                 # Static assets (favicon, manifest, etc.)
+│   └── videos/            # Local videos organized by post
+│       └── YYYY-MM-DD-post-slug/
+│           └── video.mp4
 ├── src/
 │   ├── components/        # Vue and Astro components
 │   │   ├── Layout.astro   # Base layout with header/footer
@@ -41,8 +44,7 @@ This blog explores the intersection of technology and creativity, featuring post
 │   │   ├── blog/         # Blog posts (organized by date)
 │   │   │   ├── YYYY-MM-DD-post-title/
 │   │   │   │   ├── index.mdx      # Post content (MDX for embeds)
-│   │   │   │   ├── images/        # Post-specific images
-│   │   │   │   └── videos/        # Post-specific videos (imported as assets)
+│   │   │   │   └── images/        # Post-specific images
 │   │   │   └── ...
 │   │   └── config.ts     # Content collection configuration
 │   ├── pages/            # Route pages
@@ -138,17 +140,19 @@ Your content here...
 
 #### Local Videos
 
-For videos stored in your post directory:
+For videos stored locally, we use an organized public folder approach that ensures reliable loading across all deployment platforms:
 
-1. **Store videos** in a `videos/` subdirectory within your post folder
-2. **Import the video** at the top of your MDX file:
-   ```js
-   import myVideo from "./videos/video-file.mp4";
+1. **Store videos** in the organized `public/videos/` directory structure:
    ```
-3. **Use in HTML video element** with desired attributes:
+   public/
+   └── videos/
+       └── YYYY-MM-DD-post-slug/
+           └── video-file.mp4
+   ```
+2. **Reference videos directly** in your MDX file (no imports needed):
    ```jsx
    <video
-     src={myVideo}
+     src="/videos/YYYY-MM-DD-post-slug/video-file.mp4"
      autoplay
      loop
      muted
@@ -201,7 +205,7 @@ TikTok videos are currently embedded using a `LinkPreview` component.
 
 - **Folder naming**: `YYYY-MM-DD-descriptive-title/`
 - **Images**: Store in an `images/` sub-directory within the post folder. Reference them like `heroImage: "./images/hero.jpg"`
-- **Videos**: Store in a `videos/` sub-directory and import as assets in your MDX file
+- **Videos**: Store in `public/videos/YYYY-MM-DD-post-slug/` and reference directly as `/videos/YYYY-MM-DD-post-slug/video.mp4`
 - **Slugs**: The `slug` frontmatter property is required and determines the post's URL
 - **URL Structure**: Posts are accessible at `/YYYY/MM/slug` (e.g., `/2024/05/what-lies-under-ai-short-film`)
 

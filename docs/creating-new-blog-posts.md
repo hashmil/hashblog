@@ -220,25 +220,36 @@ _Caption: This is what the interface looks like_
 
 ### Local Videos
 
-For videos stored in your post directory:
+For videos stored locally, we use an organized public folder approach that ensures reliable loading across all deployment platforms:
 
-#### 1. Store Videos
+#### 1. Store Videos in Public Folder
 
-Place video files in the `videos/` subdirectory within your post folder:
+Create an organized directory structure in the public folder that mirrors your blog post structure:
 
 ```
-src/content/blog/YYYY-MM-DD-post-title/
-├── index.mdx
-├── images/
+public/
 └── videos/
-    ├── demo.mp4
-    ├── prototype.webm
-    └── tutorial.mov
+    ├── YYYY-MM-DD-post-title-1/
+    │   ├── demo.mp4
+    │   ├── prototype.webm
+    │   └── tutorial.mov
+    ├── YYYY-MM-DD-post-title-2/
+    │   └── feature-demo.mp4
+    └── ...
 ```
 
-#### 2. Import and Use Videos
+**Example for a specific post:**
 
-Import videos at the top of your MDX file, then use them in HTML video elements:
+```
+public/
+└── videos/
+    └── 2025-06-12-apple-liquid-glass-ui-thoughts/
+        └── liquidglass.mp4
+```
+
+#### 2. Reference Videos Directly
+
+Use direct path references in your video elements (no imports needed):
 
 ```markdown
 ---
@@ -248,33 +259,28 @@ pubDate: 2024-01-15
 slug: "my-video-post"
 ---
 
-import demoVideo from "./videos/demo.mp4";
-import prototypeVideo from "./videos/prototype.webm";
-
 # My Video Post
 
 Here's a demo of the feature in action:
 
 <video
-src={demoVideo}
-controls
-style="width: 100%; height: auto; border-radius: 8px; margin: 1rem 0;"
-
-> Your browser does not support the video tag.
-> </video>
+  src="/videos/2024-01-15-my-video-post/demo.mp4"
+  controls
+  style="width: 100%; height: auto; border-radius: 8px; margin: 1rem 0;">
+Your browser does not support the video tag.
+</video>
 
 And here's an autoplay background video:
 
 <video
-src={prototypeVideo}
-autoplay
-loop
-muted
-playsinline
-style="width: 100%; height: auto; border-radius: 8px; margin: 1rem 0;"
-
-> Your browser does not support the video tag.
-> </video>
+  src="/videos/2024-01-15-my-video-post/prototype.webm"
+  autoplay
+  loop
+  muted
+  playsinline
+  style="width: 100%; height: auto; border-radius: 8px; margin: 1rem 0;">
+Your browser does not support the video tag.
+</video>
 ```
 
 #### 3. Video Attributes for Different Use Cases
@@ -282,7 +288,7 @@ style="width: 100%; height: auto; border-radius: 8px; margin: 1rem 0;"
 **Interactive Content (User Controls)**
 
 ```jsx
-<video src={myVideo} controls>
+<video src="/videos/YYYY-MM-DD-post-slug/video.mp4" controls>
   Your browser does not support the video tag.
 </video>
 ```
@@ -290,7 +296,12 @@ style="width: 100%; height: auto; border-radius: 8px; margin: 1rem 0;"
 **Background/Demo Videos (Auto-playing)**
 
 ```jsx
-<video src={myVideo} autoplay loop muted playsinline>
+<video
+  src="/videos/YYYY-MM-DD-post-slug/video.mp4"
+  autoplay
+  loop
+  muted
+  playsinline>
   Your browser does not support the video tag.
 </video>
 ```
@@ -298,7 +309,10 @@ style="width: 100%; height: auto; border-radius: 8px; margin: 1rem 0;"
 **Audio Narration (With Sound)**
 
 ```jsx
-<video src={myVideo} controls style="width: 100%; height: auto;">
+<video
+  src="/videos/YYYY-MM-DD-post-slug/video.mp4"
+  controls
+  style="width: 100%; height: auto;">
   Your browser does not support the video tag.
 </video>
 ```
@@ -306,7 +320,7 @@ style="width: 100%; height: auto; border-radius: 8px; margin: 1rem 0;"
 **Single Playthrough**
 
 ```jsx
-<video src={myVideo} controls preload="metadata">
+<video src="/videos/YYYY-MM-DD-post-slug/video.mp4" controls preload="metadata">
   Your browser does not support the video tag.
 </video>
 ```
@@ -547,8 +561,6 @@ slug: "your-post-slug"
 draft: false
 ---
 
-import myVideo from "./videos/demo.mp4";
-
 # Your Post Title Here
 
 Introduction paragraph that hooks the reader and explains what they'll learn.
@@ -561,10 +573,9 @@ Your content goes here with proper MDX formatting.
 _Caption: This shows the interface in action_
 
 <video
-  src={myVideo}
+  src="/videos/2024-01-15-your-post-slug/demo.mp4"
   controls
-  style="width: 100%; height: auto; border-radius: 8px; margin: 1rem 0;"
->
+  style="width: 100%; height: auto; border-radius: 8px; margin: 1rem 0;">
   Your browser does not support the video tag.
 </video>
 
