@@ -41,7 +41,7 @@ function formatDate(date: Date) {
 					</a>
 				</h1>
 				
-				<p class="text-lg text-text-light font-text leading-relaxed mb-6" transition:name={`post-description-${sortedPosts[0].slug}`}>
+				<p class="text-base font-text leading-relaxed mb-6" style="color: #d1d5db; line-height: 1.8;" transition:name={`post-description-${sortedPosts[0].slug}`}>
 					{sortedPosts[0].data.description}
 				</p>
 				
@@ -61,28 +61,18 @@ function formatDate(date: Date) {
 		<!-- Previous Posts List -->
 		{sortedPosts.length > 1 && (
 			<section transition:name="posts-list">
-				<h2 class="text-xl font-primary text-accent mb-8">Previous Posts</h2>
+				<h2 class="text-xl font-primary text-accent mb-4">Previous Posts</h2>
 				
 				<div class="space-y-0">
 					{sortedPosts.slice(1).map((post) => (
-						<article class="post-list-item" transition:name={`post-item-${post.slug}`}>
-							<div class="flex flex-col md:flex-row md:items-baseline md:justify-between gap-2 md:gap-8">
-								<div class="flex-1 min-w-0">
-									<h3 class="post-title">
-										<a href={getPostUrl(post.slug, post.data.pubDate)} transition:name={`post-link-${post.slug}`}>
-											{post.data.title}
-										</a>
-									</h3>
-									{post.data.description && (
-										<p class="post-excerpt">
-											{post.data.description}
-										</p>
-									)}
-								</div>
-								
-								<div class="post-meta md:text-right md:flex-shrink-0">
-									{formatDate(post.data.pubDate)}
-								</div>
+						<article class="border-b py-4 last:border-b-0" style="border-color: #6b7280;" transition:name={`post-item-${post.slug}`}>
+							<h3 class="text-xl md:text-2xl font-primary text-white hover:text-accent transition-colors duration-200 leading-tight mb-2">
+								<a href={getPostUrl(post.slug, post.data.pubDate)} transition:name={`post-link-${post.slug}`}>
+									{post.data.title}
+								</a>
+							</h3>
+							<div class="font-text text-sm" style="color: #6b7280;">
+								{formatDate(post.data.pubDate)}
 							</div>
 						</article>
 					))}

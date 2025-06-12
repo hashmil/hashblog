@@ -144,8 +144,6 @@
     border-bottom: dotted 1px #ff5682;
     text-decoration: none;
     transition: all 0.2s ease;
-    padding: 2px 4px;
-    border-radius: 4px;
     /* Ensure long URLs wrap properly on mobile */
     word-wrap: break-word;
     word-break: break-word;
@@ -231,7 +229,7 @@
   }
 
   .bg-gradient-dark {
-    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+    background: linear-gradient(135deg, #2a2a2a 0%, #121212 100%);
   }
 
   /* Video container for responsive embeds */
