@@ -1,0 +1,36 @@
+---
+// Get current year dynamically
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="copyright">
+      © {currentYear} Hash Milhan
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 4rem;
+    padding: 2rem 0;
+    text-align: center;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  .copyright {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #9ca3af;
+    margin: 0;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 400;
+  }
+</style> 
