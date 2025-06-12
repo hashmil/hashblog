@@ -8,7 +8,7 @@ export default {
         primary: "#FFFFFF",
         secondary: "#FFFFFF",
         accent: "#FF5682",
-        dark: "#1a1a1a",
+        dark: "#121212",
         "dark-lighter": "#2a2a2a",
         "text-light": "#FFFFFF",
         "text-muted": "#a0a0a0",
@@ -29,7 +29,7 @@ export default {
       },
       backgroundImage: {
         "gradient-primary": "linear-gradient(135deg, #FF5682 0%, #ff8fa3 100%)",
-        "gradient-dark": "linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%)",
+        "gradient-dark": "linear-gradient(135deg, #2a2a2a 0%, #121212 100%)",
       },
       animation: {
         "fade-in": "fadeIn 0.5s ease-out forwards",
