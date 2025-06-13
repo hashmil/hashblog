@@ -9,7 +9,7 @@ import rehypeExternalLinks from "rehype-external-links";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://hashblog.pages.dev", // Update to your actual Cloudflare Pages URL
+  site: "https://hashir.blog", // Updated to actual custom domain
   output: "server", // Server-side rendering for Cloudflare
   adapter: cloudflare({
     imageService: "compile",
@@ -48,7 +48,8 @@ export default defineConfig({
       "localhost",
       "images.unsplash.com",
       "via.placeholder.com",
-      "hashblog.pages.dev",
+      "hashir.blog",
+      "hashblog.pages.dev", // Keep for compatibility during transition
     ],
     remotePatterns: [
       {

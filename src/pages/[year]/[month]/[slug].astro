@@ -67,6 +67,7 @@ const canonicalURL = new URL(`/${year}/${month}/${post.slug}`, Astro.site);
 let heroImageUrl: string | undefined;
 if (post.data.heroImage) {
   // Convert the image to a full URL for social sharing
+  // post.data.heroImage.src already contains the optimized path (e.g., /_astro/image.hash.ext)
   heroImageUrl = new URL(post.data.heroImage.src, Astro.site).toString();
 }
 ---
