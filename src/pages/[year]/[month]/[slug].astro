@@ -66,9 +66,18 @@ const canonicalURL = new URL(`/${year}/${month}/${post.slug}`, Astro.site);
 // Handle heroImage for social meta and structured data
 let heroImageUrl: string | undefined;
 if (post.data.heroImage) {
-  // Convert the image to a full URL for social sharing
-  // post.data.heroImage.src already contains the optimized path (e.g., /_astro/image.hash.ext)
-  heroImageUrl = new URL(post.data.heroImage.src, Astro.site).toString();
+  // For social sharing, use static images from public folder to avoid 404s
+  // Extract the filename from the heroImage path and create a static URL
+  const imagePath = post.data.heroImage.src;
+  const filename = imagePath.split('/').pop()?.split('.')[0]; // Get filename without extension
+  
+  // Try to use a static version first (for social sharing reliability)
+  if (filename) {
+    heroImageUrl = new URL(`/images/social-${filename}.png`, Astro.site).toString();
+  } else {
+    // Fallback to optimized image
+    heroImageUrl = new URL(post.data.heroImage.src, Astro.site).toString();
+  }
 }
 ---
 
