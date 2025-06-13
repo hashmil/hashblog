@@ -23,6 +23,8 @@
     "vue": "^3.5.16"
   },
   "devDependencies": {
+    "rehype-external-links": "^3.0.0",
+    "remark-external-links": "^9.0.1",
     "tsx": "^4.20.1"
   }
 }

@@ -5,6 +5,7 @@ import tailwind from "@astrojs/tailwind";
 import cloudflare from "@astrojs/cloudflare";
 import embed from "astro-embed/integration";
 import mdx from "@astrojs/mdx";
+import rehypeExternalLinks from "rehype-external-links";
 
 // https://astro.build/config
 export default defineConfig({
@@ -34,6 +35,12 @@ export default defineConfig({
       langs: [],
       wrap: true,
     },
+    rehypePlugins: [
+      [
+        rehypeExternalLinks,
+        { target: "_blank", rel: ["noopener", "noreferrer"] },
+      ],
+    ],
   },
 
   image: {
