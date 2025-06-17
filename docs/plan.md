@@ -4,7 +4,7 @@
 
 A modern, fast-loading blog website showcasing insights on AI, web development, creative coding, and innovative design. Built with Astro and Vue components, featuring a dark theme, full-screen navigation menu with integrated search, and responsive design optimized for performance.
 
-**Live Site**: [hashblog.pages.dev](https://hashblog.pages.dev)
+**Live Site**: [hashir.blog](https://hashir.blog)
 
 ## Tech Stack
 
@@ -269,7 +269,7 @@ Some typography and colours from my older wordpress site that we can use
 ## Current Deployment
 
 - **Platform**: Cloudflare Pages for edge deployment
-- **Domain**: hashblog.pages.dev (with potential for custom domain)
+- **Domain**: hashir.blog (custom domain active), hashblog.pages.dev (Cloudflare Pages fallback)
 - **CDN**: Global content delivery via Cloudflare's network
 - **Build Process**: Automated deployments via GitHub Actions
 - **Environment**: Node.js 18+ with npm package management

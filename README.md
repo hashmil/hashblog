@@ -2,7 +2,7 @@
 
 Personal blog by **Hash Milhan** - Creative Technology Director sharing insights on AI, web development, creative coding, and innovative design.
 
-🌐 **Live Site**: [hashblog.pages.dev](https://hashblog.pages.dev)
+🌐 **Live Site**: [hashir.blog](https://hashir.blog)
 
 ## About
 
@@ -248,8 +248,7 @@ License](LICENSE).
 
 **Hash Milhan** - Creative Technology Director
 
-- 🌐 Website: [hashblog.pages.dev](https://hashblog.
-  pages.dev)
+- 🌐 Website: [hashir.blog](https://hashir.blog)
 - 🐦 Twitter: [@hashir](https://twitter.com/hashir)
 - 📧 Email: blog@hashir.net
 
