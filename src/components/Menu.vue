@@ -2,8 +2,7 @@
   <div
     v-if="isOpen"
     class="fixed inset-0 z-50 bg-dark/95 backdrop-blur-menu transition-opacity duration-500"
-    :class="{ 'opacity-100': isMenuVisible, 'opacity-0': !isMenuVisible }"
-    @click="closeMenu">
+    :class="{ 'opacity-100': isMenuVisible, 'opacity-0': !isMenuVisible }">
     <!-- Menu Content -->
     <div class="flex flex-col h-full" @click.stop>
       <!-- Header with Close Button -->
@@ -20,6 +19,7 @@
 
         <button
           @click="closeMenu"
+          @touchstart="closeMenu"
           class="w-10 h-10 flex items-center justify-center text-white hover:text-primary transition-colors duration-200"
           aria-label="Close menu">
           <svg

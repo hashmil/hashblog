@@ -36,14 +36,34 @@
 </header>
 
 <script>
-  // Menu button functionality will be handled by the Menu Vue component
-  document.addEventListener('DOMContentLoaded', () => {
+  // Menu button functionality - more robust approach for mobile
+  function initMenuButton() {
     const menuButton = document.getElementById('menu-button');
     if (menuButton) {
-      menuButton.addEventListener('click', () => {
+      const handleMenuToggle = (e: Event) => {
+        e.preventDefault();
+        e.stopPropagation();
         // Dispatch custom event for Vue component to handle
         document.dispatchEvent(new CustomEvent('toggle-menu'));
-      });
+      };
+      
+      // Add both click and touchstart for better mobile support
+      menuButton.addEventListener('click', handleMenuToggle);
+      menuButton.addEventListener('touchstart', handleMenuToggle, { passive: false });
+      
+      // Ensure button is focusable and accessible
+      menuButton.setAttribute('tabindex', '0');
     }
-  });
+  }
+
+  // Try multiple initialization approaches
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMenuButton);
+  } else {
+    // DOM is already loaded
+    initMenuButton();
+  }
+  
+  // Fallback - try again after a short delay
+  setTimeout(initMenuButton, 100);
 </script> 
