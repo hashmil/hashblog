@@ -61,7 +61,7 @@
               target="_blank"
               rel="noopener noreferrer"
               @click="closeMenu"
-              class="block text-4xl lg:text-6xl font-primary text-white hover:text-accent transition-all duration-300 flex items-center justify-center gap-4 animate-slide-up-3">
+              class="text-4xl lg:text-6xl font-primary text-white hover:text-accent transition-all duration-300 flex items-center justify-center gap-4 animate-slide-up-3">
               Portfolio
               <svg
                 class="w-8 h-8 lg:w-12 lg:h-12"

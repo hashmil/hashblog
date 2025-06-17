@@ -143,13 +143,16 @@ Your content here...
 For videos stored locally, we use an organized public folder approach that ensures reliable loading across all deployment platforms:
 
 1. **Store videos** in the organized `public/videos/` directory structure:
-   ```
+
+   ```text
    public/
    └── videos/
        └── YYYY-MM-DD-post-slug/
            └── video-file.mp4
    ```
+
 2. **Reference videos directly** in your MDX file (no imports needed):
+
    ```jsx
    <video
      src="/videos/YYYY-MM-DD-post-slug/video-file.mp4"
@@ -173,31 +176,37 @@ For videos stored locally, we use an organized public folder approach that ensur
 
 For videos from providers like YouTube and Vimeo, import the required component from the `@astro-community/astro-embed` package directly in your `.mdx` file.
 
-**YouTube**
+#### YouTube
 
-1.  **Import the component**:
-    ```js
-    import { YouTube } from "@astro-community/astro-embed-youtube";
-    ```
-2.  **Use the component**:
-    Pass the YouTube video ID to the `id` prop. You can find the ID in the YouTube video URL (`https://www.youtube.com/watch?v=VIDEO_ID`).
-    ```astro
-    <YouTube id="your-video-id-here" />
-    ```
+1. **Import the component**:
 
-**Vimeo**
+   ```js
+   import { YouTube } from "@astro-community/astro-embed-youtube";
+   ```
 
-1.  **Import the component**:
-    ```js
-    import { Vimeo } from "@astro-community/astro-embed-vimeo";
-    ```
-2.  **Use the component**:
-    Pass the full Vimeo video URL to the `id` prop.
-    ```astro
-    <Vimeo id="https://vimeo.com/your-video-id" />
-    ```
+2. **Use the component**:
+   Pass the YouTube video ID to the `id` prop. You can find the ID in the YouTube video URL (`https://www.youtube.com/watch?v=VIDEO_ID`).
 
-**TikTok**
+   ```astro
+   <YouTube id="your-video-id-here" />
+   ```
+
+#### Vimeo
+
+1. **Import the component**:
+
+   ```js
+   import { Vimeo } from "@astro-community/astro-embed-vimeo";
+   ```
+
+2. **Use the component**:
+   Pass the full Vimeo video URL to the `id` prop.
+
+   ```astro
+   <Vimeo id="https://vimeo.com/your-video-id" />
+   ```
+
+#### TikTok
 
 TikTok videos are currently embedded using a `LinkPreview` component.
 
@@ -250,7 +259,7 @@ License](LICENSE).
 
 - 🌐 Website: [hashir.blog](https://hashir.blog)
 - 🐦 Twitter: [@hashir](https://twitter.com/hashir)
-- 📧 Email: blog@hashir.net
+- 📧 Email: <blog@hashir.net>
 
 ---
 
