@@ -97,6 +97,7 @@ npm run dev
 | `npm run dev`             | Start local dev server at `localhost:4321` |
 | `npm run build`           | Build production site to `./dist/`         |
 | `npm run preview`         | Preview build locally                      |
+| `npm run setup-social-images` | Organize hero images for social sharing |
 | `npm run astro -- --help` | Get help with Astro CLI                    |
 | `npm test`                | Run unit tests                             |
 
@@ -219,6 +220,36 @@ TikTok videos are currently embedded using a `LinkPreview` component.
 - **URL Structure**: Posts are accessible at `/YYYY/MM/slug` (e.g., `/2024/05/what-lies-under-ai-short-film`)
 
 See `docs/creating-new-blog-posts.md` and `docs/plan.md` for detailed guidelines.
+
+### 5. Social Sharing Setup
+
+The blog includes an automated social sharing system that optimizes hero images for social media platforms:
+
+#### Social Images Script
+
+```sh
+npm run setup-social-images
+```
+
+This script:
+
+- **Extracts hero images** from blog post frontmatter
+- **Organizes them** in `/public/social-images/year/slug/hero.ext`
+- **Optimizes for social sharing** meta tags (1200x630px recommended)
+- **Runs automatically** during the build process
+
+#### How it works
+
+1. The script reads all blog posts and their `heroImage` frontmatter
+2. Copies hero images to the organized social images directory structure
+3. Social sharing meta tags reference these organized images
+4. Ensures consistent URLs for Open Graph and Twitter Card previews
+
+#### Requirements
+
+- Hero images should be **1200x630px** for optimal social sharing
+- Images must be referenced in frontmatter as `heroImage: "./images/filename.jpg"`
+- The script must run before deployment for social sharing to work properly
 
 ## 🚀 Deployment
 
