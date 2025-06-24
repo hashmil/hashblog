@@ -4,11 +4,12 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "npm run setup-social-images && astro build",
+    "build": "npm run setup-social-images && npm run setup-videos && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "test": "node --import tsx --test \"tests/*.test.ts\"",
-    "setup-social-images": "node scripts/setup-social-images.js"
+    "setup-social-images": "node scripts/setup-social-images.js",
+    "setup-videos": "node scripts/setup-videos.js"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.5.3",
