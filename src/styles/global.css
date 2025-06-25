@@ -109,10 +109,18 @@
     @apply prose-ul:font-text prose-ol:font-text;
     @apply prose-li:mb-2;
     @apply prose-img:rounded-lg prose-img:shadow-lg;
+    /* Image captions */
+    @apply prose-img:mb-2;
     /* Prevent horizontal overflow on mobile */
     overflow-wrap: break-word;
     word-wrap: break-word;
     max-width: 100%;
+  }
+
+  /* Image caption styling */
+  .prose-minimal p em:only-child {
+    @apply text-sm text-text-muted font-accent text-center block mt-2 mb-6;
+    font-style: normal;
   }
 
   /* Custom body text styling for prose-minimal */
