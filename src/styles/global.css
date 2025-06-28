@@ -118,7 +118,7 @@
   }
 
   /* Image caption styling */
-  .prose-minimal p em:only-child {
+  .prose-minimal img + p em:only-child {
     @apply text-sm text-text-muted font-accent text-center block mt-2 mb-6;
     font-style: normal;
   }
