@@ -63,11 +63,66 @@ This blog explores the intersection of technology and creativity, featuring post
 │   │   └── global.css    # Tailwind imports and custom styles
 │   └── images/           # Site-wide images
 ├── .github/workflows/    # GitHub Actions for deployment
-├── docs/                 # Documentation
-│   ├── plan.md          # Project planning and architecture
-│   └── creating-new-blog-posts.md  # Content creation guide
+├── docs/                 # Comprehensive documentation
 └── astro.config.mjs     # Astro configuration
 ```
+
+## 📚 Documentation
+
+HashBlog includes comprehensive documentation covering all aspects of the platform:
+
+### 📖 Getting Started
+- **[Overview](docs/overview.md)** - Project vision, features, and architecture overview
+- **[Getting Started](docs/getting-started.md)** - Quick setup guide and creating your first blog post
+
+### 🏗️ Technical Documentation
+- **[Architecture](docs/architecture/README.md)** - Deep dive into technical implementation
+  - Islands architecture with Astro + Vue
+  - Content collections and schema validation
+  - Search implementation and API design
+  - Build process and asset optimization
+
+### ✍️ Content Management
+- **[Content Guide](docs/content/README.md)** - Complete content management system
+  - Creating and organizing blog posts
+  - Image handling and social sharing setup
+  - Video integration (local and external embeds)
+  - MDX features and component embedding
+  - Type-safe frontmatter with Zod validation
+
+### 🔧 Development & Deployment
+- **[Development Workflows](docs/development/README.md)** - Development best practices
+  - Component development (Astro + Vue)
+  - Testing strategies and code quality
+  - Performance optimization techniques
+  - Security considerations
+
+- **[Deployment Guide](docs/deployment/README.md)** - Production deployment
+  - Cloudflare Pages setup and configuration
+  - CI/CD with GitHub Actions
+  - Performance monitoring and optimization
+  - SEO and social media optimization
+
+### 🆘 Reference & Support
+- **[Troubleshooting](docs/reference/troubleshooting.md)** - Common issues and solutions
+  - Build and development issues
+  - Content and asset problems
+  - Search and menu troubleshooting
+  - Performance and deployment issues
+
+- **[FAQ](docs/reference/faq.md)** - Frequently asked questions
+  - Technical architecture questions
+  - Content management workflows
+  - Customization and deployment options
+  - Performance and security considerations
+
+### 🎯 Key Documentation Features
+
+- **Comprehensive Coverage** - Every aspect of HashBlog documented
+- **Code Examples** - Practical examples with real code snippets
+- **Best Practices** - Proven patterns and optimization strategies
+- **Troubleshooting** - Solutions for common development issues
+- **Architecture Deep-Dives** - Understanding the technical implementation
 
 ## 🛠️ Development
 
@@ -219,7 +274,7 @@ TikTok videos are currently embedded using a `LinkPreview` component.
 - **Slugs**: The `slug` frontmatter property is required and determines the post's URL
 - **URL Structure**: Posts are accessible at `/YYYY/MM/slug` (e.g., `/2024/05/what-lies-under-ai-short-film`)
 
-See `docs/creating-new-blog-posts.md` and `docs/plan.md` for detailed guidelines.
+See the comprehensive [Content Management Guide](docs/content/README.md) for detailed guidelines and best practices.
 
 ### 5. Social Sharing Setup
 
