@@ -28,10 +28,7 @@ export async function GET(context: any) {
       // Add GUID for proper RSS identification
       guid: getPostUrl(post.slug, post.data.pubDate),
       // Add custom data for each item
-      customData: `
-        ${post.data.heroImage ? `<enclosure url="${new URL(post.data.heroImage.replace('./', `/social-images/${new Date(post.data.pubDate).getFullYear()}/${post.slug}/hero.`).replace(/\.(jpg|jpeg|png|webp)$/, '.$1'), context.site)}" type="image/${post.data.heroImage.split('.').pop() === 'jpg' ? 'jpeg' : post.data.heroImage.split('.').pop()}" length="0"/>` : ''}
-        <source url="${new URL("rss.xml", context.site)}">Notes by Hash Milhan</source>
-      `.trim(),
+      customData: `<source url="${new URL("rss.xml", context.site)}">Notes by Hash Milhan</source>`,
     })),
     customData: `
       <language>en-us</language>
