@@ -17,27 +17,20 @@ export async function GET(context: any) {
     description:
       "Creative Technology Director sharing insights on AI, web development, and creative projects.",
     site: context.site,
-    items: await Promise.all(
-      sortedPosts.map(async (post) => {
-        // Render the MDX content to HTML
-        const { Content } = await post.render();
-        
-        return {
-          title: post.data.title,
-          pubDate: post.data.pubDate,
-          description: post.data.description,
-          content: Content,
-          link: getPostUrl(post.slug, post.data.pubDate),
-          // Enhanced metadata
-          author: "blog@hashir.net (Hash Milhan)",
-          categories: post.data.tags || [],
-          // Add GUID for proper RSS identification
-          guid: getPostUrl(post.slug, post.data.pubDate),
-          // Add custom data for each item
-          customData: `<source url="${new URL("rss.xml", context.site)}">Notes by Hash Milhan</source>`,
-        };
-      })
-    ),
+    items: sortedPosts.map((post) => ({
+      title: post.data.title,
+      pubDate: post.data.pubDate,
+      description: post.data.description,
+      content: post.body, // Use the raw markdown content
+      link: getPostUrl(post.slug, post.data.pubDate),
+      // Enhanced metadata
+      author: "blog@hashir.net (Hash Milhan)",
+      categories: post.data.tags || [],
+      // Add GUID for proper RSS identification
+      guid: getPostUrl(post.slug, post.data.pubDate),
+      // Add custom data for each item
+      customData: `<source url="${new URL("rss.xml", context.site)}">Notes by Hash Milhan</source>`,
+    })),
     customData: `
       <language>en-us</language>
       <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
