@@ -7,25 +7,28 @@
     "build": "npm run setup-social-images && npm run setup-videos && astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "check": "astro check",
     "test": "node --import tsx --test \"tests/*.test.ts\"",
     "setup-social-images": "node scripts/setup-social-images.js",
     "setup-videos": "node scripts/setup-videos.js"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^12.5.3",
+    "@astrojs/cloudflare": "^12.6.10",
     "@astrojs/markdown-remark": "^6.3.2",
-    "@astrojs/mdx": "^4.3.0",
-    "@astrojs/rss": "^4.0.12",
+    "@astrojs/mdx": "^4.3.9",
+    "@astrojs/rss": "^4.0.13",
     "@astrojs/tailwind": "^6.0.2",
-    "@astrojs/vue": "^5.1.0",
-    "@tailwindcss/typography": "^0.5.16",
-    "astro": "^5.8.1",
-    "astro-embed": "^0.9.0",
+    "@astrojs/vue": "^5.1.2",
+    "@tailwindcss/typography": "^0.5.19",
+    "astro": "^5.15.3",
+    "astro-embed": "^0.9.1",
     "fuse.js": "^7.1.0",
-    "vue": "^3.5.16"
+    "vue": "^3.5.22"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.5",
     "rehype-external-links": "^3.0.0",
-    "tsx": "^4.20.1"
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
   }
 }
