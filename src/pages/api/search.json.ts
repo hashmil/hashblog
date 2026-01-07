@@ -10,7 +10,7 @@ export const GET: APIRoute = async () => {
 
     // Transform posts for search index
     const searchData = allPosts.map((post) => ({
-      slug: post.slug,
+      slug: post.id,
       data: {
         title: post.data.title,
         description: post.data.description,

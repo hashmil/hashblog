@@ -30,23 +30,23 @@ function formatDate(date: Date) {
 		<div class="max-w-3xl mx-auto">
 		<!-- Featured/Latest Post -->
 		{sortedPosts[0] && (
-			<article class="mb-16" transition:name={`post-preview-${sortedPosts[0].slug}`}>
+			<article class="mb-16" transition:name={`post-preview-${sortedPosts[0].id}`}>
 				<div class="post-meta mb-4" transition:name="post-meta">
 					{formatDate(sortedPosts[0].data.pubDate)}
 				</div>
-				
-				<h1 class="text-3xl md:text-5xl font-primary text-white mb-6 leading-tight" transition:name={`post-title-${sortedPosts[0].slug}`}>
-					<a href={getPostUrl(sortedPosts[0].slug, sortedPosts[0].data.pubDate)} class="hover:text-accent transition-colors duration-200">
+
+				<h1 class="text-3xl md:text-5xl font-primary text-white mb-6 leading-tight" transition:name={`post-title-${sortedPosts[0].id}`}>
+					<a href={getPostUrl(sortedPosts[0].id, sortedPosts[0].data.pubDate)} class="hover:text-accent transition-colors duration-200">
 						{sortedPosts[0].data.title}
 					</a>
 				</h1>
-				
-				<p class="text-base font-text leading-relaxed mb-6" style="color: #d1d5db; line-height: 1.8;" transition:name={`post-description-${sortedPosts[0].slug}`}>
+
+				<p class="text-base font-text leading-relaxed mb-6" style="color: #d1d5db; line-height: 1.8;" transition:name={`post-description-${sortedPosts[0].id}`}>
 					{sortedPosts[0].data.description}
 				</p>
-				
-				<a 
-					href={getPostUrl(sortedPosts[0].slug, sortedPosts[0].data.pubDate)}
+
+				<a
+					href={getPostUrl(sortedPosts[0].id, sortedPosts[0].data.pubDate)}
 					class="font-accent transition-colors duration-200"
 					style="color: #fff; border-bottom: dotted 1px #FF5682; text-decoration: none;"
 					onmouseover="this.style.color='#FF5682'; this.style.borderBottomColor='#fff';"
@@ -65,9 +65,9 @@ function formatDate(date: Date) {
 				
 				<div class="space-y-0">
 					{sortedPosts.slice(1).map((post) => (
-						<article class="border-b py-4 last:border-b-0" style="border-color: #6b7280;" transition:name={`post-item-${post.slug}`}>
+						<article class="border-b py-4 last:border-b-0" style="border-color: #6b7280;" transition:name={`post-item-${post.id}`}>
 							<h3 class="text-xl md:text-2xl font-primary text-white hover:text-accent transition-colors duration-200 leading-tight mb-2">
-								<a href={getPostUrl(post.slug, post.data.pubDate)} transition:name={`post-link-${post.slug}`}>
+								<a href={getPostUrl(post.id, post.data.pubDate)} transition:name={`post-link-${post.id}`}>
 									{post.data.title}
 								</a>
 							</h3>

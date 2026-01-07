@@ -22,12 +22,12 @@ export async function GET(context: any) {
       pubDate: post.data.pubDate,
       description: post.data.description,
       content: post.body, // Use the raw markdown content
-      link: getPostUrl(post.slug, post.data.pubDate),
+      link: getPostUrl(post.id, post.data.pubDate),
       // Enhanced metadata
       author: "blog@hashir.net (Hash Milhan)",
       categories: post.data.tags || [],
       // Add GUID for proper RSS identification
-      guid: getPostUrl(post.slug, post.data.pubDate),
+      guid: getPostUrl(post.id, post.data.pubDate),
       // Add custom data for each item
       customData: `<source url="${new URL("rss.xml", context.site)}">Notes by Hash Milhan</source>`,
     })),

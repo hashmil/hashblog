@@ -5,7 +5,7 @@ import Menu from '../../../components/Menu.vue';
 import Navigation from '../../../components/Navigation.astro';
 import Share from '../../../components/Share.astro';
 import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 
 export const prerender = true;
 
@@ -15,12 +15,12 @@ export async function getStaticPaths() {
     const pubDate = new Date(post.data.pubDate);
     const year = pubDate.getFullYear().toString();
     const month = (pubDate.getMonth() + 1).toString().padStart(2, '0');
-    
+
     return {
-      params: { 
+      params: {
         year: year,
         month: month,
-        slug: post.slug 
+        slug: post.id
       },
       props: post,
     };
@@ -28,7 +28,7 @@ export async function getStaticPaths() {
 }
 
 const post = Astro.props;
-const { Content } = await post.render();
+const { Content } = await render(post);
 
 // Get all posts for navigation
 const allPosts = await getCollection('blog', ({ data }) => {
@@ -40,7 +40,7 @@ const sortedPosts = allPosts.sort((a, b) =>
 );
 
 // Find current post index and get prev/next
-const currentIndex = sortedPosts.findIndex(p => p.slug === post.slug);
+const currentIndex = sortedPosts.findIndex(p => p.id === post.id);
 const prevPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
 const nextPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
 
@@ -61,7 +61,7 @@ const readingTime = Math.ceil(wordCount / wordsPerMinute);
 const pubDate = new Date(post.data.pubDate);
 const year = pubDate.getFullYear();
 const month = (pubDate.getMonth() + 1).toString().padStart(2, '0');
-const canonicalURL = new URL(`/${year}/${month}/${post.slug}`, Astro.site);
+const canonicalURL = new URL(`/${year}/${month}/${post.id}`, Astro.site);
 
 // Handle heroImage for social meta and structured data
 let heroImageUrl: string | undefined;
@@ -127,7 +127,7 @@ if (post.data.heroImage) {
   <Header />
   
   <main class="container py-12" transition:name="main-content">
-    <article class="max-w-3xl mx-auto" transition:name={`post-preview-${post.slug}`}>
+    <article class="max-w-3xl mx-auto" transition:name={`post-preview-${post.id}`}>
       <!-- Post Header -->
       <header class="mb-12">
         <!-- Breadcrumb -->
@@ -144,12 +144,12 @@ if (post.data.heroImage) {
           {formatDate(post.data.pubDate)} • {readingTime} min read
         </div>
         
-        <h1 class="text-3xl md:text-5xl font-primary text-white mb-8 leading-tight" transition:name={`post-title-${post.slug}`}>
+        <h1 class="text-3xl md:text-5xl font-primary text-white mb-8 leading-tight" transition:name={`post-title-${post.id}`}>
           {post.data.title}
         </h1>
         
         {/* {post.data.heroImage && (
-          <div class="mb-12 rounded-lg overflow-hidden" transition:name={`post-hero-${post.slug}`}>
+          <div class="mb-12 rounded-lg overflow-hidden" transition:name={`post-hero-${post.id}`}>
             <Image 
               src={post.data.heroImage} 
               alt={post.data.title}
@@ -161,12 +161,12 @@ if (post.data.heroImage) {
       </header>
       
       <!-- Post Content -->
-      <div class="prose-minimal" transition:name={`post-content-${post.slug}`}>
+      <div class="prose-minimal" transition:name={`post-content-${post.id}`}>
         <Content />
       </div>
-      
+
       <!-- Share Component -->
-      <div class="mt-16" transition:name={`post-share-${post.slug}`}>
+      <div class="mt-16" transition:name={`post-share-${post.id}`}>
         <Share 
           title={post.data.title}
           url={canonicalURL.toString()}
@@ -175,9 +175,9 @@ if (post.data.heroImage) {
       </div>
       
       <!-- Navigation Component -->
-      <Navigation 
-        prevPost={prevPost ? { slug: prevPost.slug, title: prevPost.data.title, pubDate: prevPost.data.pubDate } : undefined}
-        nextPost={nextPost ? { slug: nextPost.slug, title: nextPost.data.title, pubDate: nextPost.data.pubDate } : undefined}
+      <Navigation
+        prevPost={prevPost ? { slug: prevPost.id, title: prevPost.data.title, pubDate: prevPost.data.pubDate } : undefined}
+        nextPost={nextPost ? { slug: nextPost.id, title: nextPost.data.title, pubDate: nextPost.data.pubDate } : undefined}
       />
     </article>
   </main>
