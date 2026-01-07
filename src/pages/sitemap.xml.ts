@@ -39,7 +39,7 @@ export const GET: APIRoute = async ({ site }) => {
     .map(
       (post) => `
   <url>
-    <loc>${siteUrl}${getPostUrl(post.slug, post.data.pubDate)}</loc>
+    <loc>${siteUrl}${getPostUrl(post.id, post.data.pubDate)}</loc>
     <lastmod>${
       post.data.updatedDate
         ? post.data.updatedDate.toISOString()
