@@ -1,0 +1,213 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@500;800&family=Libre+Baskerville:ital,wght@0,400;1,400&display=swap');
+
+.preview-container {
+  font-family: "Libre Baskerville", Georgia, serif;
+  background-color: #121212;
+  color: #d1d5db;
+  padding: 2rem;
+  max-width: 100%;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+.preview-hero {
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.preview-hero-image {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: cover;
+  display: block;
+}
+
+.preview-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.preview-breadcrumb {
+  margin-bottom: 1.5rem;
+}
+
+.preview-breadcrumb-text {
+  font-family: "Work Sans", system-ui, sans-serif;
+  font-weight: 500;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.preview-breadcrumb-text:hover {
+  color: #ff5682;
+}
+
+.preview-meta {
+  font-family: "Work Sans", system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #9ca3af;
+  margin-bottom: 1rem;
+}
+
+.preview-updated {
+  font-style: italic;
+}
+
+.preview-title {
+  font-family: "Work Sans", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 2.5rem;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .preview-title {
+    font-size: 2rem;
+  }
+}
+
+.preview-description {
+  color: #d1d5db;
+  font-size: 1.125rem;
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+
+.preview-body {
+  margin-top: 2rem;
+}
+
+.preview-body h1,
+.preview-body h2,
+.preview-body h3,
+.preview-body h4,
+.preview-body h5,
+.preview-body h6 {
+  font-family: "Work Sans", system-ui, sans-serif;
+  font-weight: 800;
+  color: #fff;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.preview-body h1 {
+  font-size: 2rem;
+}
+
+.preview-body h2 {
+  font-size: 1.75rem;
+}
+
+.preview-body h3 {
+  font-size: 1.5rem;
+}
+
+.preview-body p {
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  color: #d1d5db;
+}
+
+.preview-body a {
+  color: #fff;
+  border-bottom: dotted 1px #ff5682;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.preview-body a:hover {
+  color: #ff5682;
+  background-color: #fff;
+  border-bottom-color: transparent;
+}
+
+.preview-body strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.preview-body blockquote {
+  border-left: 4px solid #ff5682;
+  background-color: #1f1f1f;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+}
+
+.preview-body ul,
+.preview-body ol {
+  margin-bottom: 1.5rem;
+  padding-left: 2rem;
+}
+
+.preview-body li {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.preview-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  display: block;
+}
+
+.preview-body pre {
+  background-color: #1f1f1f;
+  border: 1px solid #374151;
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin: 1.5rem 0;
+}
+
+.preview-body code {
+  background-color: #1f1f1f;
+  color: #ff5682;
+  padding: 0.125rem 0.5rem;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.875rem;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.preview-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #374151;
+}
+
+.preview-tag {
+  font-family: "Work Sans", system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #ff5682;
+  background-color: #1f1f1f;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+}
+
+.preview-tag:hover {
+  background-color: #ff5682;
+  color: #fff;
+}
