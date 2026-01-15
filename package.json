@@ -10,7 +10,9 @@
     "check": "astro check",
     "test": "node --import tsx --test \"tests/*.test.ts\"",
     "setup-social-images": "node scripts/setup-social-images.js",
-    "setup-videos": "node scripts/setup-videos.js"
+    "setup-videos": "node scripts/setup-videos.js",
+    "cms": "npx decap-server",
+    "dev:cms": "concurrently \"npm run dev\" \"npm run cms\""
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.10",
