@@ -25,3 +25,7 @@ pnpm-debug.log*
 
 # Claude Code working files
 .claude/
+
+# Claude-mem generated files (keep root CLAUDE.md tracked)
+**/CLAUDE.md
+!/CLAUDE.md
