@@ -1,3 +1,14 @@
+/**
+ * Decap CMS Preview Configuration
+ *
+ * Global dependencies (provided by Decap CMS via Preact):
+ * - CMS: The Decap CMS global object
+ * - createClass: Preact component factory (like React.createClass)
+ * - h: Preact hyperscript function for creating virtual DOM elements
+ *
+ * These are loaded globally by the Decap CMS script in index.html
+ */
+
 // Register the preview stylesheet so it applies inside the iframe
 CMS.registerPreviewStyle('/admin/preview.css');
 

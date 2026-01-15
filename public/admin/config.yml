@@ -1,9 +1,14 @@
+# Decap CMS Configuration for HashBlog
+# Run with: bun run dev:cms
+
+# Enable local Git backend (no external authentication needed)
 local_backend: true
 
 backend:
   name: git-gateway
   branch: feature/decap-cms-integration
 
+# Centralized media storage
 media_folder: "public/media"
 public_folder: "/media"
 
@@ -13,18 +18,20 @@ collections:
     label_singular: "Blog Post"
     folder: "src/content/blog"
     create: true
+    # Directory naming: YYYY-MM-DD-slug (slug auto-generated from title)
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     path: "{{slug}}/index"
+    # MDX extension for component embedding (body uses markdown widget which works with MDX)
     extension: "mdx"
     format: "frontmatter"
+    # URL preview path matches site structure: /YYYY/MM/slug
     preview_path: "{{year}}/{{month}}/{{slug}}"
     fields:
       - {label: "Title", name: "title", widget: "string", required: true}
-      - {label: "Description", name: "description", widget: "string", required: true}
+      - {label: "Description", name: "description", widget: "string", required: true, hint: "Max 160 characters for SEO"}
       - {label: "Publish Date", name: "pubDate", widget: "datetime", date_format: "YYYY-MM-DD", time_format: "HH:mm", required: true}
       - {label: "Updated Date", name: "updatedDate", widget: "datetime", date_format: "YYYY-MM-DD", time_format: "HH:mm", required: false}
-      - {label: "Hero Image", name: "heroImage", widget: "image", required: false}
-      - {label: "Preview Image", name: "preview", widget: "image", required: false}
+      - {label: "Hero Image", name: "heroImage", widget: "image", required: false, hint: "1200x630px for optimal social sharing"}
       - {label: "Tags", name: "tags", widget: "list", required: false, default: []}
       - {label: "Draft", name: "draft", widget: "boolean", default: false}
       - {label: "Body", name: "body", widget: "markdown"}
