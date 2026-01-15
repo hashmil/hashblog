@@ -1,7 +1,8 @@
+local_backend: true
+
 backend:
   name: git-gateway
-  branch: main
-  local_backend: true
+  branch: feature/decap-cms-integration
 
 media_folder: "public/media"
 public_folder: "/media"
@@ -13,7 +14,9 @@ collections:
     folder: "src/content/blog"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-    path: "{{year}}-{{month}}-{{day}}-{{slug}}/index.mdx"
+    path: "{{slug}}/index"
+    extension: "mdx"
+    format: "frontmatter"
     preview_path: "{{year}}/{{month}}/{{slug}}"
     fields:
       - {label: "Title", name: "title", widget: "string", required: true}

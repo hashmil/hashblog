@@ -64,7 +64,15 @@ function setupSocialImages() {
     }
 
     // Get the actual image file path
-    const imagePath = path.join(postPath, heroImagePath.replace("./", ""));
+    // Handle both /media/ paths (Decap CMS) and relative ./images/ paths (legacy)
+    let imagePath;
+    if (heroImagePath.startsWith("/media/")) {
+      // Decap CMS format: /media/slug-hero.jpg -> public/media/slug-hero.jpg
+      imagePath = path.join(publicDir, heroImagePath);
+    } else {
+      // Legacy format: ./images/hero.jpg -> src/content/blog/post/images/hero.jpg
+      imagePath = path.join(postPath, heroImagePath.replace("./", ""));
+    }
 
     if (!fs.existsSync(imagePath)) {
       console.log(`❌ Error: Image not found for ${postDir}: ${imagePath}`);

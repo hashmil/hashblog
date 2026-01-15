@@ -70,11 +70,11 @@ if (post.data.heroImage) {
   // Create path: /social-images/{year}/{slug}/hero.{ext}
   const year = Astro.params.year;
   const slug = Astro.params.slug;
-  
-  // Get the original image extension from the hero image path
-  const originalPath = post.data.heroImage.src;
+
+  // heroImage is now a string path (e.g., "/media/slug-hero.jpg")
+  const originalPath = post.data.heroImage;
   const ext = originalPath.split('.').pop() || 'png';
-  
+
   // Use organized static image path
   heroImageUrl = new URL(`/social-images/${year}/${slug}/hero.${ext}`, Astro.site).toString();
 }

@@ -29,9 +29,9 @@ This blog explores the intersection of technology and creativity, featuring post
 ```text
 /
 ├── public/                 # Static assets (favicon, manifest, etc.)
-│   └── videos/            # Local videos organized by post
-│       └── YYYY-MM-DD-post-slug/
-│           └── video.mp4
+│   └── media/             # All images and videos (centralized)
+│       ├── post-slug-image.jpg
+│       └── post-slug-video.mp4
 ├── src/
 │   ├── components/        # Vue and Astro components
 │   │   ├── Layout.astro   # Base layout with header/footer
@@ -43,8 +43,7 @@ This blog explores the intersection of technology and creativity, featuring post
 │   ├── content/
 │   │   ├── blog/         # Blog posts (organized by date)
 │   │   │   ├── YYYY-MM-DD-post-title/
-│   │   │   │   ├── index.mdx      # Post content (MDX for embeds)
-│   │   │   │   └── images/        # Post-specific images
+│   │   │   │   └── index.mdx      # Post content (MDX for embeds)
 │   │   │   └── ...
 │   │   └── config.ts     # Content collection configuration
 │   ├── pages/            # Route pages
@@ -192,85 +191,66 @@ draft: false # Set to true to hide from production
 Your content here...
 ```
 
-### 3. Adding Videos
+### 3. Adding Media (Images & Videos)
+
+All media files (images and videos) are stored in the centralized `/public/media/` directory.
+
+#### Images
+
+Store images in `/public/media/` with a slug prefix:
+```
+public/media/
+├── post-slug-hero.jpg
+├── post-slug-screenshot.png
+└── post-slug-diagram.svg
+```
+
+Reference in frontmatter or content:
+```markdown
+heroImage: "/media/post-slug-hero.jpg"
+![Description](/media/post-slug-screenshot.png)
+```
 
 #### Local Videos
 
-For videos stored locally, we use an organized public folder approach that ensures reliable loading across all deployment platforms:
+Store videos in `/public/media/` and reference directly:
 
-1. **Store videos** in the organized `public/videos/` directory structure:
+```html
+<video controls loop playsinline autoplay muted>
+  <source src="/media/post-slug-video.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+```
 
-   ```text
-   public/
-   └── videos/
-       └── YYYY-MM-DD-post-slug/
-           └── video-file.mp4
-   ```
-
-2. **Reference videos directly** in your MDX file (no imports needed):
-
-   ```jsx
-   <video
-     src="/videos/YYYY-MM-DD-post-slug/video-file.mp4"
-     autoplay
-     loop
-     muted
-     playsinline
-     style="width: 100%; height: auto; border-radius: 8px; margin: 1rem 0;">
-     Your browser does not support the video tag.
-   </video>
-   ```
-
-**Video Attributes for Different Use Cases:**
-
+**Video Attributes:**
 - **Background/Demo videos**: `autoplay`, `loop`, `muted`, `playsinline` (no `controls`)
-- **Interactive content**: Add `controls` attribute for user control
+- **Interactive content**: Add `controls` for user control
 - **Audio narration**: Remove `muted` for videos with important audio
-- **Single playthrough**: Remove `loop` for one-time viewing
 
 #### External Video Embedding
 
-For videos from providers like YouTube and Vimeo, import the required component from the `@astro-community/astro-embed` package directly in your `.mdx` file.
+YouTube and Vimeo videos auto-embed when you paste a URL on its own line:
 
-#### YouTube
+```markdown
+https://www.youtube.com/watch?v=VIDEO_ID
 
-1. **Import the component**:
+https://vimeo.com/VIDEO_ID
+```
 
-   ```js
-   import { YouTube } from "@astro-community/astro-embed-youtube";
-   ```
-
-2. **Use the component**:
-   Pass the YouTube video ID to the `id` prop. You can find the ID in the YouTube video URL (`https://www.youtube.com/watch?v=VIDEO_ID`).
-
-   ```astro
-   <YouTube id="your-video-id-here" />
-   ```
-
-#### Vimeo
-
-1. **Import the component**:
-
-   ```js
-   import { Vimeo } from "@astro-community/astro-embed-vimeo";
-   ```
-
-2. **Use the component**:
-   Pass the full Vimeo video URL to the `id` prop.
-
-   ```astro
-   <Vimeo id="https://vimeo.com/your-video-id" />
-   ```
+The `astro-embed` integration automatically transforms these URLs into embedded players.
 
 #### TikTok
 
-TikTok videos are currently embedded using a `LinkPreview` component.
+TikTok videos use `LinkPreview` for card-style embedding:
+```js
+import { LinkPreview } from "@astro-community/astro-embed-link-preview";
+<LinkPreview id="https://www.tiktok.com/@user/video/123" />
+```
 
 ### 4. Organization
 
 - **Folder naming**: `YYYY-MM-DD-descriptive-title/`
-- **Images**: Store in an `images/` sub-directory within the post folder. Reference them like `heroImage: "./images/hero.jpg"`
-- **Videos**: Store in `public/videos/YYYY-MM-DD-post-slug/` and reference directly as `/videos/YYYY-MM-DD-post-slug/video.mp4`
+- **Media**: All images and videos stored in `/public/media/` with slug prefixes
 - **Slugs**: The `slug` frontmatter property is required and determines the post's URL
 - **URL Structure**: Posts are accessible at `/YYYY/MM/slug` (e.g., `/2024/05/what-lies-under-ai-short-film`)
 

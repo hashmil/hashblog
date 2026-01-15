@@ -4,15 +4,14 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "npm run setup-social-images && npm run setup-videos && astro build",
+    "build": "bun run setup-social-images && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
     "test": "node --import tsx --test \"tests/*.test.ts\"",
     "setup-social-images": "node scripts/setup-social-images.js",
-    "setup-videos": "node scripts/setup-videos.js",
-    "cms": "npx decap-server",
-    "dev:cms": "concurrently \"npm run dev\" \"npm run cms\""
+    "cms": "bun x decap-server",
+    "dev:cms": "concurrently \"bun run dev\" \"bun run cms\""
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.10",

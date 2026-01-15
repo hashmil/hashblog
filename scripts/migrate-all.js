@@ -102,35 +102,45 @@ function migratePost(postDir) {
     }
   }
   
-  // Process content images
-  const imageRegex = /!\[(.*?)\]\((\.\/)?images\/(.+?)\)/g;
+  // Process content images - find all image references to ./images/ or images/
+  const imageRegex = /!\[([^\]]*)\]\((\.\/)?images\/([^)]+)\)/g;
   let contentImageChanges = [];
   let match;
-  
-  while ((match = imageRegex.exec(content)) !== null) {
+
+  // First pass: collect all images to migrate
+  const imagesToMigrate = [];
+  while ((match = imageRegex.exec(originalContent)) !== null) {
     const altText = match[1];
-    const oldPath = match[2];
-    const imagePath = path.join(imagesDir, oldPath);
-    
+    const imageName = match[3]; // The filename after images/
+    const imagePath = path.join(imagesDir, imageName);
+
     if (fs.existsSync(imagePath)) {
-      // Generate new filename with slug prefix
-      const newName = truncateFilename(slug, oldPath);
-      const newPath = path.join(mediaDir, newName);
-      
+      const newName = truncateFilename(slug, imageName);
+      const newMediaPath = path.join(mediaDir, newName);
+
       // Copy image to media folder
-      if (!fs.existsSync(newPath)) {
-        fs.copyFileSync(imagePath, newPath);
+      if (!fs.existsSync(newMediaPath)) {
+        fs.copyFileSync(imagePath, newMediaPath);
       }
-      
+
+      imagesToMigrate.push({
+        oldPattern: match[0],
+        newMarkdown: `![${altText}](/media/${newName})`,
+        oldName: imageName,
+        newName: newName
+      });
+
       contentImageChanges.push({
-        old: oldPath,
+        old: imageName,
         new: `/media/${newName}`
       });
     }
   }
-  
-  // Update content image references
-  content = content.replace(imageRegex, `![${altText}](/media/${slug}-$2)`);
+
+  // Second pass: replace all image references
+  for (const img of imagesToMigrate) {
+    content = content.replace(img.oldPattern, img.newMarkdown);
+  }
   
   // Write updated content back
   if (content !== originalContent) {

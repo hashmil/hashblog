@@ -1,27 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@500;800&family=Libre+Baskerville:ital,wght@0,400;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700;800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
 
+/* Main container - matches site dark theme */
 .preview-container {
   font-family: "Libre Baskerville", Georgia, serif;
   background-color: #121212;
   color: #d1d5db;
   padding: 2rem;
-  max-width: 100%;
-  margin: 0 auto;
-  line-height: 1.8;
-}
-
-.preview-hero {
-  margin-bottom: 2rem;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.preview-hero-image {
-  width: 100%;
-  height: auto;
-  max-height: 400px;
-  object-fit: cover;
-  display: block;
+  min-height: 100vh;
 }
 
 .preview-content {
@@ -29,59 +14,26 @@
   margin: 0 auto;
 }
 
-.preview-breadcrumb {
-  margin-bottom: 1.5rem;
-}
-
-.preview-breadcrumb-text {
-  font-family: "Work Sans", system-ui, sans-serif;
-  font-weight: 500;
-  color: #9ca3af;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: color 0.2s ease;
-}
-
-.preview-breadcrumb-text:hover {
-  color: #ff5682;
-}
-
-.preview-meta {
-  font-family: "Work Sans", system-ui, sans-serif;
-  font-weight: 500;
-  font-size: 0.875rem;
-  color: #9ca3af;
-  margin-bottom: 1rem;
-}
-
-.preview-updated {
-  font-style: italic;
-}
-
+/* Title - matches site's large bold white title */
 .preview-title {
   font-family: "Work Sans", system-ui, sans-serif;
   font-weight: 800;
-  font-size: 2.5rem;
+  font-size: 3rem;
   color: #fff;
-  line-height: 1.2;
-  margin-bottom: 1rem;
+  line-height: 1.1;
+  margin-bottom: 2rem;
 }
 
 @media (max-width: 768px) {
   .preview-title {
-    font-size: 2rem;
+    font-size: 2.25rem;
   }
 }
 
-.preview-description {
-  color: #d1d5db;
-  font-size: 1.125rem;
-  margin-bottom: 2rem;
-  line-height: 1.7;
-}
-
+/* Body content - prose styling */
 .preview-body {
-  margin-top: 2rem;
+  line-height: 1.8;
+  font-size: 1rem;
 }
 
 .preview-body h1,
@@ -93,28 +45,31 @@
   font-family: "Work Sans", system-ui, sans-serif;
   font-weight: 800;
   color: #fff;
-  margin-top: 2rem;
+  margin-top: 2.5rem;
   margin-bottom: 1rem;
-}
-
-.preview-body h1 {
-  font-size: 2rem;
+  line-height: 1.2;
 }
 
 .preview-body h2 {
-  font-size: 1.75rem;
+  font-size: 1.875rem;
 }
 
 .preview-body h3 {
   font-size: 1.5rem;
 }
 
+.preview-body h4 {
+  font-size: 1.25rem;
+}
+
 .preview-body p {
   margin-bottom: 1.5rem;
   font-size: 1rem;
   color: #d1d5db;
+  line-height: 1.8;
 }
 
+/* Links - white with dotted pink underline */
 .preview-body a {
   color: #fff;
   border-bottom: dotted 1px #ff5682;
@@ -129,41 +84,66 @@
   color: #ff5682;
   background-color: #fff;
   border-bottom-color: transparent;
+  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
 }
 
 .preview-body strong {
   color: #fff;
-  font-weight: 600;
+  font-weight: 700;
 }
 
+.preview-body em {
+  font-style: italic;
+}
+
+/* Blockquotes */
 .preview-body blockquote {
   border-left: 4px solid #ff5682;
   background-color: #1f1f1f;
   padding: 1.5rem;
   margin: 1.5rem 0;
   border-radius: 0 8px 8px 0;
-  font-style: italic;
 }
 
+.preview-body blockquote p {
+  margin-bottom: 0;
+}
+
+/* Lists */
 .preview-body ul,
 .preview-body ol {
   margin-bottom: 1.5rem;
-  padding-left: 2rem;
+  padding-left: 1.5rem;
 }
 
 .preview-body li {
   margin-bottom: 0.5rem;
   font-size: 1rem;
+  line-height: 1.8;
 }
 
+/* Images with shadow */
 .preview-body img {
   max-width: 100%;
   height: auto;
   border-radius: 8px;
   margin: 1.5rem 0;
   display: block;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
 }
 
+/* Code - inline */
+.preview-body code {
+  background-color: #1f1f1f;
+  color: #ff5682;
+  padding: 0.125rem 0.5rem;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, monospace;
+  font-size: 0.875rem;
+  word-wrap: break-word;
+}
+
+/* Code blocks */
 .preview-body pre {
   background-color: #1f1f1f;
   border: 1px solid #374151;
@@ -175,39 +155,148 @@
   margin: 1.5rem 0;
 }
 
-.preview-body code {
-  background-color: #1f1f1f;
-  color: #ff5682;
-  padding: 0.125rem 0.5rem;
-  border-radius: 4px;
-  font-family: monospace;
-  font-size: 0.875rem;
-  word-wrap: break-word;
-  word-break: break-word;
-  overflow-wrap: break-word;
+.preview-body pre code {
+  background-color: transparent;
+  padding: 0;
+  color: #d1d5db;
 }
 
-.preview-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 2rem;
-  padding-top: 2rem;
+/* Horizontal rule */
+.preview-body hr {
+  border: none;
   border-top: 1px solid #374151;
+  margin: 2rem 0;
 }
 
-.preview-tag {
-  font-family: "Work Sans", system-ui, sans-serif;
-  font-weight: 500;
-  font-size: 0.875rem;
-  color: #ff5682;
+/* Tables */
+.preview-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+
+.preview-body th,
+.preview-body td {
+  border: 1px solid #374151;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.preview-body th {
   background-color: #1f1f1f;
-  padding: 0.5rem 1rem;
-  border-radius: 9999px;
+  font-family: "Work Sans", system-ui, sans-serif;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* ============================================
+   VIDEO EMBEDS (YouTube, Vimeo, MP4)
+   ============================================ */
+
+.video-embed {
+  position: relative;
+  width: 100%;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #1f1f1f;
+}
+
+/* 16:9 aspect ratio container for iframes */
+.video-embed iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.youtube-embed,
+.vimeo-embed {
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+}
+
+/* Local video player */
+.local-video {
+  padding-bottom: 0;
+}
+
+.local-video video {
+  width: 100%;
+  display: block;
+  border-radius: 8px;
+}
+
+/* ============================================
+   TWEET EMBED
+   ============================================ */
+
+.tweet-embed {
+  margin: 1.5rem 0;
+}
+
+.tweet-embed a {
+  text-decoration: none;
+  border: none;
+}
+
+.tweet-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background-color: #1f1f1f;
+  border: 1px solid #374151;
+  border-radius: 12px;
+  color: #9ca3af;
+  font-family: "Work Sans", system-ui, sans-serif;
+  font-size: 0.875rem;
   transition: all 0.2s ease;
 }
 
-.preview-tag:hover {
-  background-color: #ff5682;
+.tweet-placeholder:hover {
+  background-color: #2a2a2a;
+  border-color: #4b5563;
   color: #fff;
+}
+
+.tweet-placeholder svg {
+  flex-shrink: 0;
+}
+
+.tweet-placeholder span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================
+   CALLOUT / NOTE BOXES
+   ============================================ */
+
+.callout,
+.note {
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  border-left: 4px solid;
+}
+
+.callout-info,
+.note-info {
+  background-color: rgba(59, 130, 246, 0.1);
+  border-color: #3b82f6;
+}
+
+.callout-warning,
+.note-warning {
+  background-color: rgba(245, 158, 11, 0.1);
+  border-color: #f59e0b;
+}
+
+.callout-tip,
+.note-tip {
+  background-color: rgba(34, 197, 94, 0.1);
+  border-color: #22c55e;
 }
