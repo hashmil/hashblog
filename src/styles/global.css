@@ -326,3 +326,175 @@
 .no-results-leave-to {
   opacity: 0;
 }
+
+/* ============================================
+   CONTENT COMPONENTS (from Decap CMS editor)
+   ============================================ */
+
+/* Callout / Note Boxes */
+.callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  border-left: 4px solid;
+  background-color: #1f1f1f;
+}
+
+.callout-note {
+  border-color: #3b82f6;
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.callout-tip {
+  border-color: #22c55e;
+  background-color: rgba(34, 197, 94, 0.1);
+}
+
+.callout-warning {
+  border-color: #f59e0b;
+  background-color: rgba(245, 158, 11, 0.1);
+}
+
+.callout-important {
+  border-color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* Figure with Caption */
+.prose-minimal figure {
+  margin: 1.5rem 0;
+}
+
+.prose-minimal figure img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 0;
+}
+
+.prose-minimal figure figcaption {
+  margin-top: 0.75rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* CTA Buttons */
+.cta-button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-family: "Work Sans", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.cta-primary {
+  background: linear-gradient(135deg, #ff5682 0%, #ff8fa3 100%);
+  color: #fff;
+}
+
+.cta-primary:hover {
+  box-shadow: 0 4px 15px rgba(255, 86, 130, 0.4);
+  transform: translateY(-2px);
+}
+
+.cta-secondary {
+  background-color: #374151;
+  color: #fff;
+}
+
+.cta-secondary:hover {
+  background-color: #4b5563;
+}
+
+.cta-outline {
+  background-color: transparent;
+  color: #ff5682;
+  border: 2px solid #ff5682;
+}
+
+.cta-outline:hover {
+  background-color: #ff5682;
+  color: #fff;
+}
+
+/* Attributed Blockquote */
+.attributed-quote {
+  border-left: 4px solid #ff5682;
+  background-color: #1f1f1f;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.attributed-quote p {
+  font-size: 1.125rem;
+  font-style: italic;
+  line-height: 1.8;
+  margin-bottom: 0;
+}
+
+.attributed-quote cite {
+  display: block;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: #9ca3af;
+  font-style: normal;
+}
+
+.attributed-quote cite em {
+  font-style: italic;
+}
+
+/* Collapsible / Details */
+.prose-minimal details {
+  margin: 1.5rem 0;
+  border: 1px solid #374151;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #1f1f1f;
+}
+
+.prose-minimal details summary {
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  font-family: "Work Sans", system-ui, sans-serif;
+  font-weight: 600;
+  color: #fff;
+  background-color: #2a2a2a;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.prose-minimal details summary::-webkit-details-marker {
+  display: none;
+}
+
+.prose-minimal details summary::before {
+  content: "▶";
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.prose-minimal details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.prose-minimal details summary:hover {
+  background-color: #333;
+}
+
+.prose-minimal details > *:not(summary) {
+  padding: 1rem 1.25rem;
+}

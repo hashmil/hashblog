@@ -275,28 +275,202 @@
    CALLOUT / NOTE BOXES
    ============================================ */
 
-.callout,
-.note {
+.callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
   padding: 1rem 1.25rem;
   margin: 1.5rem 0;
   border-radius: 8px;
   border-left: 4px solid;
+  background-color: #1f1f1f;
 }
 
-.callout-info,
-.note-info {
-  background-color: rgba(59, 130, 246, 0.1);
+.callout-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.callout-content {
+  flex: 1;
+  line-height: 1.6;
+}
+
+.callout-note {
   border-color: #3b82f6;
+  background-color: rgba(59, 130, 246, 0.1);
 }
 
-.callout-warning,
-.note-warning {
-  background-color: rgba(245, 158, 11, 0.1);
-  border-color: #f59e0b;
-}
-
-.callout-tip,
-.note-tip {
-  background-color: rgba(34, 197, 94, 0.1);
+.callout-tip {
   border-color: #22c55e;
+  background-color: rgba(34, 197, 94, 0.1);
+}
+
+.callout-warning {
+  border-color: #f59e0b;
+  background-color: rgba(245, 158, 11, 0.1);
+}
+
+.callout-important {
+  border-color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* ============================================
+   FIGURE WITH CAPTION
+   ============================================ */
+
+.content-figure,
+figure {
+  margin: 1.5rem 0;
+}
+
+.content-figure img,
+figure img {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+.content-figure figcaption,
+figure figcaption {
+  margin-top: 0.75rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* ============================================
+   CTA BUTTONS
+   ============================================ */
+
+.cta-button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-family: "Work Sans", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.cta-primary {
+  background: linear-gradient(135deg, #ff5682 0%, #ff8fa3 100%);
+  color: #fff;
+}
+
+.cta-primary:hover {
+  box-shadow: 0 4px 15px rgba(255, 86, 130, 0.4);
+  transform: translateY(-2px);
+}
+
+.cta-secondary {
+  background-color: #374151;
+  color: #fff;
+}
+
+.cta-secondary:hover {
+  background-color: #4b5563;
+}
+
+.cta-outline {
+  background-color: transparent;
+  color: #ff5682;
+  border: 2px solid #ff5682;
+}
+
+.cta-outline:hover {
+  background-color: #ff5682;
+  color: #fff;
+}
+
+/* ============================================
+   ATTRIBUTED BLOCKQUOTE
+   ============================================ */
+
+.attributed-quote {
+  border-left: 4px solid #ff5682;
+  background-color: #1f1f1f;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.attributed-quote p {
+  font-size: 1.125rem;
+  font-style: italic;
+  line-height: 1.8;
+  margin-bottom: 0;
+}
+
+.attributed-quote cite {
+  display: block;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: #9ca3af;
+  font-style: normal;
+}
+
+.attributed-quote cite em {
+  font-style: italic;
+}
+
+/* ============================================
+   COLLAPSIBLE / DETAILS
+   ============================================ */
+
+.collapsible,
+details {
+  margin: 1.5rem 0;
+  border: 1px solid #374151;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #1f1f1f;
+}
+
+.collapsible summary,
+details summary {
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  font-family: "Work Sans", system-ui, sans-serif;
+  font-weight: 600;
+  color: #fff;
+  background-color: #2a2a2a;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.collapsible summary::-webkit-details-marker,
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+.collapsible summary::before,
+details summary::before {
+  content: "▶";
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.collapsible[open] summary::before,
+details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.collapsible summary:hover,
+details summary:hover {
+  background-color: #333;
+}
+
+.details-content,
+details > *:not(summary) {
+  padding: 1rem 1.25rem;
 }

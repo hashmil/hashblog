@@ -177,44 +177,221 @@ CMS.registerEditorComponent({
   }
 });
 
-// Code Block with syntax highlighting
+// Note: Code Block is handled by Decap CMS built-in component
+// Using standard markdown fenced code blocks: ```language\ncode\n```
+
+// ============================================
+// CONTENT COMPONENTS - For rich blog content
+// ============================================
+
+// Callout/Note Box - for tips, warnings, important notes
 CMS.registerEditorComponent({
-  id: 'codeblock',
-  label: 'Code Block',
+  id: 'callout',
+  label: 'Callout',
   fields: [
     {
-      name: 'language',
-      label: 'Language',
+      name: 'type',
+      label: 'Type',
       widget: 'select',
-      options: [
-        'javascript', 'typescript', 'python', 'html', 'css', 'json',
-        'bash', 'shell', 'markdown', 'jsx', 'tsx', 'go', 'rust', 'sql',
-        'yaml', 'xml', 'swift', 'kotlin', 'java', 'csharp', 'php', 'ruby'
-      ],
-      default: 'javascript'
+      options: ['note', 'tip', 'warning', 'important'],
+      default: 'note'
     },
     {
-      name: 'code',
-      label: 'Code',
+      name: 'content',
+      label: 'Content',
       widget: 'text'
     }
   ],
-  pattern: /^```(\w+)\n([\s\S]*?)```$/m,
+  pattern: /^<div class="callout callout-(\w+)">\s*([\s\S]*?)\s*<\/div>$/m,
   fromBlock: function(match) {
-    return {
-      language: match[1],
-      code: match[2].trim()
-    };
+    return { type: match[1], content: match[2] };
   },
   toBlock: function(data) {
-    return '```' + data.language + '\n' + data.code + '\n```';
+    return `<div class="callout callout-${data.type}">\n${data.content}\n</div>`;
   },
   toPreview: function(data) {
-    const escaped = data.code
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
-    return `<pre class="language-${data.language}"><code>${escaped}</code></pre>`;
+    const icons = {
+      note: 'ℹ️',
+      tip: '💡',
+      warning: '⚠️',
+      important: '❗'
+    };
+    return `<div class="callout callout-${data.type}">
+      <span class="callout-icon">${icons[data.type] || 'ℹ️'}</span>
+      <div class="callout-content">${data.content}</div>
+    </div>`;
+  }
+});
+
+// Figure - Image with caption
+CMS.registerEditorComponent({
+  id: 'figure',
+  label: 'Figure',
+  fields: [
+    {
+      name: 'src',
+      label: 'Image Path',
+      widget: 'image',
+      hint: 'Upload or enter path like /media/image.jpg'
+    },
+    {
+      name: 'alt',
+      label: 'Alt Text',
+      widget: 'string',
+      hint: 'Describe the image for accessibility'
+    },
+    {
+      name: 'caption',
+      label: 'Caption',
+      widget: 'string',
+      hint: 'Caption text shown below the image'
+    }
+  ],
+  pattern: /^<figure>\s*<img src="([^"]+)" alt="([^"]*)"[^>]*>\s*<figcaption>([^<]*)<\/figcaption>\s*<\/figure>$/m,
+  fromBlock: function(match) {
+    return { src: match[1], alt: match[2], caption: match[3] };
+  },
+  toBlock: function(data) {
+    return `<figure>
+  <img src="${data.src}" alt="${data.alt || ''}" />
+  <figcaption>${data.caption}</figcaption>
+</figure>`;
+  },
+  toPreview: function(data) {
+    return `<figure class="content-figure">
+      <img src="${data.src}" alt="${data.alt || ''}" />
+      <figcaption>${data.caption}</figcaption>
+    </figure>`;
+  }
+});
+
+// Button/CTA Link
+CMS.registerEditorComponent({
+  id: 'button',
+  label: 'Button',
+  fields: [
+    {
+      name: 'text',
+      label: 'Button Text',
+      widget: 'string'
+    },
+    {
+      name: 'url',
+      label: 'URL',
+      widget: 'string',
+      hint: 'Link destination'
+    },
+    {
+      name: 'style',
+      label: 'Style',
+      widget: 'select',
+      options: ['primary', 'secondary', 'outline'],
+      default: 'primary'
+    }
+  ],
+  pattern: /^<a href="([^"]+)" class="cta-button cta-(\w+)">([^<]+)<\/a>$/m,
+  fromBlock: function(match) {
+    return { url: match[1], style: match[2], text: match[3] };
+  },
+  toBlock: function(data) {
+    return `<a href="${data.url}" class="cta-button cta-${data.style}">${data.text}</a>`;
+  },
+  toPreview: function(data) {
+    return `<a href="${data.url}" class="cta-button cta-${data.style}">${data.text}</a>`;
+  }
+});
+
+// Blockquote with Attribution
+CMS.registerEditorComponent({
+  id: 'quote',
+  label: 'Quote',
+  fields: [
+    {
+      name: 'text',
+      label: 'Quote Text',
+      widget: 'text'
+    },
+    {
+      name: 'author',
+      label: 'Author',
+      widget: 'string',
+      required: false,
+      hint: 'Optional attribution'
+    },
+    {
+      name: 'source',
+      label: 'Source',
+      widget: 'string',
+      required: false,
+      hint: 'Optional source (book, article, etc.)'
+    }
+  ],
+  pattern: /^<blockquote class="attributed-quote">\s*<p>([\s\S]*?)<\/p>\s*(?:<cite>— ([^<]*?)(?:, <em>([^<]*)<\/em>)?<\/cite>)?\s*<\/blockquote>$/m,
+  fromBlock: function(match) {
+    return { text: match[1], author: match[2] || '', source: match[3] || '' };
+  },
+  toBlock: function(data) {
+    let cite = '';
+    if (data.author) {
+      cite = `\n  <cite>— ${data.author}${data.source ? `, <em>${data.source}</em>` : ''}</cite>`;
+    }
+    return `<blockquote class="attributed-quote">
+  <p>${data.text}</p>${cite}
+</blockquote>`;
+  },
+  toPreview: function(data) {
+    let cite = '';
+    if (data.author) {
+      cite = `<cite>— ${data.author}${data.source ? `, <em>${data.source}</em>` : ''}</cite>`;
+    }
+    return `<blockquote class="attributed-quote">
+      <p>${data.text}</p>
+      ${cite}
+    </blockquote>`;
+  }
+});
+
+// Details/Collapsible Section
+CMS.registerEditorComponent({
+  id: 'details',
+  label: 'Collapsible',
+  fields: [
+    {
+      name: 'summary',
+      label: 'Summary (visible text)',
+      widget: 'string',
+      hint: 'Clickable header text'
+    },
+    {
+      name: 'content',
+      label: 'Hidden Content',
+      widget: 'text',
+      hint: 'Content revealed when expanded'
+    },
+    {
+      name: 'open',
+      label: 'Start Open',
+      widget: 'boolean',
+      default: false
+    }
+  ],
+  pattern: /^<details( open)?>\s*<summary>([^<]+)<\/summary>\s*([\s\S]*?)\s*<\/details>$/m,
+  fromBlock: function(match) {
+    return { open: !!match[1], summary: match[2], content: match[3] };
+  },
+  toBlock: function(data) {
+    const openAttr = data.open ? ' open' : '';
+    return `<details${openAttr}>
+  <summary>${data.summary}</summary>
+  ${data.content}
+</details>`;
+  },
+  toPreview: function(data) {
+    const openAttr = data.open ? ' open' : '';
+    return `<details${openAttr} class="collapsible">
+      <summary>${data.summary}</summary>
+      <div class="details-content">${data.content}</div>
+    </details>`;
   }
 });
 
