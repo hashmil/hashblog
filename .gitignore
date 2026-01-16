@@ -29,3 +29,7 @@ pnpm-debug.log*
 # Claude-mem generated files (keep root CLAUDE.md tracked)
 **/CLAUDE.md
 !/CLAUDE.md
+
+# TinaCMS generated files
+tina/__generated__/
+.tina/

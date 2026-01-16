@@ -3,15 +3,17 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
-    "build": "bun run setup-social-images && astro build",
-    "preview": "astro preview",
-    "astro": "astro",
-    "check": "astro check",
+    "dev": "vite dev --port 3000",
+    "dev:tina": "tinacms dev -c \"vite dev --port 3000\"",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "node .output/server/index.mjs",
     "test": "node --import tsx --test \"tests/*.test.ts\"",
     "setup-social-images": "node scripts/setup-social-images.js",
-    "cms": "bun x decap-server",
-    "dev:cms": "concurrently \"bun run dev\" \"bun run cms\""
+    "dev:astro": "astro dev",
+    "build:astro": "tinacms build && bun run setup-social-images && astro build",
+    "cms:decap": "bun x decap-server",
+    "dev:decap": "concurrently \"bun run dev:astro\" \"bun run cms:decap\""
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.10",
@@ -21,15 +23,29 @@
     "@astrojs/tailwind": "^6.0.2",
     "@astrojs/vue": "^5.1.2",
     "@tailwindcss/typography": "^0.5.19",
+    "@tailwindcss/vite": "^4.1.18",
+    "@tanstack/react-query": "^5.90.17",
+    "@tanstack/react-router": "^1.150.0",
+    "@tanstack/react-start": "^1.150.0",
+    "@tinacms/cli": "^2.1.1",
     "astro": "^5.15.3",
     "astro-embed": "^0.9.1",
     "fuse.js": "^7.1.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "tailwindcss": "^4.1.18",
+    "tinacms": "^3.3.1",
+    "vite": "^6",
     "vue": "^3.5.22"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.5",
+    "@types/react": "^19.2.8",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
     "rehype-external-links": "^3.0.0",
     "tsx": "^4.20.6",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vite-tsconfig-paths": "^6.0.4"
   }
 }
