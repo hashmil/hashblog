@@ -1,6 +1,6 @@
 import { tinaField } from 'tinacms/dist/react'
 import { TinaMarkdown } from 'tinacms/dist/rich-text'
-import type { BlogBlocks } from '../../../tina/__generated__/types'
+import type { BlogBlocks, PageBlocks } from '../../../tina/__generated__/types'
 
 // Individual block components
 import { ContentBlock } from './ContentBlock'
@@ -12,8 +12,11 @@ import { CalloutBlock } from './CalloutBlock'
 import { EmbedBlock } from './EmbedBlock'
 import { DividerBlock } from './DividerBlock'
 
+// Union type for all block types (Blog and Page collections share the same block structure)
+type AnyBlock = BlogBlocks | PageBlocks
+
 interface BlockRendererProps {
-  blocks: BlogBlocks[] | null | undefined
+  blocks: AnyBlock[] | null | undefined
   parentField?: string
 }
 
@@ -35,80 +38,84 @@ export function BlockRenderer({ blocks, parentField = 'blocks' }: BlockRendererP
       {blocks.map((block, index) => {
         const blockField = `${parentField}.${index}`
 
-        switch (block.__typename) {
-          case 'BlogBlocksContent':
+        // Handle both BlogBlocks* and PageBlocks* types
+        const blockType = block.__typename?.replace(/^(Blog|Page)Blocks/, '')
+
+        switch (blockType) {
+          case 'Content':
             return (
               <ContentBlock
                 key={index}
-                data={block}
+                data={block as any}
                 tinaFieldName={blockField}
               />
             )
 
-          case 'BlogBlocksImage':
+          case 'Image':
             return (
               <ImageBlock
                 key={index}
-                data={block}
+                data={block as any}
                 tinaFieldName={blockField}
               />
             )
 
-          case 'BlogBlocksVideo':
+          case 'Video':
             return (
               <VideoBlock
                 key={index}
-                data={block}
+                data={block as any}
                 tinaFieldName={blockField}
               />
             )
 
-          case 'BlogBlocksCode':
+          case 'Code':
             return (
               <CodeBlock
                 key={index}
-                data={block}
+                data={block as any}
                 tinaFieldName={blockField}
               />
             )
 
-          case 'BlogBlocksQuote':
+          case 'Quote':
             return (
               <QuoteBlock
                 key={index}
-                data={block}
+                data={block as any}
                 tinaFieldName={blockField}
               />
             )
 
-          case 'BlogBlocksCallout':
+          case 'Callout':
             return (
               <CalloutBlock
                 key={index}
-                data={block}
+                data={block as any}
                 tinaFieldName={blockField}
               />
             )
 
-          case 'BlogBlocksEmbed':
+          case 'Embed':
             return (
               <EmbedBlock
                 key={index}
-                data={block}
+                data={block as any}
                 tinaFieldName={blockField}
               />
             )
 
-          case 'BlogBlocksDivider':
+          case 'Divider':
             return (
               <DividerBlock
                 key={index}
-                data={block}
+                data={block as any}
                 tinaFieldName={blockField}
               />
             )
 
           default:
+            console.warn('Unknown block type:', block.__typename)
             return null
         }
       })}
