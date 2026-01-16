@@ -373,7 +373,45 @@ export default defineConfig({
             description: 'Draft posts are hidden in production',
           },
 
-          // Block-based content
+          // Legacy body content (for existing posts)
+          // New posts should use blocks instead
+          {
+            type: 'rich-text',
+            name: 'body',
+            label: 'Body Content (Legacy)',
+            description: 'For existing posts. New posts should use Content Blocks below.',
+            isBody: true,
+            templates: [
+              // YouTube embed
+              {
+                name: 'YouTube',
+                label: 'YouTube Video',
+                fields: [
+                  {
+                    type: 'string',
+                    name: 'url',
+                    label: 'YouTube URL',
+                    required: true,
+                  },
+                ],
+              },
+              // Vimeo embed
+              {
+                name: 'Vimeo',
+                label: 'Vimeo Video',
+                fields: [
+                  {
+                    type: 'string',
+                    name: 'url',
+                    label: 'Vimeo URL',
+                    required: true,
+                  },
+                ],
+              },
+            ],
+          },
+
+          // Block-based content (for new posts)
           {
             type: 'object',
             list: true,

@@ -6,7 +6,7 @@ export const Route = createFileRoute('/')(
     loader: async () => {
       const postsResponse = await client.queries.blogConnection({
         sort: 'pubDate',
-        last: 100, // Get recent posts
+        last: 100,
       })
       return {
         posts: postsResponse.data?.blogConnection?.edges || [],
@@ -16,86 +16,108 @@ export const Route = createFileRoute('/')(
   }
 )
 
+function formatDate(date: string) {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(new Date(date))
+}
+
+function getPostUrl(relativePath: string) {
+  const dirName = relativePath.replace('/index.mdx', '').replace('/index', '')
+  const match = dirName.match(/^(\d{4})-(\d{2})-\d{2}-(.+)$/)
+  if (!match) return null
+  const [, year, month, slug] = match
+  return { year, month, slug }
+}
+
 function Home() {
   const { posts } = Route.useLoaderData()
 
+  const sortedPosts = posts
+    .filter((edge) => edge?.node && !edge.node.draft)
+    .map((edge) => edge!.node!)
+    .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
+
+  const featuredPost = sortedPosts[0]
+  const previousPosts = sortedPosts.slice(1)
+
   return (
-    <div className="min-h-screen">
-      <header className="max-w-4xl mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold" style={{ fontFamily: 'Work Sans, sans-serif' }}>
-          HashBlog
-        </h1>
-        <p className="text-gray-400 mt-2" style={{ fontFamily: 'Libre Baskerville, serif' }}>
-          Personal blog by Hash Milhan
-        </p>
-      </header>
+    <main className="container py-12">
+      <div className="max-w-3xl mx-auto">
+        {/* Featured/Latest Post */}
+        {featuredPost && (() => {
+          const urlParts = getPostUrl(featuredPost._sys?.relativePath || '')
+          if (!urlParts) return null
 
-      <main className="max-w-4xl mx-auto px-4 py-8">
-        <div className="space-y-8">
-          {posts.length === 0 ? (
-            <p className="text-gray-400">No posts yet. Start TinaCMS to create your first post!</p>
-          ) : (
-            posts
-              .filter((edge) => edge?.node && !edge.node.draft)
-              .reverse() // Show newest first
-              .map((edge) => {
-                const post = edge?.node
-                if (!post) return null
+          return (
+            <article className="mb-16">
+              <div className="text-[#a0a0a0] text-sm mb-4 font-text">
+                {formatDate(featuredPost.pubDate)}
+              </div>
 
-                // Extract URL parts from relativePath
-                const relativePath = post._sys?.relativePath || ''
-                const dirName = relativePath.replace('/index.mdx', '').replace('/index', '')
-                const match = dirName.match(/^(\d{4})-(\d{2})-\d{2}-(.+)$/)
-                if (!match) return null
-                const [, year, month, slug] = match
+              <h1 className="text-3xl md:text-5xl font-primary text-white mb-6 leading-tight">
+                <Link
+                  to="/$year/$month/$slug"
+                  params={urlParts}
+                  className="hover:text-[#FF5682] transition-colors duration-200"
+                >
+                  {featuredPost.title}
+                </Link>
+              </h1>
 
-                const formattedDate = new Date(post.pubDate).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })
+              <p className="text-base font-text leading-relaxed mb-6 text-[#d1d5db]" style={{ lineHeight: 1.8 }}>
+                {featuredPost.description}
+              </p>
+
+              <Link
+                to="/$year/$month/$slug"
+                params={urlParts}
+                className="font-accent text-white hover:text-[#FF5682] transition-colors duration-200"
+                style={{ borderBottom: 'dotted 1px #FF5682', textDecoration: 'none' }}
+              >
+                Read More →
+              </Link>
+            </article>
+          )
+        })()}
+
+        {/* Previous Posts List */}
+        {previousPosts.length > 0 && (
+          <section>
+            <h2 className="text-xl font-primary text-[#FF5682] mb-4">Previous Posts</h2>
+
+            <div className="space-y-0">
+              {previousPosts.map((post) => {
+                const urlParts = getPostUrl(post._sys?.relativePath || '')
+                if (!urlParts) return null
 
                 return (
-                  <article key={post.id} className="border-b border-gray-800 pb-8">
-                    <Link
-                      to="/$year/$month/$slug"
-                      params={{ year, month, slug }}
-                      className="group block"
-                    >
-                      {post.heroImage && (
-                        <img
-                          src={post.heroImage}
-                          alt={post.title}
-                          className="w-full h-48 object-cover rounded-lg mb-4 group-hover:opacity-80 transition-opacity"
-                        />
-                      )}
-                      <h2
-                        className="text-2xl font-bold mb-2 group-hover:text-pink-500 transition-colors"
-                        style={{ fontFamily: 'Work Sans, sans-serif' }}
-                      >
+                  <article
+                    key={post.id}
+                    className="border-b border-gray-600 py-4 last:border-b-0"
+                  >
+                    <h3 className="text-xl md:text-2xl font-primary text-white hover:text-[#FF5682] transition-colors duration-200 leading-tight mb-2">
+                      <Link to="/$year/$month/$slug" params={urlParts}>
                         {post.title}
-                      </h2>
-                      <p className="text-gray-400 text-sm mb-3">{formattedDate}</p>
-                      <p className="text-gray-300">{post.description}</p>
-                      {post.tags && post.tags.length > 0 && (
-                        <div className="flex gap-2 mt-4">
-                          {post.tags.map((tag) => (
-                            <span
-                              key={tag}
-                              className="px-2 py-1 bg-gray-800 rounded text-xs text-gray-400"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </Link>
+                      </Link>
+                    </h3>
+                    <div className="font-text text-sm text-gray-500">
+                      {formatDate(post.pubDate)}
+                    </div>
                   </article>
                 )
-              })
-          )}
-        </div>
-      </main>
-    </div>
+              })}
+            </div>
+          </section>
+        )}
+
+        {/* No posts message */}
+        {sortedPosts.length === 0 && (
+          <p className="text-[#a0a0a0]">No posts yet. Start TinaCMS to create your first post!</p>
+        )}
+      </div>
+    </main>
   )
 }
