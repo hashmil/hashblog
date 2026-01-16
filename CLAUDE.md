@@ -12,7 +12,7 @@ bun run build                  # Production build with social images setup
 bun run preview                # Preview production build locally
 bun test                       # Run unit tests using Node.js built-in test runner
 bun run setup-social-images    # Organize hero images for social sharing
-bun run cms                    # Start Decap CMS proxy server (localhost:8081)
+bun run cms                    # Start Decap CMS proxy server (localhost:8082)
 bun run dev:cms                # Run dev server + CMS together
 ```
 

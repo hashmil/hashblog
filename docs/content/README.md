@@ -1,36 +1,49 @@
 # Content Management
 
-HashBlog provides a powerful, type-safe content management system built on Astro's Content Collections. This guide covers everything you need to know about creating, managing, and organizing blog content.
+HashBlog uses **Decap CMS** for content management with Git-based storage. All content is type-safe using Astro's Content Collections with Zod validation.
+
+## 🚀 Quick Start
+
+The easiest way to manage content is via Decap CMS:
+
+```bash
+# Start CMS and dev server together
+bun run dev:cms
+
+# Access admin panel at:
+# http://localhost:4321/admin/index.html
+```
+
+See **[Decap CMS Guide](../decap-cms-guide.md)** for complete CMS documentation.
 
 ## 📚 Table of Contents
 
+- **[Decap CMS Guide](../decap-cms-guide.md)** - Visual content management
 - **[Creating Blog Posts](creating-posts.md)** - Step-by-step guide to writing new posts
 - **[Image Handling](images.md)** - Image optimization and social sharing setup
 - **[Video Integration](videos.md)** - Local videos and external platform embeds
 - **[Content Schema](schema.md)** - Understanding frontmatter validation and types
-- **[Asset Organization](assets.md)** - Managing images, videos, and other media
 
 ## 🎯 Content Management Overview
 
 ### Core Principles
 
-1. **Type Safety**: All content is validated using Zod schemas
-2. **Self-Contained Posts**: Each post includes its own assets and media
-3. **SEO First**: Built-in optimization for search engines and social sharing
-4. **Performance**: Automated asset optimization during build
-5. **Developer Experience**: Modern tooling with hot reloading and TypeScript
+1. **Visual Editing**: Decap CMS provides a user-friendly editor with live preview
+2. **Type Safety**: All content is validated using Zod schemas
+3. **Centralized Media**: All images and videos stored in `/public/media/`
+4. **SEO First**: Built-in optimization for search engines and social sharing
+5. **Git-Based**: All changes committed to Git automatically
 
 ### Content Architecture
 
 ```
 src/content/blog/YYYY-MM-DD-post-title/
-├── index.mdx              # Main post content
-├── images/               # Post-specific images
-│   ├── hero.jpg         # Social sharing image (1200x630px)
-│   ├── screenshot1.png  # In-content images
-│   └── diagram.svg      # Illustrations and diagrams
-└── videos/              # Optional local videos
-    └── demo.mp4         # Video content
+└── index.mdx              # Main post content
+
+public/media/              # Centralized media storage
+├── post-slug-hero.jpg     # Hero images (1200x630px)
+├── post-slug-image.png    # Content images
+└── post-slug-video.mp4    # Local videos
 ```
 
 ### URL Structure
@@ -64,28 +77,30 @@ Posts are accessible via SEO-friendly URLs:
 
 ## 🔧 Content Workflow
 
-### 1. Content Creation
+### Option 1: Using Decap CMS (Recommended)
+
+1. Start CMS: `bun run dev:cms`
+2. Open `http://localhost:4321/admin/index.html`
+3. Click "New Blog Post"
+4. Fill in fields and write content
+5. Use toolbar for embeds (YouTube, Vimeo, Video, Code)
+6. Click Save - auto-commits to Git
+
+### Option 2: Manual Creation
 
 ```bash
 # Create new post directory
 mkdir "src/content/blog/$(date +%Y-%m-%d)-your-post-title"
-cd "src/content/blog/$(date +%Y-%m-%d)-your-post-title"
-
-# Create asset directories
-mkdir images videos
-
-# Create post file
-touch index.mdx
 ```
 
-### 2. Content Development
+Create `index.mdx`:
 
 ```mdx
 ---
 title: "Your Amazing Blog Post"
 description: "A compelling description under 160 characters for SEO."
 pubDate: 2025-06-30
-heroImage: "./images/hero.jpg"
+heroImage: "/media/your-post-slug-hero.jpg"
 tags: ["Development", "Tutorial"]
 draft: true  # Set to false when ready to publish
 ---
@@ -95,28 +110,28 @@ draft: true  # Set to false when ready to publish
 Write your blog post using Markdown and MDX features...
 ```
 
-### 3. Asset Management
+### Asset Management
 
-- **Images**: Add to `images/` directory, reference as `./images/filename.jpg`
-- **Videos**: Add to `videos/` directory for local hosting
-- **External Media**: Use embed components for YouTube, Vimeo, etc.
+- **Images**: Upload via CMS or add to `/public/media/` with slug prefix
+- **Videos**: Upload via CMS or add to `/public/media/`
+- **External Media**: Paste YouTube/Vimeo URLs on their own line
 
-### 4. Preview and Testing
+### Preview and Testing
 
 ```bash
 # Start development server
-npm run dev
+bun run dev
 
 # Preview your post at:
 # http://localhost:4321/YYYY/MM/your-post-title
 ```
 
-### 5. Publication
+### Publication
 
 ```bash
 # Set draft: false in frontmatter
 # Run build to verify everything works
-npm run build
+bun run build
 
 # Commit and push to trigger deployment
 git add .
@@ -138,10 +153,9 @@ pubDate: Date          // Publication date (determines URL)
 
 ```typescript
 updatedDate?: Date      // Last modification date
-heroImage?: Image      // Social sharing image (1200x630px recommended)
+heroImage?: string      // Path to hero image (1200x630px recommended)
 tags?: string[]        // Category tags (default: [])
 draft?: boolean        // Draft status (default: false)
-preview?: Image        // Preview image (alternative to hero)
 ```
 
 ### Schema Validation
@@ -150,16 +164,14 @@ Content is automatically validated using Zod schemas:
 
 ```typescript
 const blog = defineCollection({
-  type: 'content',
-  schema: ({ image }) => z.object({
+  schema: () => z.object({
     title: z.string(),
     description: z.string(),
     pubDate: z.date(),
     updatedDate: z.date().optional(),
-    heroImage: image().optional(),
+    heroImage: z.string().optional(),  // String path for /media/ URLs
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
-    preview: image().optional(),
   }),
 });
 ```
@@ -200,37 +212,34 @@ import { YouTube } from "@astro-community/astro-embed-youtube";
 
 ### Image Handling
 
-**Local Images**:
+**In Markdown content**:
 ```mdx
-![Description](./images/screenshot.png)
+![Description](/media/post-slug-screenshot.png)
 ```
 
-**Optimized Images** (with Astro's Image component):
-```mdx
-import { Image } from 'astro:assets';
-import screenshot from './images/screenshot.png';
-
-<Image src={screenshot} alt="Description" />
+**Hero images** (in frontmatter):
+```yaml
+heroImage: "/media/post-slug-hero.jpg"
 ```
 
 ### Video Integration
 
-**Local Videos**:
+**Local Videos** (stored in `/public/media/`):
 ```html
-<video controls>
-  <source src="/videos/2025-06-30-post-title/demo.mp4" type="video/mp4">
+<video controls loop playsinline autoplay muted>
+  <source src="/media/post-slug-video.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 ```
 
-**External Embeds**:
+**External Embeds** (just paste URL on its own line):
 ```mdx
-import { YouTube } from "@astro-community/astro-embed-youtube";
-import { Vimeo } from "@astro-community/astro-embed-vimeo";
+https://www.youtube.com/watch?v=VIDEO_ID
 
-<YouTube id="VIDEO_ID" />
-<Vimeo id="VIDEO_ID" />
+https://vimeo.com/VIDEO_ID
 ```
+
+The `astro-embed` integration auto-transforms these URLs into embedded players.
 
 ## 🔍 Content Discovery
 
@@ -344,12 +353,12 @@ tags: ["Tutorial", "JavaScript", "Performance"]
 **Build Failures**:
 - Check frontmatter schema validation
 - Verify all required fields are present
-- Ensure image paths are correct
+- Ensure image paths start with `/media/`
 
 **Missing Images**:
-- Verify relative path references
-- Check image file extensions
-- Run `npm run setup-social-images`
+- Verify images exist in `/public/media/`
+- Check image paths start with `/media/`
+- Run `bun run setup-social-images`
 
 **Draft Posts Showing**:
 - Ensure `draft: false` for published content
@@ -359,7 +368,7 @@ tags: ["Tutorial", "JavaScript", "Performance"]
 **URL Issues**:
 - Verify `pubDate` format is correct
 - Check directory naming convention
-- Ensure slug generation is working
+- Ensure slug is auto-generated from directory name
 
 ---
 

@@ -18,8 +18,10 @@ This starts the Decap CMS proxy server at `http://localhost:8082`.
 
 Open your browser and navigate to:
 ```
-http://localhost:8082/admin
+http://localhost:4321/admin/index.html
 ```
+
+Note: The CMS proxy runs on port 8082, but you access the admin panel through the Astro dev server on port 4321.
 
 ### Start CMS + Dev Server Together
 
@@ -36,14 +38,20 @@ This runs both the Astro development server (`localhost:4321`) and the CMS proxy
    - **Title** (required): Post title
    - **Description** (required): Post description (≤160 characters for SEO)
    - **Publish Date** (required): Publication date
-   - **Hero Image** (optional): Main image for social sharing
-   - **Preview Image** (optional): Additional preview image
+   - **Hero Image** (optional): Main image for social sharing (1200x630px recommended)
    - **Tags** (optional): Array of tags
    - **Draft** (boolean): Set to `false` to publish
    - **Body** (required): Main content in Markdown
 
-3. Upload images using the media library (images go to `/public/media/`)
-4. Click "Save" - Changes are committed to your local Git repo
+3. Use toolbar buttons to add rich media:
+   - **YouTube**: Insert YouTube video embeds
+   - **Vimeo**: Insert Vimeo video embeds
+   - **Tweet**: Insert Twitter/X embeds
+   - **Video**: Insert local MP4 videos from /media/
+   - **Code Block**: Insert syntax-highlighted code
+
+4. Upload images using the media library (images go to `/public/media/`)
+5. Click "Save" - Changes are committed to your local Git repo
 
 ## Managing Images
 
@@ -134,7 +142,6 @@ description: "Post description"
 pubDate: 2026-01-15T10:00:00.000Z
 updatedDate: 2026-01-16T14:30:00.000Z
 heroImage: "/media/hero-image.jpg"
-preview: "/media/preview-image.jpg"
 tags: ["tag1", "tag2"]
 draft: false
 ---

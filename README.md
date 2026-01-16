@@ -16,6 +16,7 @@ This blog explores the intersection of technology and creativity, featuring post
 ## Tech Stack
 
 - **Framework**: [Astro](https://astro.build) - Static site generator with component islands
+- **CMS**: [Decap CMS](https://decapcms.org) - Git-based content management with local backend
 - **UI Components**: [Vue 3](https://vuejs.org) - Interactive components (menu, search)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com) - Utility-first CSS framework
 - **TypeScript** - Type safety and better developer experience
@@ -127,8 +128,8 @@ HashBlog includes comprehensive documentation covering all aspects of the platfo
 
 ### Prerequisites
 
-- Node.js 18+
-- npm
+- Node.js 18+ or Bun
+- Git
 
 ### Setup
 
@@ -138,51 +139,66 @@ git clone https://github.com/hashmil/hashblog.git
 cd hashblog
 
 # Install dependencies
-npm install
+bun install
 
 # Start development server
-npm run dev
+bun run dev
 ```
 
 ### Available Commands
 
-| Command                   | Action                                     |
-| ------------------------- | ------------------------------------------ |
-| `npm run dev`             | Start local dev server at `localhost:4321` |
-| `npm run build`           | Build production site to `./dist/`         |
-| `npm run preview`         | Preview build locally                      |
-| `npm run setup-social-images` | Organize hero images for social sharing |
-| `npm run astro -- --help` | Get help with Astro CLI                    |
-| `npm test`                | Run unit tests                             |
+| Command                   | Action                                           |
+| ------------------------- | ------------------------------------------------ |
+| `bun run dev`             | Start local dev server at `localhost:4321`       |
+| `bun run build`           | Build production site to `./dist/`               |
+| `bun run preview`         | Preview build locally                            |
+| `bun run cms`             | Start Decap CMS proxy server                     |
+| `bun run dev:cms`         | Run dev server + CMS together                    |
+| `bun run setup-social-images` | Organize hero images for social sharing      |
+| `bun test`                | Run unit tests                                   |
 
 ### Running Tests
 
 ```sh
-npm test
+bun test
 ```
 
 ## 📝 Creating Blog Posts
 
-### 1. Create a New Post Directory
+### Option 1: Using Decap CMS (Recommended)
+
+The easiest way to create and manage blog posts:
+
+```sh
+# Start the CMS and dev server together
+bun run dev:cms
+
+# Access the admin panel at:
+# http://localhost:4321/admin/index.html
+```
+
+The CMS provides:
+- Visual editor with live preview
+- Toolbar buttons for YouTube, Vimeo, Tweet, Video, and Code embeds
+- Automatic Git commits
+- Image upload to `/public/media/`
+
+### Option 2: Manual Creation
 
 ```sh
 # Create folder with date prefix
 mkdir "src/content/blog/YYYY-MM-DD-your-post-title"
-cd "src/content/blog/YYYY-MM-DD-your-post-title"
 ```
 
-### 2. Add Content
-
-Create an `index.mdx` file inside the new directory. Using the `.mdx` extension is required to embed components like videos directly into your content.
+Create an `index.mdx` file inside the new directory:
 
 ```markdown
 ---
 title: "Your Post Title"
 description: "Compelling description for SEO and previews."
 pubDate: YYYY-MM-DD
-heroImage: "./images/hero-image.jpg"
+heroImage: "/media/your-post-slug-hero.jpg"
 tags: ["AI", "Web Development", "Creative Coding"]
-slug: "your-post-slug"
 draft: false # Set to true to hide from production
 ---
 
@@ -263,7 +279,7 @@ The blog includes an automated social sharing system that optimizes hero images 
 #### Social Images Script
 
 ```sh
-npm run setup-social-images
+bun run setup-social-images
 ```
 
 This script:
@@ -273,18 +289,10 @@ This script:
 - **Optimizes for social sharing** meta tags (1200x630px recommended)
 - **Runs automatically** during the build process
 
-#### How it works
-
-1. The script reads all blog posts and their `heroImage` frontmatter
-2. Copies hero images to the organized social images directory structure
-3. Social sharing meta tags reference these organized images
-4. Ensures consistent URLs for Open Graph and Twitter Card previews
-
 #### Requirements
 
 - Hero images should be **1200x630px** for optimal social sharing
-- Images must be referenced in frontmatter as `heroImage: "./images/filename.jpg"`
-- The script must run before deployment for social sharing to work properly
+- Images referenced in frontmatter as `heroImage: "/media/slug-hero.jpg"`
 
 ## 🚀 Deployment
 
@@ -301,16 +309,15 @@ Add these to your GitHub repository secrets:
 
 ## 🎨 Features
 
+- **Decap CMS** - Git-based content management with visual editor
 - **Fast Loading** - Astro's static generation with minimal JavaScript
-- **SEO Optimized** - Meta tags, structured data, and sitemap generation
+- **SEO Optimized** - Meta tags, structured data, sitemap, and robots.txt
 - **Responsive Design** - Mobile-first approach with Tailwind CSS
 - **Interactive Elements** - Vue components for enhanced UX
 - **Full-Screen Navigation** - Integrated search within navigation menu
-- **Content Management** - MDX-based with automatic blog post discovery
-- **Local Video Support** - Import and embed videos from post directories
-- **External Video Embeds** - YouTube, Vimeo, and TikTok integration
+- **Rich Media Embeds** - YouTube, Vimeo, Twitter/X, and local videos via CMS toolbar
 - **Date-Based URLs** - Clean `/YYYY/MM/slug` URL structure for better SEO
-- **Social Sharing** - Built-in share functionality
+- **Social Sharing** - Built-in share functionality with optimized images
 - **RSS Feed** - Automatic feed generation for subscribers
 - **Search Functionality** - Real-time search across all content
 
