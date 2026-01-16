@@ -11,6 +11,7 @@ import { QuoteBlock } from './QuoteBlock'
 import { CalloutBlock } from './CalloutBlock'
 import { EmbedBlock } from './EmbedBlock'
 import { DividerBlock } from './DividerBlock'
+import { SocialLinksBlock } from './SocialLinksBlock'
 
 // Union type for all block types (Blog and Page collections share the same block structure)
 type AnyBlock = BlogBlocks | PageBlocks
@@ -108,6 +109,15 @@ export function BlockRenderer({ blocks, parentField = 'blocks' }: BlockRendererP
           case 'Divider':
             return (
               <DividerBlock
+                key={index}
+                data={block as any}
+                tinaFieldName={blockField}
+              />
+            )
+
+          case 'SocialLinks':
+            return (
+              <SocialLinksBlock
                 key={index}
                 data={block as any}
                 tinaFieldName={blockField}

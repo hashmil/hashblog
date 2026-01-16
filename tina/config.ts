@@ -260,6 +260,59 @@ const dividerBlock: Template = {
   ],
 };
 
+/**
+ * Social Links Block - Social media links with icons
+ */
+const socialLinksBlock: Template = {
+  name: 'socialLinks',
+  label: 'Social Links',
+  fields: [
+    {
+      type: 'string',
+      name: 'title',
+      label: 'Title',
+      description: 'Optional heading above the links',
+    },
+    {
+      type: 'object',
+      list: true,
+      name: 'links',
+      label: 'Links',
+      ui: {
+        itemProps: (item) => ({ label: item?.platform || 'New Link' }),
+      },
+      fields: [
+        {
+          type: 'string',
+          name: 'platform',
+          label: 'Platform',
+          options: [
+            { value: 'twitter', label: 'Twitter/X' },
+            { value: 'instagram', label: 'Instagram' },
+            { value: 'linkedin', label: 'LinkedIn' },
+            { value: 'github', label: 'GitHub' },
+            { value: 'email', label: 'Email' },
+            { value: 'website', label: 'Website' },
+          ],
+          required: true,
+        },
+        {
+          type: 'string',
+          name: 'url',
+          label: 'URL',
+          required: true,
+        },
+        {
+          type: 'string',
+          name: 'label',
+          label: 'Display Label',
+          description: 'Text shown next to the icon',
+        },
+      ],
+    },
+  ],
+};
+
 // =============================================================================
 // TinaCMS Configuration
 // =============================================================================
@@ -334,6 +387,7 @@ export default defineConfig({
               calloutBlock,
               embedBlock,
               dividerBlock,
+              socialLinksBlock,
             ],
           },
         ],

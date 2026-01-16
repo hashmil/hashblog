@@ -31,6 +31,7 @@
     "astro": "^5.15.3",
     "astro-embed": "^0.9.1",
     "fuse.js": "^7.1.0",
+    "lucide-react": "^0.562.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "tailwindcss": "^4.1.18",
