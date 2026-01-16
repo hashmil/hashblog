@@ -1,9 +1,10 @@
 'use client'
-import { createFileRoute } from '@tanstack/react-router'
-import { useTina } from 'tinacms/dist/react'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { useTina, tinaField } from 'tinacms/dist/react'
 import { TinaMarkdown } from 'tinacms/dist/rich-text'
 import type { BlogQuery } from '../../../../tina/__generated__/types'
 import client from '../../../../tina/__generated__/client'
+import { BlockRenderer } from '../../../components/blocks'
 
 // Loader to fetch blog post data from TinaCMS
 export const Route = createFileRoute('/$year/$month/$slug')({
@@ -61,6 +62,9 @@ function BlogPost() {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold">Post not found</h1>
+        <Link to="/" className="text-pink-500 hover:underline mt-4 inline-block">
+          ← Back to home
+        </Link>
       </div>
     )
   }
@@ -71,27 +75,64 @@ function BlogPost() {
     day: 'numeric',
   })
 
+  // Check if post uses blocks or legacy body content
+  const hasBlocks = post.blocks && post.blocks.length > 0
+
   return (
     <article className="max-w-4xl mx-auto px-4 py-8">
+      {/* Hero Image - click to edit */}
       {post.heroImage && (
         <img
           src={post.heroImage}
           alt={post.title}
-          className="w-full h-64 object-cover rounded-lg mb-8"
+          className="w-full h-64 md:h-80 object-cover rounded-lg mb-8 shadow-lg"
+          data-tina-field={tinaField(post, 'heroImage')}
         />
       )}
 
+      {/* Post Header - click to edit title */}
       <header className="mb-8">
-        <h1 className="text-4xl font-bold mb-4" style={{ fontFamily: 'Work Sans, sans-serif' }}>
+        <h1
+          className="text-4xl md:text-5xl font-bold mb-4 leading-tight"
+          style={{ fontFamily: 'Work Sans, sans-serif' }}
+          data-tina-field={tinaField(post, 'title')}
+        >
           {post.title}
         </h1>
-        <p className="text-gray-400">{formattedDate}</p>
+
+        <div className="flex flex-wrap items-center gap-4 text-gray-400">
+          <time
+            dateTime={post.pubDate}
+            data-tina-field={tinaField(post, 'pubDate')}
+          >
+            {formattedDate}
+          </time>
+          {post.updatedDate && (
+            <span className="text-sm">
+              (Updated: {new Date(post.updatedDate).toLocaleDateString()})
+            </span>
+          )}
+        </div>
+
+        {/* Description - click to edit */}
+        <p
+          className="text-gray-400 mt-4 text-lg"
+          style={{ fontFamily: 'Libre Baskerville, serif' }}
+          data-tina-field={tinaField(post, 'description')}
+        >
+          {post.description}
+        </p>
+
+        {/* Tags - click to edit */}
         {post.tags && post.tags.length > 0 && (
-          <div className="flex gap-2 mt-4">
+          <div
+            className="flex flex-wrap gap-2 mt-4"
+            data-tina-field={tinaField(post, 'tags')}
+          >
             {post.tags.map((tag) => (
               <span
                 key={tag}
-                className="px-3 py-1 bg-gray-800 rounded-full text-sm text-gray-300"
+                className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded-full text-sm text-gray-300 transition-colors"
               >
                 {tag}
               </span>
@@ -100,9 +141,32 @@ function BlogPost() {
         )}
       </header>
 
-      <div className="prose prose-invert prose-lg max-w-none">
-        <TinaMarkdown content={post.body} />
+      {/* Content - either blocks or legacy body */}
+      <div className="prose-minimal">
+        {hasBlocks ? (
+          // New block-based content
+          <BlockRenderer blocks={post.blocks} />
+        ) : (
+          // Legacy body content (for backward compatibility)
+          <div
+            className="prose prose-invert prose-lg max-w-none"
+            data-tina-field={tinaField(post, 'body')}
+          >
+            <TinaMarkdown content={post.body} />
+          </div>
+        )}
       </div>
+
+      {/* Back to home link */}
+      <footer className="mt-16 pt-8 border-t border-gray-800">
+        <Link
+          to="/"
+          className="text-pink-500 hover:text-pink-400 transition-colors inline-flex items-center gap-2"
+        >
+          <span>←</span>
+          <span>Back to all posts</span>
+        </Link>
+      </footer>
     </article>
   )
 }

@@ -1,0 +1,50 @@
+---
+title: Testing Block-Based Editing
+description: A test post to verify the new block-based visual editing system in TinaCMS.
+pubDate: 2026-01-16T00:00:00.000Z
+heroImage: /media/claude-code-the-vibe-coding-end-game-claude-co.png
+tags:
+  - Testing
+  - TinaCMS
+draft: true
+blocks:
+  - _template: content
+    body: |
+      ## Welcome to Block-Based Editing
+
+      This post demonstrates the new block-based content system. Each section is a separate, draggable block that you can edit visually.
+
+      Key features:
+      - Click on any element to edit it directly
+      - Drag blocks to reorder them
+      - Add new blocks from the sidebar
+  - _template: callout
+    type: tip
+    title: Pro Tip
+    content: |
+      Block-based editing makes it easy to create rich, structured content without writing code.
+  - _template: image
+    src: /media/claude-code-the-vibe-coding-end-game-claude-co.png
+    alt: Claude Code screenshot
+    caption: An example image with caption
+  - _template: content
+    body: |
+      ### Code Example
+
+      Here's how you might use the code block:
+  - _template: code
+    language: typescript
+    filename: example.ts
+    code: |
+      const greeting = "Hello, World!";
+      console.log(greeting);
+  - _template: quote
+    quote: The best way to predict the future is to invent it.
+    author: Alan Kay
+    source: 1971
+  - _template: divider
+    style: dots
+  - _template: content
+    body: |
+      That's it! You now have a fully block-based blog post.
+---
