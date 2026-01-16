@@ -285,6 +285,59 @@ export default defineConfig({
 
   schema: {
     collections: [
+      // Pages collection for static pages (About, etc.)
+      {
+        name: 'page',
+        label: 'Pages',
+        path: 'src/content/pages',
+        format: 'mdx',
+        ui: {
+          router: ({ document }) => {
+            const slug = document._sys.filename;
+            return `/${slug}`;
+          },
+        },
+        fields: [
+          {
+            type: 'string',
+            name: 'title',
+            label: 'Title',
+            required: true,
+            isTitle: true,
+          },
+          {
+            type: 'string',
+            name: 'description',
+            label: 'Description',
+            description: 'SEO description (max 160 characters)',
+            required: true,
+            ui: { component: 'textarea' },
+          },
+          {
+            type: 'image',
+            name: 'image',
+            label: 'Page Image',
+            description: 'Optional image for the page',
+          },
+          {
+            type: 'object',
+            list: true,
+            name: 'blocks',
+            label: 'Content Blocks',
+            description: 'Build your page with draggable content blocks',
+            templates: [
+              contentBlock,
+              imageBlock,
+              videoBlock,
+              codeBlock,
+              quoteBlock,
+              calloutBlock,
+              embedBlock,
+              dividerBlock,
+            ],
+          },
+        ],
+      },
       {
         name: 'blog',
         label: 'Blog Posts',
