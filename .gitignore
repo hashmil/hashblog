@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # Claude Code working files
 .claude/
+
+# Local draft exports
+/drafts/
