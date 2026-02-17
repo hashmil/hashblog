@@ -1,0 +1,69 @@
+---
+title: "I Built a Dubai Guide Skill for OpenClaw"
+description: "Dubai has too many options. I made an OpenClaw skill to help my family decide where to go, track what we've visited, and filter by weather and vibe."
+pubDate: 2026-02-14
+heroImage: "./images/dubai-guide.png"
+tags: ["Dubai", "OpenClaw", "AI", "Automation"]
+slug: "i-built-a-dubai-guide-skill-for-openclaw"
+draft: false
+---
+
+Dubai has an overwhelming number of things to do. Every week there's a new beach club, coffee shop, or "hidden gem" restaurant. The problem isn't finding options — it's choosing.
+
+With a four-year-old son, my criteria are different than the typical Dubai advice you see online. I need to know: Is there parking nearby? Is it stroller-friendly? Will he melt in the heat, or need a jacket in the colder months? Is there somewhere he can run around without me worrying?
+
+I found myself spending more time deciding where to go than actually going anywhere. I'd scroll through Instagram and TikTok, check Google Maps, ask friends, and still end up at the same three places I already knew. There's just too much choice.
+
+So I built a skill for Oracle — my OpenClaw bot. It solves three specific problems:
+
+1. **Decision paralysis** — when I ask "where should we go?", I get an actual answer, not a list of 50 options
+2. **Forgetting places** — we visit somewhere great, swear we'll go back, then forget the name three months later
+3. **Weather blindness** — showing up at an outdoor spot in August, or an indoor play centre when it's perfect beach weather
+
+#### How it works
+
+The skill maintains a JSON database of places we've been or want to visit. Each entry includes:
+
+- **Basic info** — name, area, type (cafe, beach, coffee shop, etc.)
+- **Environment** — indoor, outdoor, or hybrid
+- **Seasonality** — summer-safe, winter-only, or all year
+- **Vibe tags** — kid-friendly, work-friendly, Brand Club discount, stroller-friendly
+- **Visit history** — dates, notes, who we went with
+
+When I log a new place, Oracle uses the `goplaces` CLI skill (from ClawdHub) to pull data from Google Places API and auto-fill the details. I just add my own notes and vibe assessment.
+
+When I want a recommendation, Oracle filters by:
+- Current weather (is it 45°C or actually pleasant outside?)
+- The vibe we're after (Brand Club discount day vs somewhere he can burn energy)
+- Whether we've already been there (sometimes we want a favourite, sometimes we want new)
+
+It also does a quick web search for "consensus" — Reddit threads, recent reviews, tips about parking, best times to visit, whether it's become a tourist trap. I get a pro tip like "park at Festival City Mall and walk over — much easier" instead of just "this place is nice."
+
+![Oracle recommending Global Village with crowds, parking tips, and a better alternative](./images/oracle-global-village-recommendation.png)
+*An actual recommendation from Oracle for Global Village — complete with crowd warnings, parking advice, and a better alternative suggestion.*
+
+#### Why this works better than lists
+
+I've tried Google Lists, Notion databases, spreadsheets. They all suffer from the same problem: I have to maintain them manually, and they don't help me decide.
+
+This skill is conversational. I can say "somewhere kid-friendly for a Sunday morning" or "indoor activity, haven't been before, Brand Club if possible" and get three actual suggestions. If it's July, I won't get outdoor terraces unless they're explicitly marked summer-safe (meaning heavily air-conditioned).
+
+The visit tracking is passive. I just tell Oracle "we went to Kite Beach" and it logs it with today's date. Six months later I can ask "when did we last go to that Greek place in JBR?" and get an answer.
+
+#### Two versions: Dubai-specific and universal
+
+I built two skills. The first is `dubai-guide` — pre-configured for Dubai's extreme climate and areas (Jumeirah, DIFC, Marina, etc.). The second is `city-guide` — a generic version you can customise for any city worldwide. Just set your city and it adapts the weather logic and database structure accordingly.
+
+Both are available on my [GitHub](https://github.com/hashmil/openclaw-skills).
+
+#### The real value
+
+Dubai moves fast. Places open, get popular, become crowded, close. A static list goes stale quickly. But a database I actually update because it's low-friction? That stays useful.
+
+The skill also stops me from making dumb mistakes. I recently asked about beach spots and Oracle reminded me that Kite Beach on a Friday afternoon means spending 40 minutes looking for parking. It pulled that from my own notes from a previous visit — notes I'd have never found scrolling through my phone.
+
+It's not revolutionary tech. It's just a structured way to track decisions and learn from them. Which, it turns out, is exactly what I needed.
+
+#### What's next
+
+I'm now trying to figure out how to integrate this with Entertainer, Fazaa, and other discount memberships. The goal is to automatically check what places have active offers before recommending them — so instead of manually flipping through apps, I can just ask "where should we go that has a buy-one-get-one-free deal right now?"

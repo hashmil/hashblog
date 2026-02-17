@@ -33,3 +33,6 @@ pnpm-debug.log*
 # TinaCMS generated files
 tina/__generated__/
 .tina/
+
+# Local draft exports
+/drafts/
