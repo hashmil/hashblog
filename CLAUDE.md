@@ -1,6 +1,10 @@
-# CLAUDE.md
+# AGENTS.md / CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to coding agents working in this repository. `AGENTS.md` should remain a symlink to this file so project instructions stay in one place.
+
+## Git Commits
+
+Never include Codex, Anthropic, Claude, or other AI-assistant attribution in commit messages or PR bodies. No generated-by footer, co-author footer, or "with/via AI" phrasing. The user's name is the sole author.
 
 ## Development Commands
 
@@ -8,8 +12,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm run dev                    # Start development server at localhost:4321
 npm run build                  # Production build with social images setup
 npm run preview                # Preview production build locally
+npm run check                  # Run Astro diagnostics
 npm test                       # Run unit tests using Node.js built-in test runner
 npm run setup-social-images    # Organize hero images for social sharing
+npm run setup-videos           # Organize local post videos
+npm run deploy                 # Build and deploy to Cloudflare Workers
 ```
 
 ## Architecture Overview
@@ -20,7 +27,7 @@ HashBlog is an Astro 6 static site generator with Vue 3 islands for interactivit
 - **Astro**: Static site generation with component islands
 - **Vue 3**: Interactive components (menu, search)
 - **TypeScript**: Type-safe development
-- **Tailwind CSS**: Utility-first styling with custom design system
+- **Tailwind CSS v4**: Utility-first styling with custom design system
 - **MDX**: Rich content with component embedding
 - **Fuse.js**: Real-time search functionality
 
@@ -79,10 +86,28 @@ Type-safe content management via Astro's content collections:
 5. Automatic sitemap and RSS feed generation
 
 ### Deployment
-- **Platform**: Cloudflare Workers Static Assets with GitHub Actions
-- **Config**: `wrangler.toml` points Worker assets at `dist`
-- **Domain**: hashir.blog (custom domain)
-- **Assets**: Global CDN with edge caching
+- **Production platform**: Cloudflare Workers Static Assets
+- **Worker name**: `hashblog`
+- **Production domain**: `hashir.blog`
+- **Workers preview URL**: `https://hashblog.hashirm.workers.dev`
+- **Config**: `wrangler.toml` points Worker assets at `./dist`
+- **Routing**: `hashir.blog/*` is attached to the Worker route in `wrangler.toml`
+- **CI/CD**: `.github/workflows/deploy.yml` runs check, tests, audit, build, then `cloudflare/wrangler-action@v4` deploys on pushes
+
+Use Workers as the source of truth for production. Do not switch this project back to Cloudflare Pages unless the custom domain routing and workflow are intentionally changed together. The old Pages project may still exist in Cloudflare, but `hashir.blog` is served by the Worker route.
+
+Manual deployment:
+
+```bash
+npm run deploy
+```
+
+Required GitHub secrets for automated deployment:
+
+- `CLOUDFLARE_API_TOKEN` with Workers edit/deploy permissions
+- `CLOUDFLARE_ACCOUNT_ID`
+
+The site is currently static. Keep `astro.config.mjs` as `output: "static"` and do not add the `@astrojs/cloudflare` adapter unless server-rendered routes or runtime-only features are actually introduced.
 
 ## Development Workflows
 
