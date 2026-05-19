@@ -1,11 +1,11 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import vue from "@astrojs/vue";
-import tailwind from "@astrojs/tailwind";
 import cloudflare from "@astrojs/cloudflare";
 import embed from "astro-embed/integration";
 import mdx from "@astrojs/mdx";
 import rehypeExternalLinks from "rehype-external-links";
+import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
@@ -13,20 +13,13 @@ export default defineConfig({
   output: "server", // Server-side rendering for Cloudflare
   adapter: cloudflare({
     imageService: "compile",
-    routes: {
-      extend: {
-        exclude: [{ pattern: "/assets/*" }],
-      },
-    },
+    prerenderEnvironment: "node",
   }),
 
   integrations: [
     embed(),
     mdx(),
     vue(),
-    tailwind({
-      applyBaseStyles: false,
-    }),
   ],
 
   markdown: {
@@ -76,13 +69,20 @@ export default defineConfig({
   },
 
   vite: {
+    plugins: [tailwindcss()],
     build: {
       cssMinify: "esbuild",
-      rollupOptions: {
-        output: {
-          assetFileNames: "assets/[name].[hash].[ext]",
-          chunkFileNames: "assets/[name].[hash].js",
-          entryFileNames: "assets/[name].[hash].js",
+    },
+    environments: {
+      client: {
+        build: {
+          rollupOptions: {
+            output: {
+              assetFileNames: "assets/[name].[hash].[ext]",
+              chunkFileNames: "assets/[name].[hash].js",
+              entryFileNames: "assets/[name].[hash].js",
+            },
+          },
         },
       },
     },

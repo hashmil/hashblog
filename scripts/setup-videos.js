@@ -18,13 +18,6 @@ if (!fs.existsSync(videosDir)) {
   fs.mkdirSync(videosDir, { recursive: true });
 }
 
-// Function to get post slug from directory name
-function getPostSlug(dirName) {
-  // Extract slug from directory name (remove date prefix)
-  const match = dirName.match(/^\d{4}-\d{2}-\d{2}-(.+)$/);
-  return match ? match[1] : dirName;
-}
-
 // Function to copy videos from post directories
 function setupVideos() {
   console.log("🎬 Setting up video files...\n");

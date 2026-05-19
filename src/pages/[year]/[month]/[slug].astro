@@ -4,7 +4,6 @@ import Header from '../../../components/Header.astro';
 import Menu from '../../../components/Menu.vue';
 import Navigation from '../../../components/Navigation.astro';
 import Share from '../../../components/Share.astro';
-import { Image } from 'astro:assets';
 import { getCollection, render } from 'astro:content';
 
 export const prerender = true;
@@ -54,7 +53,7 @@ function formatDate(date: Date) {
 
 // Calculate reading time (rough estimate: 200 words per minute)
 const wordsPerMinute = 200;
-const wordCount = post.body.split(/\s+/).length;
+const wordCount = post.body?.split(/\s+/).filter(Boolean).length ?? 0;
 const readingTime = Math.ceil(wordCount / wordsPerMinute);
 
 // Generate canonical URL with new format
@@ -102,7 +101,7 @@ if (post.data.heroImage) {
     ))}
     
     <!-- Structured data -->
-    <script type="application/ld+json" set:html={JSON.stringify({
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@type": "BlogPosting",
       "headline": post.data.title,
@@ -184,4 +183,4 @@ if (post.data.heroImage) {
   
   <!-- Menu Component -->
   <Menu client:load />
-</Layout> 
+</Layout>

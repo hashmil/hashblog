@@ -116,10 +116,10 @@ const structuredData = {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     
     <!-- Structured Data -->
-    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   </head>
   <body>
-    <script type="application/ld+json">
+    <script is:inline type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Person",
@@ -141,4 +141,4 @@ const structuredData = {
 <style is:global>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
   @import '../styles/global.css';
-</style> 
+</style>
