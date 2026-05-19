@@ -15,14 +15,14 @@ This blog explores the intersection of technology and creativity, featuring post
 
 ## Tech Stack
 
-- **Framework**: [Astro](https://astro.build) - Static site generator with component islands
-- **UI Components**: [Vue 3](https://vuejs.org) - Interactive components (menu, search)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com) - Utility-first CSS framework
-- **TypeScript** - Type safety and better developer experience
+- **Framework**: [Astro 6](https://astro.build) - Static site generator with component islands
+- **UI Components**: [Vue 3](https://vuejs.org) - Interactive islands for menu and search
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com) - Utility-first CSS framework via `@tailwindcss/vite`
+- **TypeScript 6** - Type safety and better developer experience
 - **Content**: Markdown/MDX with frontmatter for blog posts
 - **Embeds**: `@astro-community/astro-embed` - YouTube, Vimeo, TikTok video embeds
 - **Deployment**: [Cloudflare Workers Static Assets](https://developers.cloudflare.com/workers/static-assets/) - Edge deployment with global CDN
-- **CI/CD**: GitHub Actions - Automated deployment pipeline
+- **CI/CD**: GitHub Actions + `cloudflare/wrangler-action@v4`
 
 ## 🏗️ Project Structure
 
@@ -64,7 +64,8 @@ This blog explores the intersection of technology and creativity, featuring post
 │   └── images/           # Site-wide images
 ├── .github/workflows/    # GitHub Actions for deployment
 ├── docs/                 # Comprehensive documentation
-└── astro.config.mjs     # Astro configuration
+├── astro.config.mjs      # Astro configuration
+└── wrangler.toml         # Cloudflare Workers Static Assets configuration
 ```
 
 ## 📚 Documentation
@@ -152,9 +153,12 @@ npm run dev
 | `npm run dev`             | Start local dev server at `localhost:4321` |
 | `npm run build`           | Build production site to `./dist/`         |
 | `npm run preview`         | Preview build locally                      |
-| `npm run setup-social-images` | Organize hero images for social sharing |
-| `npm run astro -- --help` | Get help with Astro CLI                    |
+| `npm run check`           | Run Astro diagnostics                      |
 | `npm test`                | Run unit tests                             |
+| `npm run setup-social-images` | Organize hero images for social sharing |
+| `npm run setup-videos`    | Organize local post videos                 |
+| `npm run deploy`          | Build and deploy to Cloudflare Workers     |
+| `npm run astro -- --help` | Get help with Astro CLI                    |
 
 ### Running Tests
 
@@ -308,16 +312,39 @@ This script:
 
 ## 🚀 Deployment
 
-The site automatically deploys to Cloudflare Workers Static Assets when
-pushing to the `main` branch via GitHub Actions.
+The site deploys to **Cloudflare Workers Static Assets**. Production is served from the `hashblog` Worker using the `hashir.blog/*` route configured in `wrangler.toml`.
+
+### Automatic Deployment
+
+Pushing to `main` runs `.github/workflows/deploy.yml`:
+
+1. `npm ci`
+2. `npm run check`
+3. `npm test`
+4. `npm audit --audit-level=moderate`
+5. `npm run build`
+6. `cloudflare/wrangler-action@v4` deploys the Worker on push events
+
+### Manual Deployment
+
+```sh
+npm run deploy
+```
 
 ### Required Secrets
 
 Add these to your GitHub repository secrets:
 
 - `CLOUDFLARE_API_TOKEN` - Cloudflare API token with
-  Workers:Edit permissions
+  Workers edit/deploy permissions
 - `CLOUDFLARE_ACCOUNT_ID` - Your Cloudflare account ID
+
+### Production URLs
+
+- **Custom domain**: [hashir.blog](https://hashir.blog)
+- **Workers preview URL**: [hashblog.hashirm.workers.dev](https://hashblog.hashirm.workers.dev)
+
+The old Cloudflare Pages project may still exist in Cloudflare, but `hashir.blog` is served by the Worker route.
 
 ## 🎨 Features
 

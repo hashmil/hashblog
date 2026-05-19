@@ -1,84 +1,125 @@
-# Tech Stack Update - November 3, 2025
+# Tech Stack Update - May 19, 2026
 
 ## Summary
-Successfully updated all dependencies to their latest stable versions. All packages have been updated, security vulnerabilities fixed, and the build process verified.
 
-## Updated Packages
+The project has been updated to the current Astro 6 stack and moved from Cloudflare Pages deployment to Cloudflare Workers Static Assets. The production domain `hashir.blog` is now served by the `hashblog` Worker route.
+
+## Current Runtime Model
+
+- **Site output**: Static Astro build
+- **Production host**: Cloudflare Workers Static Assets
+- **Worker name**: `hashblog`
+- **Production route**: `hashir.blog/*`
+- **Worker preview URL**: `https://hashblog.hashirm.workers.dev`
+- **Build output**: `dist`
+- **Deployment command**: `wrangler deploy`
+
+The site does not currently use TinaCMS, Cloudflare Pages Functions, server-rendered Astro routes, or the Astro Cloudflare adapter.
+
+## Current Package Versions
 
 ### Core Framework
-| Package | Previous Version | Updated Version | Change |
-|---------|-----------------|-----------------|--------|
-| **astro** | 5.8.1 | **5.15.3** | +0.7.2 |
+
+| Package | Current Version | Notes |
+| --- | --- | --- |
+| **astro** | `^6.3.5` | Static site generation |
+| **typescript** | `^6.0.3` | Type checking |
 
 ### Astro Integrations
-| Package | Previous Version | Updated Version | Change |
-|---------|-----------------|-----------------|--------|
-| **@astrojs/cloudflare** | 12.5.3 | **12.6.10** | +0.1.7 |
-| **@astrojs/mdx** | 4.3.0 | **4.3.9** | +0.0.9 |
-| **@astrojs/rss** | 4.0.12 | **4.0.13** | +0.0.1 |
-| **@astrojs/vue** | 5.1.0 | **5.1.2** | +0.0.2 |
-| **@astrojs/tailwind** | 6.0.2 | 6.0.2 | No change ✅ |
-| **@astrojs/markdown-remark** | 6.3.2 | 6.3.2 | No change ✅ |
 
-### UI Frameworks & Libraries
-| Package | Previous Version | Updated Version | Change |
-|---------|-----------------|-----------------|--------|
-| **vue** | 3.5.16 | **3.5.22** | +0.0.6 |
-| **@tailwindcss/typography** | 0.5.16 | **0.5.19** | +0.0.3 |
+| Package | Current Version | Notes |
+| --- | --- | --- |
+| **@astrojs/mdx** | `^5.0.6` | MDX blog posts |
+| **@astrojs/rss** | `^4.0.18` | RSS feed generation |
+| **@astrojs/vue** | `^6.0.1` | Vue islands |
+| **@astrojs/markdown-remark** | `^7.1.2` | Markdown pipeline support |
 
-### Utilities
-| Package | Previous Version | Updated Version | Change |
-|---------|-----------------|-----------------|--------|
-| **astro-embed** | 0.9.0 | **0.9.1** | +0.0.1 |
-| **fuse.js** | 7.1.0 | 7.1.0 | No change ✅ |
+### Styling
 
-### Dev Dependencies
-| Package | Previous Version | Updated Version | Change |
-|---------|-----------------|-----------------|--------|
-| **tsx** | 4.20.1 | **4.20.6** | +0.0.5 |
-| **rehype-external-links** | 3.0.0 | 3.0.0 | No change ✅ |
+| Package | Current Version | Notes |
+| --- | --- | --- |
+| **tailwindcss** | `^4.3.0` | Tailwind CSS v4 |
+| **@tailwindcss/vite** | `^4.3.0` | Tailwind Vite integration |
+| **@tailwindcss/typography** | `^0.5.19` | Prose styling |
 
-## Security Updates
-- ✅ Fixed 1 low severity vulnerability (brace-expansion RegEx DoS)
-- ✅ All packages now have 0 vulnerabilities
+### Content and UI
 
-## Build Verification
-- ✅ Build process completed successfully
-- ✅ All 37 blog posts processed
-- ✅ Social images and videos setup working correctly
-- ✅ Static routes prerendered successfully
-- ✅ No breaking changes detected
+| Package | Current Version | Notes |
+| --- | --- | --- |
+| **vue** | `^3.5.34` | Interactive menu/search islands |
+| **astro-embed** | `^0.13.0` | External media embeds |
+| **fuse.js** | `^7.3.0` | Client-side search |
 
-## Package Statistics
-- **Total packages audited:** 639
-- **Packages updated:** 100 changed, 14 added, 20 removed
-- **Installation time:** ~1 minute
-- **Build time:** ~7 seconds
+### Tooling
 
-## Verification Completed ✅
+| Package | Current Version | Notes |
+| --- | --- | --- |
+| **wrangler** | `^4.92.0` | Cloudflare Workers deploys |
+| **@astrojs/check** | `^0.9.9` | Astro diagnostics |
+| **tsx** | `^4.22.2` | Node test runner TypeScript support |
+| **rehype-external-links** | `^3.0.0` | External link attributes |
 
-1. **Build Test**: ✅ Production build completed successfully
-2. **Unit Tests**: ✅ All tests passing (1/1)
-3. **Browserslist**: ✅ Updated to latest (1.0.30001753)
-4. **Security Audit**: ✅ 0 vulnerabilities
+## Deployment Changes
 
-## Next Steps / Recommendations
+### Before
 
-1. **Testing**: Run the dev server locally to ensure everything works as expected
-   ```bash
-   npm run dev
-   ```
+- Astro server output
+- `@astrojs/cloudflare` adapter
+- Cloudflare Pages deployment
+- `pages_build_output_dir = "dist"`
 
-2. **Regular Updates**: Set up a monthly schedule to check for dependency updates
+### Now
 
-3. **Security Monitoring**: Consider using `npm audit` regularly or integrating automated dependency scanning
+- Astro static output
+- No Cloudflare adapter
+- Cloudflare Workers Static Assets
+- `wrangler.toml` uses:
+
+```toml
+name = "hashblog"
+compatibility_date = "2026-05-19"
+workers_dev = true
+
+[assets]
+directory = "./dist"
+html_handling = "auto-trailing-slash"
+not_found_handling = "none"
+
+[[routes]]
+pattern = "hashir.blog/*"
+zone_name = "hashir.blog"
+```
+
+## CI/CD
+
+GitHub Actions runs on pushes and pull requests:
+
+1. `npm ci`
+2. `npm run check`
+3. `npm test`
+4. `npm audit --audit-level=moderate`
+5. `npm run build`
+6. `cloudflare/wrangler-action@v4` deploys on push events
+
+Required repository secrets:
+
+- `CLOUDFLARE_API_TOKEN` with Workers edit/deploy permissions
+- `CLOUDFLARE_ACCOUNT_ID`
+
+## Verification Completed
+
+- `npm run check`: 0 errors, 0 warnings, 0 hints
+- `npm test`: 1/1 tests passing
+- `npm audit --audit-level=moderate`: 0 vulnerabilities
+- `npm run build`: 41 pages built
+- GitHub Actions deploy to Workers: passing
+- `https://hashir.blog/`: HTTP 200
+- `https://hashir.blog/api/search.json`: HTTP 200, 39 posts
 
 ## Notes
-- All updates were minor/patch versions, minimizing breaking change risks
-- The caret (^) versioning in package.json allows future patch updates automatically
-- Configuration files (astro.config.mjs, tailwind.config.js, tsconfig.json) remain unchanged and compatible
 
----
-*Update performed on: November 3, 2025*
-*Build verified: ✅ Success*
+- Normal page and asset requests are served as Workers static assets.
+- The production site does not need TinaCMS on `main`; TinaCMS work remains isolated to the `feature/tinacms-exploration` branch.
+- The old Cloudflare Pages project may still exist in Cloudflare, but `hashir.blog` is served by the Worker route.
+- Keep `astro.config.mjs` as `output: "static"` unless server-rendered routes are intentionally introduced.
 
