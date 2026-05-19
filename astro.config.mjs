@@ -1,7 +1,6 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import vue from "@astrojs/vue";
-import cloudflare from "@astrojs/cloudflare";
 import embed from "astro-embed/integration";
 import mdx from "@astrojs/mdx";
 import rehypeExternalLinks from "rehype-external-links";
@@ -10,11 +9,7 @@ import tailwindcss from "@tailwindcss/vite";
 // https://astro.build/config
 export default defineConfig({
   site: "https://hashir.blog", // Updated to actual custom domain
-  output: "server", // Server-side rendering for Cloudflare
-  adapter: cloudflare({
-    imageService: "compile",
-    prerenderEnvironment: "node",
-  }),
+  output: "static",
 
   integrations: [
     embed(),

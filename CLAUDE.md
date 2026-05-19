@@ -14,7 +14,7 @@ npm run setup-social-images    # Organize hero images for social sharing
 
 ## Architecture Overview
 
-HashBlog is an Astro 5.8.1 static site generator with Vue 3 islands for interactivity. It uses server-side rendering with Cloudflare Pages adapter for global edge deployment.
+HashBlog is an Astro 6 static site generator with Vue 3 islands for interactivity. It builds to static assets and deploys to Cloudflare Workers Static Assets for global edge delivery.
 
 ### Core Stack
 - **Astro**: Static site generation with component islands
@@ -73,13 +73,14 @@ Type-safe content management via Astro's content collections:
 
 ### Build Process
 1. `npm run setup-social-images` - Organizes hero images for social sharing
-2. `astro build` - Generates static site with optimized assets
-3. CSS/JS minification and asset fingerprinting
-4. Automatic sitemap and RSS feed generation
+2. `npm run setup-videos` - Organizes local post videos under `/public/videos/`
+3. `astro build` - Generates static site with optimized assets
+4. CSS/JS minification and asset fingerprinting
+5. Automatic sitemap and RSS feed generation
 
 ### Deployment
-- **Platform**: Cloudflare Pages with GitHub Actions
-- **Config**: `astro.config.mjs` with server-side rendering
+- **Platform**: Cloudflare Workers Static Assets with GitHub Actions
+- **Config**: `wrangler.toml` points Worker assets at `dist`
 - **Domain**: hashir.blog (custom domain)
 - **Assets**: Global CDN with edge caching
 

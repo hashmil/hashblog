@@ -21,7 +21,7 @@ This blog explores the intersection of technology and creativity, featuring post
 - **TypeScript** - Type safety and better developer experience
 - **Content**: Markdown/MDX with frontmatter for blog posts
 - **Embeds**: `@astro-community/astro-embed` - YouTube, Vimeo, TikTok video embeds
-- **Deployment**: [Cloudflare Pages](https://pages.cloudflare.com) - Edge deployment with global CDN
+- **Deployment**: [Cloudflare Workers Static Assets](https://developers.cloudflare.com/workers/static-assets/) - Edge deployment with global CDN
 - **CI/CD**: GitHub Actions - Automated deployment pipeline
 
 ## 🏗️ Project Structure
@@ -98,7 +98,7 @@ HashBlog includes comprehensive documentation covering all aspects of the platfo
   - Security considerations
 
 - **[Deployment Guide](docs/deployment/README.md)** - Production deployment
-  - Cloudflare Pages setup and configuration
+  - Cloudflare Workers setup and configuration
   - CI/CD with GitHub Actions
   - Performance monitoring and optimization
   - SEO and social media optimization
@@ -128,7 +128,7 @@ HashBlog includes comprehensive documentation covering all aspects of the platfo
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 22+
 - npm
 
 ### Setup
@@ -308,7 +308,7 @@ This script:
 
 ## 🚀 Deployment
 
-The site automatically deploys to Cloudflare Pages when
+The site automatically deploys to Cloudflare Workers Static Assets when
 pushing to the `main` branch via GitHub Actions.
 
 ### Required Secrets
@@ -316,7 +316,7 @@ pushing to the `main` branch via GitHub Actions.
 Add these to your GitHub repository secrets:
 
 - `CLOUDFLARE_API_TOKEN` - Cloudflare API token with
-  Pages:Edit permissions
+  Workers:Edit permissions
 - `CLOUDFLARE_ACCOUNT_ID` - Your Cloudflare account ID
 
 ## 🎨 Features

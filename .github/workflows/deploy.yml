@@ -8,30 +8,46 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    name: Build and deploy
+    name: Check, test, build, and deploy
+    permissions:
+      contents: read
+      deployments: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: "22.12.0"
+          node-version: "22"
           cache: "npm"
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Check
+        run: npm run check
+
+      - name: Test
+        run: npm test
+
+      - name: Audit
+        run: npm audit --audit-level=moderate
 
       - name: Build
         run: npm run build
 
       - name: Deploy to Cloudflare Workers
         if: github.event_name == 'push'
-        run: npx wrangler deploy
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          wranglerVersion: "4"
