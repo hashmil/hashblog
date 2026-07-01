@@ -30,6 +30,7 @@ pnpm-debug.log*
 # Codex local working files
 .codex/
 .firecrawl/
+.worktrees/
 
 # Local draft exports
 /drafts/
