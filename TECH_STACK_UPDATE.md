@@ -1,8 +1,8 @@
-# Tech Stack Update - May 19, 2026
+# Tech Stack Update - July 1, 2026
 
 ## Summary
 
-The project has been updated to the current Astro 6 stack and moved from Cloudflare Pages deployment to Cloudflare Workers Static Assets. The production domain `hashir.blog` is now served by the `hashblog` Worker route.
+The project runs on Astro 7 and deploys through Cloudflare Workers Static Assets. The production domain `hashir.blog` is served by the `hashblog` Worker route.
 
 ## Current Runtime Model
 
@@ -22,17 +22,17 @@ The site does not currently use TinaCMS, Cloudflare Pages Functions, server-rend
 
 | Package | Current Version | Notes |
 | --- | --- | --- |
-| **astro** | `^6.3.5` | Static site generation |
+| **astro** | `^7.0.4` | Static site generation |
 | **typescript** | `^6.0.3` | Type checking |
 
 ### Astro Integrations
 
 | Package | Current Version | Notes |
 | --- | --- | --- |
-| **@astrojs/mdx** | `^5.0.6` | MDX blog posts |
+| **@astrojs/mdx** | `^7.0.0` | MDX blog posts |
 | **@astrojs/rss** | `^4.0.18` | RSS feed generation |
-| **@astrojs/vue** | `^6.0.1` | Vue islands |
-| **@astrojs/markdown-remark** | `^7.1.2` | Markdown pipeline support |
+| **@astrojs/vue** | `^7.0.0` | Vue islands |
+| **@astrojs/markdown-remark** | `^7.2.0` | Unified Markdown/MDX processor support |
 
 ### Styling
 
@@ -47,17 +47,20 @@ The site does not currently use TinaCMS, Cloudflare Pages Functions, server-rend
 | Package | Current Version | Notes |
 | --- | --- | --- |
 | **vue** | `^3.5.34` | Interactive menu/search islands |
-| **astro-embed** | `^0.13.0` | External media embeds |
+| **@astro-community/astro-embed-youtube** | `^0.5.10` | YouTube embeds |
+| **@astro-community/astro-embed-vimeo** | `^0.3.12` | Vimeo embeds |
+| **@astro-community/astro-embed-link-preview** | `^0.3.1` | Link preview embeds |
 | **fuse.js** | `^7.3.0` | Client-side search |
 
 ### Tooling
 
 | Package | Current Version | Notes |
 | --- | --- | --- |
-| **wrangler** | `^4.92.0` | Cloudflare Workers deploys |
+| **wrangler** | `^4.106.0` | Cloudflare Workers deploys |
 | **@astrojs/check** | `^0.9.9` | Astro diagnostics |
 | **tsx** | `^4.22.2` | Node test runner TypeScript support |
 | **rehype-external-links** | `^3.0.0` | External link attributes |
+| **@types/node** | `^25.0.3` | Node test and script types |
 
 ## Deployment Changes
 
@@ -101,6 +104,8 @@ GitHub Actions runs on pushes and pull requests:
 5. `npm run build`
 6. `cloudflare/wrangler-action@v4` deploys on push events
 
+The workflow uses Node 22. Local clean-room validation should use `npm ci` before the same check/test/audit/build sequence.
+
 Required repository secrets:
 
 - `CLOUDFLARE_API_TOKEN` with Workers edit/deploy permissions
@@ -109,12 +114,14 @@ Required repository secrets:
 ## Verification Completed
 
 - `npm run check`: 0 errors, 0 warnings, 0 hints
-- `npm test`: 1/1 tests passing
+- `npm test`: 2/2 tests passing
 - `npm audit --audit-level=moderate`: 0 vulnerabilities
-- `npm run build`: 41 pages built
+- `npm run build`: 42 pages built
+- `npx wrangler deploy --dry-run`: passed
 - GitHub Actions deploy to Workers: passing
 - `https://hashir.blog/`: HTTP 200
-- `https://hashir.blog/api/search.json`: HTTP 200, 39 posts
+- `https://hashir.blog/api/search.json`: HTTP 200
+- Latest deployed Worker version checked during the July 1, 2026 deploy: `51a410cc-e96a-45ca-a1ca-ecca612fa0c2`
 
 ## Notes
 
@@ -122,4 +129,3 @@ Required repository secrets:
 - The production site does not need TinaCMS on `main`; TinaCMS work remains isolated to the `feature/tinacms-exploration` branch.
 - The old Cloudflare Pages project may still exist in Cloudflare, but `hashir.blog` is served by the Worker route.
 - Keep `astro.config.mjs` as `output: "static"` unless server-rendered routes are intentionally introduced.
-

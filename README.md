@@ -15,12 +15,12 @@ This blog explores the intersection of technology and creativity, featuring post
 
 ## Tech Stack
 
-- **Framework**: [Astro 6](https://astro.build) - Static site generator with component islands
+- **Framework**: [Astro 7](https://astro.build) - Static site generator with component islands
 - **UI Components**: [Vue 3](https://vuejs.org) - Interactive islands for menu and search
 - **Styling**: [Tailwind CSS v4](https://tailwindcss.com) - Utility-first CSS framework via `@tailwindcss/vite`
 - **TypeScript 6** - Type safety and better developer experience
 - **Content**: Markdown/MDX with frontmatter for blog posts
-- **Embeds**: `@astro-community/astro-embed` - YouTube, Vimeo, TikTok video embeds
+- **Embeds**: Scoped Astro Community embed packages for YouTube, Vimeo, and link previews
 - **Deployment**: [Cloudflare Workers Static Assets](https://developers.cloudflare.com/workers/static-assets/) - Edge deployment with global CDN
 - **CI/CD**: GitHub Actions + `cloudflare/wrangler-action@v4`
 
@@ -129,7 +129,7 @@ HashBlog includes comprehensive documentation covering all aspects of the platfo
 
 ### Prerequisites
 
-- Node.js 22+
+- Node.js 22.12.0 or newer
 - npm
 
 ### Setup
@@ -234,7 +234,7 @@ For videos stored locally, we use an organized public folder approach that ensur
 
 #### External Video Embedding
 
-For videos from providers like YouTube and Vimeo, import the required component from the `@astro-community/astro-embed` package directly in your `.mdx` file.
+For videos from providers like YouTube and Vimeo, import the required scoped Astro Community embed component directly in your `.mdx` file.
 
 #### YouTube
 
@@ -269,6 +269,10 @@ For videos from providers like YouTube and Vimeo, import the required component 
 #### TikTok
 
 TikTok videos are currently embedded using a `LinkPreview` component.
+
+```js
+import { LinkPreview } from "@astro-community/astro-embed-link-preview";
+```
 
 ### 4. Organization
 
@@ -324,6 +328,8 @@ Pushing to `main` runs `.github/workflows/deploy.yml`:
 4. `npm audit --audit-level=moderate`
 5. `npm run build`
 6. `cloudflare/wrangler-action@v4` deploys the Worker on push events
+
+The workflow uses Node 22 and Wrangler 4. Manual validation should use `npm ci` when checking CI parity.
 
 ### Manual Deployment
 

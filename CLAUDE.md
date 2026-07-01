@@ -21,7 +21,7 @@ npm run deploy                 # Build and deploy to Cloudflare Workers
 
 ## Architecture Overview
 
-HashBlog is an Astro 6 static site generator with Vue 3 islands for interactivity. It builds to static assets and deploys to Cloudflare Workers Static Assets for global edge delivery.
+HashBlog is an Astro 7 static site generator with Vue 3 islands for interactivity. It builds to static assets and deploys to Cloudflare Workers Static Assets for global edge delivery.
 
 ### Core Stack
 - **Astro**: Static site generation with component islands
@@ -45,9 +45,10 @@ Posts use SEO-friendly `/YYYY/MM/slug` URLs generated via:
 
 ### Video Handling
 - **Local videos**: Store in `public/videos/YYYY-MM-DD-post-slug/` and reference as `/videos/path/video.mp4`
-- **External embeds**: Import from `@astro-community/astro-embed` in MDX files
+- **External embeds**: Import the scoped Astro Community embed components directly in MDX files
   - YouTube: `import { YouTube } from "@astro-community/astro-embed-youtube"`
   - Vimeo: `import { Vimeo } from "@astro-community/astro-embed-vimeo"`
+  - Link previews/TikTok-style cards: `import { LinkPreview } from "@astro-community/astro-embed-link-preview"`
 
 ### Social Sharing System
 The `npm run setup-social-images` script:
@@ -92,7 +93,7 @@ Type-safe content management via Astro's content collections:
 - **Workers preview URL**: `https://hashblog.hashirm.workers.dev`
 - **Config**: `wrangler.toml` points Worker assets at `./dist`
 - **Routing**: `hashir.blog/*` is attached to the Worker route in `wrangler.toml`
-- **CI/CD**: `.github/workflows/deploy.yml` runs check, tests, audit, build, then `cloudflare/wrangler-action@v4` deploys on pushes
+- **CI/CD**: `.github/workflows/deploy.yml` runs `npm ci`, `npm run check`, `npm test`, `npm audit --audit-level=moderate`, `npm run build`, then `cloudflare/wrangler-action@v4` deploys on pushes to `main`
 
 Use Workers as the source of truth for production. Do not switch this project back to Cloudflare Pages unless the custom domain routing and workflow are intentionally changed together. The old Pages project may still exist in Cloudflare, but `hashir.blog` is served by the Worker route.
 
@@ -108,6 +109,11 @@ Required GitHub secrets for automated deployment:
 - `CLOUDFLARE_ACCOUNT_ID`
 
 The site is currently static. Keep `astro.config.mjs` as `output: "static"` and do not add the `@astrojs/cloudflare` adapter unless server-rendered routes or runtime-only features are actually introduced.
+
+### Runtime Requirements
+- Use Node.js `22.12.0` or newer. `.nvmrc` pins `22.12.0`, and GitHub Actions uses Node 22.
+- Run `npm ci` for clean validation and CI parity; use `npm install` when intentionally updating dependencies.
+- `npm audit --audit-level=moderate` is part of the deployment gate and must stay clean.
 
 ## Development Workflows
 

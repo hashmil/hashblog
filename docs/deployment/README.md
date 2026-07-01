@@ -17,8 +17,8 @@ HashBlog is designed for modern deployment workflows with automated builds, edge
 ┌─────────────────────────────────────────────────────────────┐
 │                 Cloudflare Global Network                  │
 │  ┌─────────────────┐  ┌──────────────────┐  ┌─────────────┐ │
-│  │   Static Site   │  │  Edge Functions  │  │     CDN     │ │
-│  │   (Pre-built)   │  │   (API Routes)   │  │  (Assets)   │ │
+│  │  Static Assets  │  │     Worker       │  │     CDN     │ │
+│  │   (Pre-built)   │  │    (Routing)     │  │  (Assets)   │ │
 │  └─────────────────┘  └──────────────────┘  └─────────────┘ │
 └─────────────────────────────────────────────────────────────┘
                              │
@@ -27,50 +27,46 @@ HashBlog is designed for modern deployment workflows with automated builds, edge
 │                     GitHub Actions                         │
 │  ┌─────────────────┐  ┌──────────────────┐  ┌─────────────┐ │
 │  │   Build Stage   │  │   Test Stage     │  │   Deploy    │ │
-│  │   (Asset Org)   │  │   (Validation)   │  │  (CF Pages) │ │
+│  │   (Asset Org)   │  │   (Validation)   │  │ (Workers)   │ │
 │  └─────────────────┘  └──────────────────┘  └─────────────┘ │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ### Technology Stack
 
-- **Platform**: Cloudflare Pages
+- **Platform**: Cloudflare Workers Static Assets
 - **CDN**: Cloudflare Global Network (300+ locations)
 - **CI/CD**: GitHub Actions
-- **Build Tool**: Astro with Cloudflare adapter
+- **Build Tool**: Astro static output
 - **Assets**: Automated organization and optimization
 
 ## ⚙️ Configuration
 
-### Cloudflare Pages Setup
+### Cloudflare Workers Setup
 
 **Project Configuration** (`wrangler.toml`):
 ```toml
 name = "hashblog"
-compatibility_date = "2024-01-01"
-pages_build_output_dir = "dist"
+compatibility_date = "2026-05-19"
+workers_dev = true
 
-[env.production]
-name = "hashblog"
+[assets]
+directory = "./dist"
+html_handling = "auto-trailing-slash"
+not_found_handling = "none"
 
-[env.preview]
-name = "hashblog-preview"
+[[routes]]
+pattern = "hashir.blog/*"
+zone_name = "hashir.blog"
 ```
 
 **Astro Configuration** (`astro.config.mjs`):
 ```javascript
 export default defineConfig({
-  output: 'server',
-  adapter: cloudflare({
-    imageService: 'compile',
-    platformProxy: {
-      enabled: true
-    }
-  }),
+  output: 'static',
   site: 'https://hashir.blog',
   integrations: [
     vue(),
-    tailwind({ applyBaseStyles: false }),
     mdx()
   ]
 });
@@ -159,11 +155,11 @@ export default defineConfig({
 
 ### 3. Deployment
 
-**Deployment Method**: Currently uses Cloudflare Pages direct deployment
+**Deployment Method**: GitHub Actions deploys Cloudflare Workers Static Assets with Wrangler 4.
 
-**Optional GitHub Actions Workflow** (`.github/workflows/deploy.yml`):
+**GitHub Actions Workflow** (`.github/workflows/deploy.yml`):
 ```yaml
-name: Deploy to Cloudflare Pages
+name: Deploy to Cloudflare Workers
 on:
   push:
     branches: [main]
@@ -179,29 +175,37 @@ jobs:
     
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
       
       - name: Install dependencies
         run: npm ci
+
+      - name: Check
+        run: npm run check
+
+      - name: Test
+        run: npm test
+
+      - name: Audit
+        run: npm audit --audit-level=moderate
       
       - name: Build project
         run: npm run build
       
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: hashblog
-          directory: dist
+          command: deploy
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          wranglerVersion: '3'
+          wranglerVersion: '4'
 ```
 
 ## 🌐 Domain and DNS
@@ -210,16 +214,11 @@ jobs:
 
 **Domain Configuration**:
 - **Primary**: `hashir.blog`
-- **Alternative**: `hashblog.pages.dev` (Cloudflare default)
-- **SSL**: Automatic Let's Encrypt certificates
+- **Workers preview**: `https://hashblog.hashirm.workers.dev`
+- **SSL**: Automatic Cloudflare edge certificates
 - **HSTS**: HTTP Strict Transport Security enabled
 
-**DNS Records** (Cloudflare DNS):
-```
-Type    Name    Content                 Proxy
-CNAME   @       hashblog.pages.dev      ✅ Proxied
-CNAME   www     hashblog.pages.dev      ✅ Proxied
-```
+The active production route is configured in `wrangler.toml` as `hashir.blog/*` for the `hashblog` Worker. The older Cloudflare Pages project may still exist, but it is not the source of truth for `hashir.blog`.
 
 ### Redirects and Routing
 
@@ -381,8 +380,8 @@ npm run build
 npm run setup-social-images -- --verbose
 npm run setup-videos -- --verbose
 
-# TypeScript errors
-npm run astro check
+# Astro/TypeScript errors
+npm run check
 ```
 
 **Asset Issues**:
@@ -392,7 +391,7 @@ npm run astro check
 - Validate social image dimensions
 
 **Performance Issues**:
-- Analyze bundle size with `npm run build:analyze`
+- Inspect bundle output from `npm run build`
 - Check Core Web Vitals in PageSpeed Insights
 - Monitor Cloudflare analytics
 - Test with slow network conditions
@@ -401,8 +400,8 @@ npm run astro check
 
 **Rollback Deployment**:
 ```bash
-# Via Cloudflare Pages dashboard
-# Or redeploy previous commit
+# Use Cloudflare Workers versions/rollback in the dashboard,
+# or revert and redeploy from git.
 git revert HEAD
 git push origin main
 ```

@@ -16,8 +16,8 @@ HashBlog was designed to solve common challenges in personal blogging:
 ## 🏗 Architecture Overview
 
 ### Core Stack
-- **[Astro 5.8.1](https://astro.build/)** - Static site generator with server-side rendering
-- **[Vue 3.5.16](https://vuejs.org/)** - Interactive components using the islands architecture
+- **[Astro 7](https://astro.build/)** - Static site generator with component islands
+- **[Vue 3.5](https://vuejs.org/)** - Interactive components using the islands architecture
 - **[TypeScript](https://www.typescriptlang.org/)** - Type-safe development across the entire stack
 - **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first styling with custom design system
 - **[MDX](https://mdxjs.com/)** - Rich content authoring with component embedding
@@ -34,16 +34,16 @@ src/content/blog/YYYY-MM-DD-post-title/
 URLs follow SEO-friendly patterns: `/YYYY/MM/slug`
 
 ### Deployment Strategy
-- **Platform**: Cloudflare Pages with global edge distribution
+- **Platform**: Cloudflare Workers Static Assets with global edge distribution
 - **Build Process**: Automated asset organization and optimization
-- **Performance**: Static generation with selective server-side rendering
+- **Performance**: Static generation with selective client-side hydration
 - **CI/CD**: GitHub Actions with automated deployments
 
 ## 🚀 Key Features
 
 ### Performance & SEO
 - **Static Generation**: Most content pre-rendered at build time
-- **Edge Deployment**: Global CDN distribution via Cloudflare Pages
+- **Edge Deployment**: Global distribution via Cloudflare Workers Static Assets
 - **Image Optimization**: Automatic image processing and format conversion
 - **Social Sharing**: Automated Open Graph image organization
 - **Structured Data**: Schema.org markup for rich search results
@@ -107,11 +107,11 @@ HashBlog consistently achieves excellent performance scores:
 - **Performance**: Minimal runtime overhead
 - **Developer Experience**: Intuitive API and excellent tooling
 
-### Why Cloudflare Pages?
-- **Edge Computing**: Global distribution with low latency
-- **Server-Side Rendering**: Hybrid static/dynamic content
-- **Integration**: Seamless GitHub Actions deployment
-- **Performance**: Built-in CDN and optimization features
+### Why Cloudflare Workers Static Assets?
+- **Edge Distribution**: Global static asset delivery with low latency
+- **Worker Routing**: `hashir.blog/*` is served by the `hashblog` Worker route
+- **Integration**: GitHub Actions deployment through `cloudflare/wrangler-action@v4`
+- **Performance**: Built-in Cloudflare edge caching and asset delivery
 
 ## 📈 Scalability Considerations
 

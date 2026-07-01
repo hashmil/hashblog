@@ -14,7 +14,7 @@ This guide covers the development workflows, best practices, and processes for c
 
 ### Prerequisites
 
-- **Node.js 18+** with npm
+- **Node.js 22.12.0+** with npm
 - **Git** for version control
 - **VS Code** (recommended) with extensions:
   - Astro Language Support
@@ -26,7 +26,7 @@ This guide covers the development workflows, best practices, and processes for c
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/hashblog.git
+git clone https://github.com/hashmil/hashblog.git
 cd hashblog
 
 # Install dependencies
@@ -43,7 +43,9 @@ npm run dev
 npm run dev              # Start dev server (localhost:4321)
 npm run build           # Production build with asset setup
 npm run preview         # Preview production build
+npm run check           # Run Astro diagnostics
 npm test                # Run unit tests
+npm audit --audit-level=moderate  # Match CI security gate
 
 # Asset management
 npm run setup-social-images  # Organize hero images
@@ -59,10 +61,10 @@ npm run astro add       # Add integrations
 
 ### Technology Stack
 
-- **Frontend**: Astro 5.8.1 + Vue 3.5.16
+- **Frontend**: Astro 7 + Vue 3.5
 - **Styling**: Tailwind CSS with custom design system
 - **Content**: MDX with Content Collections
-- **Deployment**: Cloudflare Pages with GitHub Actions
+- **Deployment**: Cloudflare Workers Static Assets with GitHub Actions
 - **Type Safety**: TypeScript with strict configuration
 
 ### Key Design Decisions
@@ -111,7 +113,7 @@ npm run dev
 
 5. **Publish**
 - Set `draft: false`
-- Run `npm run build` to validate
+- Run `npm run check`, `npm test`, `npm audit --audit-level=moderate`, and `npm run build` to validate
 - Commit and push for deployment
 
 ### Content Guidelines
@@ -280,7 +282,7 @@ graph TD
 
 **GitHub Actions** (`.github/workflows/deploy.yml`):
 ```yaml
-name: Deploy to Cloudflare Pages
+name: Deploy to Cloudflare Workers
 on:
   push:
     branches: [main]
@@ -291,21 +293,24 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 18
+          node-version: 22
           cache: 'npm'
       
       - run: npm ci
+      - run: npm run check
+      - run: npm test
+      - run: npm audit --audit-level=moderate
       - run: npm run build
       
-      - uses: cloudflare/pages-action@v1
+      - uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: hashblog
-          directory: dist
+          command: deploy
+          wranglerVersion: '4'
 ```
 
 ## 🔍 Code Quality

@@ -1,12 +1,12 @@
 # HashBlog Documentation
 
-[![Astro](https://img.shields.io/badge/Astro-5.8.1-FF5D01?logo=astro&logoColor=white)](https://astro.build/)
-[![Vue](https://img.shields.io/badge/Vue-3.5.16-4FC08D?logo=vue.js&logoColor=white)](https://vuejs.org/)
+[![Astro](https://img.shields.io/badge/Astro-7-FF5D01?logo=astro&logoColor=white)](https://astro.build/)
+[![Vue](https://img.shields.io/badge/Vue-3.5-4FC08D?logo=vue.js&logoColor=white)](https://vuejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Deployed on Cloudflare Pages](https://img.shields.io/badge/Deployed%20on-Cloudflare%20Pages-F38020?logo=cloudflare&logoColor=white)](https://pages.cloudflare.com/)
+[![Deployed on Cloudflare Workers](https://img.shields.io/badge/Deployed%20on-Cloudflare%20Workers-F38020?logo=cloudflare&logoColor=white)](https://developers.cloudflare.com/workers/static-assets/)
 
-Welcome to the comprehensive documentation for HashBlog - a modern, performance-focused personal blog built with Astro, Vue 3, and deployed on Cloudflare Pages.
+Welcome to the comprehensive documentation for HashBlog - a modern, performance-focused personal blog built with Astro, Vue 3, and deployed on Cloudflare Workers Static Assets.
 
 ## 📚 Documentation Structure
 
@@ -28,7 +28,7 @@ Welcome to the comprehensive documentation for HashBlog - a modern, performance-
 - **[Testing](development/testing.md)** - Testing strategies and setup
 
 ### Deployment & Production
-- **[Deployment](deployment/README.md)** - Build process and Cloudflare Pages setup
+- **[Deployment](deployment/README.md)** - Build process and Cloudflare Workers setup
 - **[Performance](deployment/performance.md)** - Optimization strategies and monitoring
 - **[SEO & Social](deployment/seo.md)** - Search engine and social media optimization
 
@@ -40,8 +40,8 @@ Welcome to the comprehensive documentation for HashBlog - a modern, performance-
 ## 🚀 Quick Start
 
 ```bash
-# Clone the repository (replace with your actual repo URL)
-git clone https://github.com/yourusername/hashblog.git
+# Clone the repository
+git clone https://github.com/hashmil/hashblog.git
 cd hashblog
 
 # Install dependencies
@@ -55,13 +55,13 @@ npm run dev
 
 ## 🛠 Core Technologies
 
-- **Astro 5.8.1** - Static site generator with server-side rendering
-- **Vue 3.5.16** - Interactive components for menu and search
+- **Astro 7** - Static site generator with component islands
+- **Vue 3.5** - Interactive components for menu and search
 - **TypeScript** - Type-safe development
 - **Tailwind CSS** - Utility-first styling with custom design system
 - **MDX** - Rich content with component embedding
 - **Client-side Search** - Real-time search with JavaScript filtering
-- **Cloudflare Pages** - Global edge deployment
+- **Cloudflare Workers Static Assets** - Global edge deployment
 
 ## 📖 Key Features
 
@@ -72,7 +72,7 @@ npm run dev
 - ✅ **Rich Content** - MDX support with component embedding
 - ✅ **Video Support** - Local videos and external platform embeds
 - ✅ **Type Safe** - Full TypeScript coverage with content validation
-- ✅ **Edge Deployment** - Global CDN distribution via Cloudflare Pages
+- ✅ **Edge Deployment** - Global distribution via Cloudflare Workers Static Assets
 - ✅ **Dark Theme** - Modern, accessible dark mode design
 - ✅ **Mobile First** - Responsive design optimized for all devices
 
@@ -80,8 +80,8 @@ npm run dev
 
 1. Read the [Development Workflows](development/README.md) documentation
 2. Follow the [Content Management](content/README.md) guidelines for blog posts
-3. Ensure all tests pass with `npm test`
-4. Run build validation with `npm run build`
+3. Ensure checks pass with `npm run check` and `npm test`
+4. Run `npm audit --audit-level=moderate` and `npm run build` before publishing
 
 ## 📄 License
 

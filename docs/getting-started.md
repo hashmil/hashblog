@@ -6,8 +6,8 @@ This guide will help you set up HashBlog for local development and create your f
 
 Before you begin, ensure you have:
 
-- **Node.js 20+** installed ([Download](https://nodejs.org/)) - Required for Astro 5.8.1
-- **npm** or **yarn** package manager
+- **Node.js 22.12.0+** installed ([Download](https://nodejs.org/)) - Required for Astro 7
+- **npm** package manager
 - **Git** for version control
 - **Code editor** (VS Code recommended with Astro extension)
 
@@ -16,8 +16,8 @@ Before you begin, ensure you have:
 ### 1. Clone and Install
 
 ```bash
-# Clone the repository (replace with your actual repo URL)
-git clone https://github.com/yourusername/hashblog.git
+# Clone the repository
+git clone https://github.com/hashmil/hashblog.git
 cd hashblog
 
 # Install dependencies
@@ -142,7 +142,9 @@ npm run build           # Production build with asset setup
 npm run preview         # Preview production build locally
 
 # Testing
+npm run check          # Run Astro diagnostics
 npm test                # Run unit tests
+npm audit --audit-level=moderate  # Match the CI security gate
 
 # Asset Management
 npm run setup-social-images  # Organize hero images for social sharing
@@ -159,7 +161,7 @@ npm run astro check     # Type check
 1. **Start Development**: `npm run dev`
 2. **Create Content**: Add new blog posts in `src/content/blog/`
 3. **Test Changes**: Preview at `localhost:4321`
-4. **Run Tests**: `npm test` to ensure nothing breaks
+4. **Run Checks**: `npm run check`, `npm test`, and `npm audit --audit-level=moderate`
 5. **Build**: `npm run build` to verify production build
 6. **Commit**: Git commit your changes
 
@@ -296,15 +298,15 @@ npm run dev -- --port 3000
 
 **Module Not Found**:
 ```bash
-# Clear node_modules and reinstall
-rm -rf node_modules package-lock.json
-npm install
+# Clear installed packages and reinstall from the lockfile
+rm -rf node_modules
+npm ci
 ```
 
 **Build Errors**:
 ```bash
-# Check TypeScript errors
-npm run astro check
+# Check Astro/TypeScript errors
+npm run check
 
 # Verify content schema
 npm run build

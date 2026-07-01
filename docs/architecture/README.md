@@ -9,14 +9,14 @@ HashBlog implements a modern web architecture that combines static site generati
 │                     Cloudflare Edge Network                 │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────────┐  ┌──────────────────┐  ┌─────────────┐ │
-│  │  Static Assets  │  │   Server Routes  │  │  Functions  │ │
-│  │  (Images, CSS)  │  │  (API, Search)   │  │   (SSR)     │ │
+│  │  Static Assets  │  │     Worker       │  │    Routes   │ │
+│  │  (Images, CSS)  │  │   (Routing)      │  │ (hashir.blog)│ │
 │  └─────────────────┘  └──────────────────┘  └─────────────┘ │
 └─────────────────────────────────────────────────────────────┘
                              │
                              ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                        Astro 5.8.1                         │
+│                         Astro 7                            │
 │  ┌─────────────────┐  ┌──────────────────┐  ┌─────────────┐ │
 │  │  Static Pages   │  │   Vue Islands    │  │    API      │ │
 │  │  (Blog Posts)   │  │    (Menu)        │  │  (Search)   │ │
@@ -35,10 +35,10 @@ HashBlog implements a modern web architecture that combines static site generati
 
 ## 🔧 Core Technologies
 
-### Frontend Framework: Astro 5.8.1
+### Frontend Framework: Astro 7
 - **Islands Architecture**: Selective hydration for optimal performance
 - **Static Generation**: Most content pre-rendered at build time
-- **Server-Side Rendering**: Dynamic routes for blog posts
+- **Static Routes**: Dynamic blog routes are prerendered into static HTML
 - **Built-in Optimizations**: Image processing, CSS minification, bundling
 
 **Key Benefits**:
@@ -47,7 +47,7 @@ HashBlog implements a modern web architecture that combines static site generati
 - Framework agnostic (supports Vue, React, Svelte)
 - Built-in performance optimizations
 
-### Interactive Components: Vue 3.5.16
+### Interactive Components: Vue 3.5
 - **Composition API**: Modern reactive programming model
 - **TypeScript Integration**: Full type safety
 - **Single Component**: Menu with integrated search functionality
@@ -315,41 +315,43 @@ npm run build = setup-social-images + setup-videos + astro build
 
 ## 🔗 Integration Points
 
-### Cloudflare Pages Integration
+### Cloudflare Workers Static Assets Integration
 
 ```javascript
 // astro.config.mjs
 export default defineConfig({
-  output: 'server',
-  adapter: cloudflare({
-    imageService: 'compile'
-  }),
+  output: 'static',
   site: 'https://hashir.blog'
 });
 ```
 
 **Key Features**:
-- Server-side rendering for dynamic content
-- Static asset optimization
-- Edge function deployment
-- Global CDN distribution
+- Static build output in `dist`
+- Worker route configured in `wrangler.toml`
+- Global Cloudflare edge distribution
+- No Astro Cloudflare adapter required while the site remains static
 
 ### GitHub Actions CI/CD
 
 ```yaml
 # .github/workflows/deploy.yml
-- uses: actions/setup-node@v3
+- uses: actions/setup-node@v6
   with:
-    node-version: 18
+    node-version: 22
     cache: 'npm'
 
 - run: npm ci
+- run: npm run check
+- run: npm test
+- run: npm audit --audit-level=moderate
 - run: npm run build
 
-- uses: cloudflare/pages-action@v1
+- uses: cloudflare/wrangler-action@v4
   with:
     apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
     accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    command: deploy
+    wranglerVersion: '4'
 ```
 
 ## 📊 Performance Architecture

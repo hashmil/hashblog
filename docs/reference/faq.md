@@ -6,13 +6,13 @@ Common questions and answers about HashBlog architecture, usage, and customizati
 
 ### What is HashBlog?
 
-HashBlog is a modern, performance-focused personal blog platform built with Astro 5.8.1, Vue 3, and TypeScript. It combines static site generation with selective interactivity to achieve excellent performance while maintaining a rich user experience.
+HashBlog is a modern, performance-focused personal blog platform built with Astro 7, Vue 3, and TypeScript. It combines static site generation with selective interactivity to achieve excellent performance while maintaining a rich user experience.
 
 **Key Features**:
 - 90+ Lighthouse performance scores
 - Real-time search without external dependencies
 - Automated social image organization
-- Edge deployment on Cloudflare Pages
+- Edge deployment on Cloudflare Workers Static Assets
 - Type-safe content management
 
 ### Why choose HashBlog over other blogging platforms?
@@ -30,8 +30,8 @@ HashBlog is a modern, performance-focused personal blog platform built with Astr
 ### What are the system requirements?
 
 **Development**:
-- Node.js 18 or later
-- npm or yarn package manager
+- Node.js 22.12.0 or later
+- npm package manager
 - Git for version control
 - Modern code editor (VS Code recommended)
 
@@ -301,8 +301,9 @@ HashBlog doesn't include comments by default, but you can add:
 HashBlog uses automated deployment via GitHub Actions:
 
 1. **Push to main branch** triggers GitHub Actions
-2. **Build process** runs asset organization and Astro build
-3. **Deploy to Cloudflare Pages** distributes globally
+2. **CI gates** run `npm run check`, `npm test`, and `npm audit --audit-level=moderate`
+3. **Build process** runs asset organization and Astro build
+4. **Deploy to Cloudflare Workers** publishes static assets globally through Wrangler
 4. **Edge caching** ensures fast loading worldwide
 
 ### Can I deploy to other platforms?
@@ -325,7 +326,7 @@ npm install @astrojs/netlify
 
 ### How do I set up a custom domain?
 
-1. **Configure DNS** to point to Cloudflare Pages
+1. **Configure Cloudflare routing** so the Worker serves the domain
 2. **Update Astro config**:
 ```javascript
 export default defineConfig({
@@ -337,7 +338,7 @@ export default defineConfig({
 
 ### What about SSL certificates?
 
-Cloudflare Pages provides automatic SSL certificates via Let's Encrypt. No additional configuration required.
+Cloudflare provides automatic edge SSL certificates for the Worker route. No additional certificate management is required in this repo.
 
 ## 🔧 Performance
 
@@ -404,7 +405,7 @@ HashBlog follows security best practices:
 **Regular Updates**:
 ```bash
 npm update  # Update dependencies
-npm audit   # Check for vulnerabilities
+npm audit --audit-level=moderate   # Match the CI security gate
 ```
 
 **Major Version Updates**:
@@ -418,8 +419,8 @@ npm audit   # Check for vulnerabilities
 
 1. **Content validation**: Check frontmatter syntax
 2. **Asset references**: Verify image and video paths
-3. **TypeScript errors**: Run `npm run astro check`
-4. **Dependencies**: Try `rm -rf node_modules && npm install`
+3. **Astro/TypeScript errors**: Run `npm run check`
+4. **Dependencies**: Try `rm -rf node_modules && npm ci`
 
 ### Search isn't working
 

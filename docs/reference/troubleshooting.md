@@ -212,7 +212,7 @@ ls -la public/videos/YYYY-MM-DD-post-title/
 
 3. **External Embed Issues**:
 ```mdx
-<!-- Ensure proper import (using astro-embed integration) -->
+<!-- Ensure direct scoped component imports -->
 import { YouTube } from "@astro-community/astro-embed-youtube";
 import { Vimeo } from "@astro-community/astro-embed-vimeo";
 
@@ -297,7 +297,7 @@ document.dispatchEvent(new CustomEvent('toggle-menu'));
 2. **Dependency Analysis**:
 ```bash
 # Check for unnecessary dependencies
-npm audit
+npm audit --audit-level=moderate
 npm outdated
 
 # Remove unused packages
@@ -345,7 +345,7 @@ npm uninstall package-name
 
 **Symptom**: Deployment workflow fails
 
-**Note**: This project currently uses direct Cloudflare Pages deployment rather than GitHub Actions. If setting up GitHub Actions:
+**Note**: This project deploys through GitHub Actions to Cloudflare Workers Static Assets with Wrangler 4.
 
 **Common Fixes**:
 
@@ -358,10 +358,10 @@ npm uninstall package-name
 
 2. **Node.js Version**:
 ```yaml
-# Ensure GitHub Actions uses Node.js 18+
-- uses: actions/setup-node@v4
+# Ensure GitHub Actions uses Node.js 22+
+- uses: actions/setup-node@v6
   with:
-    node-version: 18
+    node-version: 22
 ```
 
 3. **Build Dependencies**:
@@ -369,11 +369,14 @@ npm uninstall package-name
 # Check that all dependencies install correctly
 npm ci
 
-# Verify build succeeds locally
+# Verify the same gates used by CI
+npm run check
+npm test
+npm audit --audit-level=moderate
 npm run build
 ```
 
-#### Cloudflare Pages Issues
+#### Cloudflare Workers Issues
 
 **Symptom**: Site doesn't deploy or shows errors
 
@@ -383,27 +386,24 @@ npm run build
 ```toml
 # Check wrangler.toml settings (actual configuration)
 name = "hashblog"
-compatibility_date = "2024-01-01"
-pages_build_output_dir = "dist"
+compatibility_date = "2026-05-19"
+workers_dev = true
+
+[assets]
+directory = "./dist"
 ```
 
 2. **Compatibility Issues**:
-```javascript
-// Verify Cloudflare adapter configuration in astro.config.mjs
-adapter: cloudflare({
-  imageService: 'compile',
-  routes: {
-    extend: {
-      exclude: [{ pattern: "/assets/*" }],
-    },
-  },
-})
+```bash
+# Validate Wrangler can read the built assets without uploading
+npm run build
+npx wrangler deploy --dry-run
 ```
 
 3. **Domain Configuration**:
 ```bash
 # Check DNS settings for hashir.blog
-# Verify custom domain setup in Cloudflare Pages
+# Verify the hashir.blog/* Worker route in wrangler.toml and Cloudflare
 # Ensure SSL certificates are active
 # Check site configuration points to correct domain
 ```
