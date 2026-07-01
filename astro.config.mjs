@@ -1,7 +1,7 @@
 // @ts-check
 import { defineConfig } from "astro/config";
+import { unified } from "@astrojs/markdown-remark";
 import vue from "@astrojs/vue";
-import embed from "astro-embed/integration";
 import mdx from "@astrojs/mdx";
 import rehypeExternalLinks from "rehype-external-links";
 import tailwindcss from "@tailwindcss/vite";
@@ -12,7 +12,6 @@ export default defineConfig({
   output: "static",
 
   integrations: [
-    embed(),
     mdx(),
     vue(),
   ],
@@ -23,12 +22,14 @@ export default defineConfig({
       langs: [],
       wrap: true,
     },
-    rehypePlugins: [
-      [
-        rehypeExternalLinks,
-        { target: "_blank", rel: ["noopener", "noreferrer"] },
+    processor: unified({
+      rehypePlugins: [
+        [
+          rehypeExternalLinks,
+          { target: "_blank", rel: ["noopener", "noreferrer"] },
+        ],
       ],
-    ],
+    }),
   },
 
   image: {
