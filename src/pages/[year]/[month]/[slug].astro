@@ -9,7 +9,9 @@ import { getCollection, render } from 'astro:content';
 export const prerender = true;
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = await getCollection('blog', ({ data }) => {
+    return !import.meta.env.PROD || !data.draft;
+  });
   return posts.map((post) => {
     const pubDate = new Date(post.data.pubDate);
     const year = pubDate.getFullYear().toString();

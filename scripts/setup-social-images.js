@@ -24,6 +24,10 @@ function extractHeroImage(content) {
   return heroImageMatch ? heroImageMatch[1] : null;
 }
 
+function isDraft(content) {
+  return /^draft:\s*true\s*$/m.test(content);
+}
+
 // Function to get post slug from directory name
 function getPostSlug(dirName) {
   // Extract slug from directory name (remove date prefix)
@@ -55,6 +59,13 @@ function setupSocialImages() {
 
     // Read the frontmatter
     const content = fs.readFileSync(indexPath, "utf-8");
+
+    if (isDraft(content)) {
+      console.log(`⚠️  Skipping ${postDir} - draft post`);
+      skippedCount++;
+      continue;
+    }
+
     const heroImagePath = extractHeroImage(content);
 
     if (!heroImagePath) {
