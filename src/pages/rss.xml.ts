@@ -1,8 +1,10 @@
 import rss from "@astrojs/rss";
+import type { APIContext } from "astro";
 import { getCollection } from "astro:content";
-import { getPostUrl } from "../utils/url";
+import { getAbsoluteUrl, getPostUrl } from "../utils/url";
 
-export async function GET(context: any) {
+export async function GET(context: APIContext) {
+  const site = context.site ?? new URL("https://hashir.blog");
   const posts = await getCollection("blog", ({ data }) => {
     return !data.draft;
   });
@@ -16,31 +18,33 @@ export async function GET(context: any) {
     title: "Notes by Hash Milhan",
     description:
       "Creative Technology Director sharing insights on AI, web development, and creative projects.",
-    site: context.site,
-    items: sortedPosts.map((post) => ({
-      title: post.data.title,
-      pubDate: post.data.pubDate,
-      description: post.data.description,
-      content: post.body, // Use the raw markdown content
-      link: getPostUrl(post.id, post.data.pubDate),
-      // Enhanced metadata
-      author: "blog@hashir.net (Hash Milhan)",
-      categories: post.data.tags || [],
-      // Add GUID for proper RSS identification
-      guid: getPostUrl(post.id, post.data.pubDate),
-      // Add custom data for each item
-      customData: `<source url="${new URL("rss.xml", context.site)}">Notes by Hash Milhan</source>`,
-    })),
+    site,
+    items: sortedPosts.map((post) => {
+      const postUrl = getAbsoluteUrl(getPostUrl(post.id, post.data.pubDate), site);
+
+      return {
+        title: post.data.title,
+        pubDate: post.data.pubDate,
+        description: post.data.description,
+        // MDX cannot be safely published as raw HTML. The feed links to the
+        // canonical article and uses its plain-text description instead.
+        link: postUrl,
+        author: "blog@hashir.net (Hash Milhan)",
+        categories: post.data.tags || [],
+        guid: postUrl,
+        customData: `<source url="${new URL("rss.xml", site)}">Notes by Hash Milhan</source>`,
+      };
+    }),
     customData: `
-      <language>en-us</language>
+      <language>en-gb</language>
       <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
       <managingEditor>blog@hashir.net (Hash Milhan)</managingEditor>
       <webMaster>blog@hashir.net (Hash Milhan)</webMaster>
       <generator>Astro RSS Feed</generator>
       <image>
-        <url>${new URL("/images/logo.png", context.site)}</url>
+        <url>${new URL("/images/logo.png", site)}</url>
         <title>Notes by Hash Milhan</title>
-        <link>${context.site}</link>
+        <link>${site}</link>
         <description>Creative Technology Director sharing insights on AI, web development, and creative projects.</description>
         <width>144</width>
         <height>144</height>
@@ -50,7 +54,7 @@ export async function GET(context: any) {
       <ttl>60</ttl>
       <atom:link href="${new URL(
         "rss.xml",
-        context.site
+        site
       )}" rel="self" type="application/rss+xml" xmlns:atom="http://www.w3.org/2005/Atom"/>
     `,
     stylesheet: "/rss/styles.xsl",

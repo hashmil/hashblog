@@ -3,13 +3,13 @@
 // No props needed for now
 ---
 
-<header class="sticky top-0 z-40 bg-dark/80 backdrop-blur-md border-b border-gray-800" transition:name="site-header">
+<header class="sticky top-0 z-40 bg-dark/80 backdrop-blur-md border-b border-gray-800">
   <div class="container py-4">
     <div class="max-w-3xl mx-auto">
       <div class="flex items-center justify-between w-full">
       <!-- Logo -->
       <div class="flex-shrink-0">
-        <a href="/" class="flex items-center group hover:opacity-80 transition-opacity duration-200" transition:name="site-logo">
+        <a href="/" class="flex items-center group hover:opacity-80 transition-opacity duration-200">
           <img src="/images/logo.png" alt="Notes by Hash Milhan" class="h-8 object-contain" />
         </a>
       </div>
@@ -20,7 +20,8 @@
           id="menu-button"
           class="flex items-center space-x-2 text-white hover:text-accent transition-colors duration-200"
           aria-label="Open menu"
-          transition:name="menu-button"
+          aria-controls="site-menu"
+          aria-expanded="false"
         >
           <span class="font-accent">Menu</span>
           <div class="flex flex-col space-y-1">
@@ -36,34 +37,20 @@
 </header>
 
 <script>
-  // Menu button functionality - more robust approach for mobile
+  // Native click events cover pointer, touch and keyboard activation.
   function initMenuButton() {
     const menuButton = document.getElementById('menu-button');
-    if (menuButton) {
-      const handleMenuToggle = (e: Event) => {
-        e.preventDefault();
-        e.stopPropagation();
-        // Dispatch custom event for Vue component to handle
-        document.dispatchEvent(new CustomEvent('toggle-menu'));
-      };
-      
-      // Add both click and touchstart for better mobile support
-      menuButton.addEventListener('click', handleMenuToggle);
-      menuButton.addEventListener('touchstart', handleMenuToggle, { passive: false });
-      
-      // Ensure button is focusable and accessible
-      menuButton.setAttribute('tabindex', '0');
-    }
+    if (!menuButton || menuButton.dataset.menuInitialised === 'true') return;
+
+    menuButton.dataset.menuInitialised = 'true';
+    menuButton.addEventListener('click', () => {
+      document.dispatchEvent(new CustomEvent('toggle-menu'));
+    });
   }
 
-  // Try multiple initialization approaches
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMenuButton);
+    document.addEventListener('DOMContentLoaded', initMenuButton, { once: true });
   } else {
-    // DOM is already loaded
     initMenuButton();
   }
-  
-  // Fallback - try again after a short delay
-  setTimeout(initMenuButton, 100);
 </script> 

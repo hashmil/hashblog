@@ -159,7 +159,7 @@
   }
 
   .prose-minimal a:hover {
-    color: #ff5682;
+    color: #121212;
     background-color: #fff;
     border-bottom-color: transparent;
     box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
@@ -324,4 +324,19 @@
 .no-results-enter-from,
 .no-results-leave-to {
   opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

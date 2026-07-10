@@ -1,5 +1,7 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
+import { normaliseSearchText } from "../../utils/search";
+import { getPostUrl } from "../../utils/url";
 
 export const GET: APIRoute = async () => {
   try {
@@ -10,21 +12,18 @@ export const GET: APIRoute = async () => {
 
     // Transform posts for search index
     const searchData = allPosts.map((post) => ({
-      slug: post.id,
-      data: {
-        title: post.data.title,
-        description: post.data.description,
-        pubDate: post.data.pubDate,
-        tags: post.data.tags || [],
-        heroImage: post.data.heroImage || null,
-      },
-      body: post.body || "", // Include post content for better search
+      title: post.data.title,
+      description: post.data.description,
+      pubDate: post.data.pubDate.toISOString(),
+      tags: post.data.tags || [],
+      url: getPostUrl(post.id, post.data.pubDate),
+      searchText: normaliseSearchText(post.body || ""),
     }));
 
     // Sort by publication date (newest first)
     searchData.sort(
       (a, b) =>
-        new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+        new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
     );
 
     return new Response(JSON.stringify({ posts: searchData }), {

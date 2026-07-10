@@ -15,6 +15,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const NOTION_API_BASE = "https://api.notion.com/v1";
 const NOTION_VERSION = "2025-09-03";
@@ -111,6 +112,27 @@ function pickStatus(page) {
   const s = props["Status"];
   if (!s || s.type !== "status") return null;
   return s.status?.name || null;
+}
+
+export function pickDate(page) {
+  const dateProperty = page.properties?.Date;
+  const notionDate =
+    dateProperty?.type === "date" ? dateProperty.date?.start : null;
+
+  return (notionDate || page.created_time || new Date().toISOString()).slice(0, 10);
+}
+
+export function truncateDescription(value, maxLength = 160) {
+  const normalised = value.replace(/\s+/g, " ").trim();
+  if (normalised.length <= maxLength) return normalised;
+
+  const candidate = normalised.slice(0, maxLength - 1).trimEnd();
+  const lastSpace = candidate.lastIndexOf(" ");
+  const shortened = lastSpace >= Math.floor(maxLength * 0.75)
+    ? candidate.slice(0, lastSpace)
+    : candidate;
+
+  return `${shortened.replace(/[.,;:!?-]+$/, "")}…`;
 }
 
 function mdEscape(text) {
@@ -264,8 +286,7 @@ async function exportPost(pageId) {
   const tags = pickTags(page);
   const status = pickStatus(page);
 
-  const created = page.created_time || new Date().toISOString();
-  const pubDate = created.slice(0, 10);
+  const pubDate = pickDate(page);
 
   const blocks = await getAllBlockChildren(pageId);
 
@@ -284,7 +305,7 @@ async function exportPost(pageId) {
     .split("\n")
     .map((l) => l.trim())
     .find((l) => l && !l.startsWith("#") && !l.startsWith("-") && !l.startsWith(">"));
-  const description = (firstLine || title).replace(/\s+/g, " ").slice(0, 170);
+  const description = truncateDescription(firstLine || title);
 
   const slug = `${pubDate}-${slugify(title || "post")}`;
 
@@ -345,15 +366,15 @@ async function cmdList(args) {
   const rows = (data.results || []).map((p) => {
     const title = pickTitle(p);
     const status = pickStatus(p) || "";
-    const created = p.created_time?.slice(0, 10) || "";
+    const date = pickDate(p);
     const tags = pickTags(p);
-    return { id: p.id, created, status, title, tags };
+    return { id: p.id, date, status, title, tags };
   });
 
   // Output: compact, grep-friendly.
   for (const r of rows) {
     const tags = r.tags.length ? ` [${r.tags.join(", ")}]` : "";
-    process.stdout.write(`${r.created} • ${r.status.padEnd(9)} • ${r.id} • ${r.title}${tags}\n`);
+    process.stdout.write(`${r.date} • ${r.status.padEnd(9)} • ${r.id} • ${r.title}${tags}\n`);
   }
 }
 
@@ -414,12 +435,14 @@ async function main() {
   throw new Error(`Unknown command: ${cmd}\n\n${usage()}`);
 }
 
-// Avoid noisy crashes when piping output (e.g., `... | head`).
-process.stdout.on("error", (err) => {
-  if (err && err.code === "EPIPE") process.exit(0);
-});
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  // Avoid noisy crashes when piping output (e.g., `... | head`).
+  process.stdout.on("error", (err) => {
+    if (err && err.code === "EPIPE") process.exit(0);
+  });
 
-main().catch((err) => {
-  console.error(err?.stack || String(err));
-  process.exit(1);
-});
+  main().catch((err) => {
+    console.error(err?.stack || String(err));
+    process.exit(1);
+  });
+}

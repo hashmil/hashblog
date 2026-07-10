@@ -14,10 +14,11 @@ export interface Props {
 const { slug, title, description, pubDate, heroImage, tags = [], featured = false } = Astro.props;
 
 function formatDate(date: Date) {
-  return new Intl.DateTimeFormat('en-US', {
+  return new Intl.DateTimeFormat('en-GB', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
+    timeZone: 'UTC'
   }).format(date);
 }
 ---
@@ -81,4 +82,4 @@ function formatDate(date: Date) {
   .featured-card {
     @apply p-8 bg-gradient-to-br from-dark-lighter to-dark rounded-xl border border-gray-700 hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20;
   }
-</style> 
+</style>

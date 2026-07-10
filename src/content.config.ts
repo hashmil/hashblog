@@ -18,7 +18,8 @@ const blogCollection = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
-      description: z.string(),
+      // Keep search snippets and social metadata within the documented SEO limit.
+      description: z.string().trim().min(1).max(160),
       pubDate: z.date(),
       updatedDate: z.date().optional(),
       heroImage: image().optional(),

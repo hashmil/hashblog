@@ -1,11 +1,17 @@
 <template>
   <div
     v-if="isOpen"
+    id="site-menu"
+    ref="dialogRef"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="site-menu-title"
+    tabindex="-1"
     class="fixed inset-0 z-50 bg-dark/95 backdrop-blur-menu transition-opacity duration-500"
     :class="{ 'opacity-100': isMenuVisible, 'opacity-0': !isMenuVisible }">
-    <!-- Menu Content -->
-    <div class="flex flex-col h-full" @click.stop>
-      <!-- Header with Close Button -->
+    <h2 id="site-menu-title" class="sr-only">Site menu</h2>
+
+    <div class="flex flex-col h-full">
       <div
         class="flex justify-between items-center p-6 border-b border-gray-800 animate-slide-down">
         <div class="flex items-center space-x-2">
@@ -18,11 +24,13 @@
         </div>
 
         <button
-          @click="closeMenu"
-          @touchstart="closeMenu"
+          ref="closeButtonRef"
+          type="button"
           class="w-10 h-10 flex items-center justify-center text-white hover:text-primary transition-colors duration-200"
-          aria-label="Close menu">
+          aria-label="Close menu"
+          @click="closeMenu">
           <svg
+            aria-hidden="true"
             class="w-6 h-6"
             fill="none"
             stroke="currentColor"
@@ -36,23 +44,21 @@
         </button>
       </div>
 
-      <!-- Menu Content Area -->
-      <div class="flex-1 flex flex-col lg:flex-row">
-        <!-- Navigation Links -->
+      <div class="flex-1 flex flex-col lg:flex-row min-h-0">
         <div
           class="flex-1 flex flex-col justify-center items-center p-8 lg:p-16">
-          <nav class="text-center space-y-8">
+          <nav aria-label="Main navigation" class="text-center space-y-8">
             <a
               href="/"
-              @click="closeMenu"
-              class="block text-4xl lg:text-6xl font-primary text-white hover:text-accent transition-all duration-300 animate-slide-up-1">
+              class="block text-4xl lg:text-6xl font-primary text-white hover:text-accent transition-all duration-300 animate-slide-up-1"
+              @click="closeMenu">
               Blog Home
             </a>
 
             <a
               href="/about"
-              @click="closeMenu"
-              class="block text-4xl lg:text-6xl font-primary text-white hover:text-accent transition-all duration-300 animate-slide-up-2">
+              class="block text-4xl lg:text-6xl font-primary text-white hover:text-accent transition-all duration-300 animate-slide-up-2"
+              @click="closeMenu">
               About Hash
             </a>
 
@@ -60,10 +66,11 @@
               href="https://hashir.net"
               target="_blank"
               rel="noopener noreferrer"
-              @click="closeMenu"
-              class="text-4xl lg:text-6xl font-primary text-white hover:text-accent transition-all duration-300 flex items-center justify-center gap-4 animate-slide-up-3">
+              class="text-4xl lg:text-6xl font-primary text-white hover:text-accent transition-all duration-300 flex items-center justify-center gap-4 animate-slide-up-3"
+              @click="closeMenu">
               Portfolio
               <svg
+                aria-hidden="true"
                 class="w-8 h-8 lg:w-12 lg:h-12"
                 fill="none"
                 stroke="currentColor"
@@ -78,19 +85,24 @@
           </nav>
         </div>
 
-        <!-- Search Section -->
         <div
-          class="lg:w-96 p-8 lg:p-16 border-t lg:border-t-0 lg:border-l border-gray-800 animate-slide-left flex flex-col">
-          <div class="space-y-6 flex flex-col flex-1">
+          class="lg:w-96 p-8 lg:p-16 border-t lg:border-t-0 lg:border-l border-gray-800 animate-slide-left flex flex-col min-h-0">
+          <div class="space-y-6 flex flex-col flex-1 min-h-0">
             <div class="relative flex-shrink-0">
+              <label for="site-search" class="sr-only">Search posts</label>
               <input
+                id="site-search"
                 v-model="searchQuery"
-                type="text"
-                placeholder="Search..."
-                class="w-full bg-dark-lighter border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-text-muted focus:outline-none focus:border-accent transition-colors duration-200 font-text"
+                type="search"
+                autocomplete="off"
+                placeholder="Search posts…"
+                class="w-full bg-dark-lighter border border-gray-700 rounded-lg px-4 py-3 pr-10 text-white placeholder-text-muted focus:outline-none focus:border-accent transition-colors duration-200 font-text"
+                aria-controls="search-results"
+                :aria-busy="isLoadingPosts"
                 @input="performSearch" />
               <svg
-                class="absolute right-3 top-3 w-5 h-5 text-text-muted"
+                aria-hidden="true"
+                class="absolute right-3 top-3 w-5 h-5 text-text-muted pointer-events-none"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24">
@@ -102,67 +114,69 @@
               </svg>
             </div>
 
-            <!-- Search Results -->
-            <transition-group
-              name="search-results"
-              tag="div"
-              v-if="searchQuery && searchResults.length > 0"
-              class="space-y-4 flex-1 overflow-y-auto rounded-lg bg-dark-lighter search-results-container"
-              style="
-                max-height: calc(100vh - 300px);
-                padding: 16px 20px 16px 16px;
-              ">
-              <h3 key="title" class="text-lg font-semibold text-white">
-                Search Results
-              </h3>
-              <div key="results" class="space-y-3">
-                <a
-                  v-for="(result, index) in searchResults"
-                  :key="result.slug"
-                  :href="
-                    getPostUrl(
-                      result.slug,
-                      result.data?.pubDate || result.pubDate
-                    )
-                  "
-                  @click="closeMenu"
-                  class="block p-4 bg-dark rounded-lg hover:bg-gray-800 transition-all duration-200 animate-fade-in"
-                  :style="{ animationDelay: `${index * 100}ms` }">
-                  <h4 class="font-medium text-white mb-1">
-                    {{ result.data?.title || result.title }}
-                  </h4>
-                  <p class="text-sm text-text-muted line-clamp-2">
-                    {{ result.data?.description || result.description }}
-                  </p>
-                  <div class="flex items-center gap-2 mt-2">
-                    <span class="text-xs text-text-muted">{{
-                      formatDate(result.data?.pubDate || result.pubDate)
-                    }}</span>
-                    <div class="flex gap-1">
-                      <span
-                        v-for="tag in (
-                          result.data?.tags ||
-                          result.tags ||
-                          []
-                        ).slice(0, 2)"
-                        :key="tag"
-                        class="px-2 py-0.5 bg-dark text-xs rounded text-text-muted">
-                        {{ tag }}
-                      </span>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </transition-group>
-
-            <!-- No Results -->
-            <transition name="no-results" mode="out-in">
+            <div id="search-results" class="flex-1 min-h-0" aria-live="polite">
               <div
-                v-if="searchQuery && searchResults.length === 0"
-                class="text-text-muted text-center py-8 flex-shrink-0">
-                No posts found matching "{{ searchQuery }}"
+                v-if="searchQuery.trim() && isLoadingPosts"
+                role="status"
+                class="text-text-muted text-center py-8">
+                Loading posts…
               </div>
-            </transition>
+
+              <div
+                v-else-if="searchQuery.trim() && searchError"
+                role="alert"
+                class="text-text-muted text-center py-8">
+                <p>{{ searchError }}</p>
+                <button
+                  type="button"
+                  class="mt-4 font-accent text-white border-b border-accent hover:text-accent transition-colors"
+                  @click="loadPosts">
+                  Try again
+                </button>
+              </div>
+
+              <div
+                v-else-if="searchQuery.trim() && searchResults.length > 0"
+                class="space-y-4 h-full overflow-y-auto rounded-lg bg-dark-lighter search-results-container"
+                style="max-height: calc(100vh - 300px); padding: 16px 20px 16px 16px">
+                <h3 class="text-lg font-semibold text-white">Search results</h3>
+                <transition-group name="search-results" tag="div" class="space-y-3">
+                  <a
+                    v-for="(result, index) in searchResults"
+                    :key="result.url"
+                    :href="result.url"
+                    class="block p-4 bg-dark rounded-lg hover:bg-gray-800 transition-all duration-200 animate-fade-in"
+                    :style="{ animationDelay: `${index * 100}ms` }"
+                    @click="closeMenu">
+                    <h4 class="font-medium text-white mb-1">
+                      {{ result.title }}
+                    </h4>
+                    <p class="text-sm text-text-muted line-clamp-2">
+                      {{ result.description }}
+                    </p>
+                    <div class="flex items-center gap-2 mt-2">
+                      <span class="text-xs text-text-muted">
+                        {{ formatDate(result.pubDate) }}
+                      </span>
+                      <div class="flex gap-1">
+                        <span
+                          v-for="tag in result.tags.slice(0, 2)"
+                          :key="tag"
+                          class="px-2 py-0.5 bg-dark text-xs rounded text-text-muted">
+                          {{ tag }}
+                        </span>
+                      </div>
+                    </div>
+                  </a>
+                </transition-group>
+              </div>
+
+              <div
+                v-else-if="searchQuery.trim() && hasLoadedPosts"
+                class="text-text-muted text-center py-8">
+                No posts found matching “{{ searchQuery.trim() }}”
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -171,130 +185,242 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick } from "vue";
+import { nextTick, onMounted, onUnmounted, ref } from "vue";
+import { matchesSearch } from "../utils/search";
+
+interface SearchPost {
+  title: string;
+  description: string;
+  pubDate: string;
+  tags: string[];
+  url: string;
+  searchText: string;
+}
+
+interface BackgroundElementState {
+  element: HTMLElement;
+  wasInert: boolean;
+}
 
 const isOpen = ref(false);
 const isMenuVisible = ref(false);
+const dialogRef = ref<HTMLElement | null>(null);
+const closeButtonRef = ref<HTMLButtonElement | null>(null);
 const searchQuery = ref("");
-const searchResults = ref<any[]>([]);
-const allPosts = ref<any[]>([]);
+const searchResults = ref<SearchPost[]>([]);
+const allPosts = ref<SearchPost[]>([]);
+const isLoadingPosts = ref(false);
+const hasLoadedPosts = ref(false);
+const searchError = ref("");
 
-// Menu controls
-const openMenu = async () => {
-  isOpen.value = true;
-  document.body.style.overflow = "hidden";
+let previouslyFocusedElement: HTMLElement | null = null;
+let previousBodyOverflow = "";
+let backgroundElements: BackgroundElementState[] = [];
+let closeTimer: number | undefined;
+let showFrame: number | undefined;
 
-  // Load posts when menu opens (in case they weren't loaded on mount)
-  if (allPosts.value.length === 0) {
-    await loadPosts();
-  }
+const updateMenuButton = (expanded: boolean) => {
+  const menuButton = document.getElementById("menu-button");
+  if (!menuButton) return;
 
-  // Delay to trigger enter animation
-  await nextTick();
-  setTimeout(() => {
-    isMenuVisible.value = true;
-  }, 50);
+  menuButton.setAttribute("aria-expanded", expanded.toString());
 };
 
-const closeMenu = async () => {
+const makeBackgroundInert = () => {
+  const dialog = dialogRef.value;
+  if (!dialog) return;
+
+  backgroundElements = Array.from(document.body.children)
+    .filter(
+      (element): element is HTMLElement =>
+        element instanceof HTMLElement && !element.contains(dialog)
+    )
+    .map((element) => ({ element, wasInert: element.inert }));
+
+  backgroundElements.forEach(({ element }) => {
+    element.inert = true;
+  });
+};
+
+const restoreBackground = () => {
+  backgroundElements.forEach(({ element, wasInert }) => {
+    element.inert = wasInert;
+  });
+  backgroundElements = [];
+};
+
+const openMenu = async () => {
+  if (isOpen.value) return;
+
+  if (closeTimer !== undefined) {
+    window.clearTimeout(closeTimer);
+    closeTimer = undefined;
+  }
+
+  previouslyFocusedElement =
+    document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  previousBodyOverflow = document.body.style.overflow;
+  document.body.style.overflow = "hidden";
+  isOpen.value = true;
+
+  await nextTick();
+  makeBackgroundInert();
+  updateMenuButton(true);
+  closeButtonRef.value?.focus();
+
+  showFrame = window.requestAnimationFrame(() => {
+    if (isOpen.value) isMenuVisible.value = true;
+  });
+
+  void loadPosts();
+};
+
+const closeMenu = () => {
+  if (!isOpen.value || closeTimer !== undefined) return;
+
+  if (showFrame !== undefined) {
+    window.cancelAnimationFrame(showFrame);
+    showFrame = undefined;
+  }
+
   isMenuVisible.value = false;
-  document.body.style.overflow = "";
   searchQuery.value = "";
   searchResults.value = [];
 
-  // Wait for exit animation before hiding
-  setTimeout(() => {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  closeTimer = window.setTimeout(() => {
     isOpen.value = false;
-  }, 300);
+    restoreBackground();
+    document.body.style.overflow = previousBodyOverflow;
+    updateMenuButton(false);
+    previouslyFocusedElement?.focus();
+    previouslyFocusedElement = null;
+    closeTimer = undefined;
+  }, reduceMotion ? 0 : 500);
 };
 
-// Load posts for search
+const isSearchPost = (value: unknown): value is SearchPost => {
+  if (!value || typeof value !== "object") return false;
+  const post = value as Partial<SearchPost>;
+
+  return (
+    typeof post.title === "string" &&
+    typeof post.description === "string" &&
+    typeof post.pubDate === "string" &&
+    Array.isArray(post.tags) &&
+    post.tags.every((tag) => typeof tag === "string") &&
+    typeof post.url === "string" &&
+    typeof post.searchText === "string"
+  );
+};
+
 const loadPosts = async () => {
+  if (isLoadingPosts.value || hasLoadedPosts.value) return;
+
+  isLoadingPosts.value = true;
+  searchError.value = "";
+
   try {
     const response = await fetch("/api/search.json");
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    const data: unknown = await response.json();
+    const posts =
+      data && typeof data === "object" && "posts" in data
+        ? (data as { posts?: unknown }).posts
+        : undefined;
 
-    const data = await response.json();
+    if (!Array.isArray(posts)) throw new Error("Invalid search response");
 
-    // Handle both response formats: array or object with posts property
-    let posts = [];
-    if (Array.isArray(data)) {
-      posts = data;
-    } else if (data.posts && Array.isArray(data.posts)) {
-      posts = data.posts;
-    }
-
-    allPosts.value = posts;
+    allPosts.value = posts.filter(isSearchPost);
+    hasLoadedPosts.value = true;
+    performSearch();
   } catch (error) {
     console.error("Failed to load posts for search:", error);
+    searchResults.value = [];
+    searchError.value = "Search is unavailable. Check your connection and try again.";
+  } finally {
+    isLoadingPosts.value = false;
   }
 };
 
-// Search functionality
-const performSearch = async () => {
-  if (!searchQuery.value.trim()) {
+const performSearch = () => {
+  const query = searchQuery.value.trim().toLocaleLowerCase("en-GB");
+  if (!query || !hasLoadedPosts.value) {
     searchResults.value = [];
     return;
   }
 
-  const query = searchQuery.value.toLowerCase();
-  const filteredResults = allPosts.value.filter((post) => {
-    // More robust data access
-    const title = post?.data?.title || post?.title || "";
-    const description = post?.data?.description || post?.description || "";
-    const tags = post?.data?.tags || post?.tags || [];
-    const body = post?.body || "";
-
-    const titleMatch = title.toLowerCase().includes(query);
-    const descriptionMatch = description.toLowerCase().includes(query);
-    const tagsMatch =
-      Array.isArray(tags) &&
-      tags.some((tag: string) => tag.toLowerCase().includes(query));
-    const contentMatch = body && body.toLowerCase().includes(query);
-
-    return titleMatch || descriptionMatch || tagsMatch || contentMatch;
-  });
-
-  searchResults.value = filteredResults.slice(0, 10);
+  searchResults.value = allPosts.value
+    .filter((post) => matchesSearch(post, query))
+    .slice(0, 10);
 };
 
-// Format date helper
-const formatDate = (date: string | Date) => {
-  return new Intl.DateTimeFormat("en-US", {
+const formatDate = (date: string) =>
+  new Intl.DateTimeFormat("en-GB", {
     year: "numeric",
     month: "short",
     day: "numeric",
+    timeZone: "UTC",
   }).format(new Date(date));
+
+const getFocusableElements = (): HTMLElement[] => {
+  const dialog = dialogRef.value;
+  if (!dialog) return [];
+
+  return Array.from(
+    dialog.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )
+  ).filter((element) => !element.hasAttribute("hidden"));
 };
 
-// Generate post URL in format /yyyy/mm/slug
-const getPostUrl = (slug: string, pubDate: string | Date): string => {
-  const date = new Date(pubDate);
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  return `/${year}/${month}/${slug}`;
-};
+const handleKeydown = (event: KeyboardEvent) => {
+  if (!isOpen.value) return;
 
-// Event listeners
-const handleKeydown = (e: KeyboardEvent) => {
-  if (e.key === "Escape" && isOpen.value) {
+  if (event.key === "Escape") {
+    event.preventDefault();
     closeMenu();
+    return;
+  }
+
+  if (event.key !== "Tab") return;
+
+  const focusableElements = getFocusableElements();
+  if (focusableElements.length === 0) {
+    event.preventDefault();
+    dialogRef.value?.focus();
+    return;
+  }
+
+  const first = focusableElements[0];
+  const last = focusableElements[focusableElements.length - 1];
+  const activeElement = document.activeElement;
+
+  if (event.shiftKey && (activeElement === first || !dialogRef.value?.contains(activeElement))) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && (activeElement === last || !dialogRef.value?.contains(activeElement))) {
+    event.preventDefault();
+    first.focus();
   }
 };
 
 onMounted(() => {
   document.addEventListener("toggle-menu", openMenu);
   document.addEventListener("keydown", handleKeydown);
-  loadPosts();
 });
 
 onUnmounted(() => {
   document.removeEventListener("toggle-menu", openMenu);
   document.removeEventListener("keydown", handleKeydown);
-  document.body.style.overflow = "";
+
+  if (closeTimer !== undefined) window.clearTimeout(closeTimer);
+  if (showFrame !== undefined) window.cancelAnimationFrame(showFrame);
+
+  restoreBackground();
+  document.body.style.overflow = previousBodyOverflow;
+  updateMenuButton(false);
 });
 </script>
 
@@ -306,7 +432,6 @@ onUnmounted(() => {
   overflow: hidden;
 }
 
-/* Staggered slide-up animations for navigation links */
 @keyframes slideUpFade {
   from {
     opacity: 0;
@@ -375,7 +500,6 @@ onUnmounted(() => {
   animation: fadeIn 0.4s ease-out both;
 }
 
-/* Transition groups for search results */
 .search-results-enter-active {
   transition: all 0.3s ease-out;
 }
@@ -394,23 +518,10 @@ onUnmounted(() => {
   transform: translateY(-10px);
 }
 
-.no-results-enter-active,
-.no-results-leave-active {
-  transition: all 0.3s ease;
-}
-
-.no-results-enter-from,
-.no-results-leave-to {
-  opacity: 0;
-  transform: translateY(10px);
-}
-
-/* Hover effects */
 nav a:hover {
   transform: translateY(-2px);
 }
 
-/* Custom scrollbar for search results */
 .search-results-container::-webkit-scrollbar {
   width: 6px;
 }
@@ -430,5 +541,25 @@ nav a:hover {
 .search-results-container::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.25);
   background-clip: content-box;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-slide-up-1,
+  .animate-slide-up-2,
+  .animate-slide-up-3,
+  .animate-slide-down,
+  .animate-slide-left,
+  .animate-fade-in {
+    animation: none;
+  }
+
+  .search-results-enter-active,
+  .search-results-leave-active {
+    transition: none;
+  }
+
+  nav a:hover {
+    transform: none;
+  }
 }
 </style>

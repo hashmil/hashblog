@@ -1,9 +1,9 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
-import { getPostUrl } from "../utils/url";
+import { getAbsoluteUrl, getPostUrl } from "../utils/url";
 
 export const GET: APIRoute = async ({ site }) => {
-  const siteUrl = site || "https://localhost:4321";
+  const siteUrl = site ?? new URL("https://localhost:4321");
 
   // Get all blog posts
   const posts = await getCollection("blog", ({ data }) => {
@@ -20,7 +20,7 @@ export const GET: APIRoute = async ({ site }) => {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Homepage -->
   <url>
-    <loc>${siteUrl}/</loc>
+    <loc>${getAbsoluteUrl("/", siteUrl)}</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -28,7 +28,7 @@ export const GET: APIRoute = async ({ site }) => {
   
   <!-- About page -->
   <url>
-    <loc>${siteUrl}/about</loc>
+    <loc>${getAbsoluteUrl("/about", siteUrl)}</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -39,7 +39,7 @@ export const GET: APIRoute = async ({ site }) => {
     .map(
       (post) => `
   <url>
-    <loc>${siteUrl}${getPostUrl(post.id, post.data.pubDate)}</loc>
+    <loc>${getAbsoluteUrl(getPostUrl(post.id, post.data.pubDate), siteUrl)}</loc>
     <lastmod>${
       post.data.updatedDate
         ? post.data.updatedDate.toISOString()

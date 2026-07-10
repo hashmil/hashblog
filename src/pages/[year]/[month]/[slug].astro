@@ -5,6 +5,7 @@ import Menu from '../../../components/Menu.vue';
 import Navigation from '../../../components/Navigation.astro';
 import Share from '../../../components/Share.astro';
 import { getCollection, render } from 'astro:content';
+import { getPostUrl } from '../../../utils/url';
 
 export const prerender = true;
 
@@ -13,9 +14,7 @@ export async function getStaticPaths() {
     return !import.meta.env.PROD || !data.draft;
   });
   return posts.map((post) => {
-    const pubDate = new Date(post.data.pubDate);
-    const year = pubDate.getFullYear().toString();
-    const month = (pubDate.getMonth() + 1).toString().padStart(2, '0');
+    const [, year, month] = getPostUrl(post.id, post.data.pubDate).split('/');
 
     return {
       params: {
@@ -46,10 +45,11 @@ const prevPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentInde
 const nextPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
 
 function formatDate(date: Date) {
-  return new Intl.DateTimeFormat('en-US', {
+  return new Intl.DateTimeFormat('en-GB', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
+    timeZone: 'UTC'
   }).format(date);
 }
 
@@ -59,10 +59,7 @@ const wordCount = post.body?.split(/\s+/).filter(Boolean).length ?? 0;
 const readingTime = Math.ceil(wordCount / wordsPerMinute);
 
 // Generate canonical URL with new format
-const pubDate = new Date(post.data.pubDate);
-const year = pubDate.getFullYear();
-const month = (pubDate.getMonth() + 1).toString().padStart(2, '0');
-const canonicalURL = new URL(`/${year}/${month}/${post.id}`, Astro.site);
+const canonicalURL = new URL(getPostUrl(post.id, post.data.pubDate), Astro.site);
 
 // Handle heroImage for social meta and structured data
 let heroImageUrl: string | undefined;
@@ -85,6 +82,8 @@ if (post.data.heroImage) {
   title={post.data.title} 
   description={post.data.description} 
   image={heroImageUrl}
+  imageWidth={post.data.heroImage?.width}
+  imageHeight={post.data.heroImage?.height}
   author="Hash Milhan"
   pubDate={post.data.pubDate}
   tags={post.data.tags}
@@ -94,7 +93,6 @@ if (post.data.heroImage) {
   <Fragment slot="head">
     <!-- Article specific meta tags -->
     <meta property="article:author" content="Hash Milhan" />
-    <meta property="article:published_time" content={post.data.pubDate.toISOString()} />
     {post.data.updatedDate && (
       <meta property="article:modified_time" content={post.data.updatedDate.toISOString()} />
     )}
@@ -127,8 +125,8 @@ if (post.data.heroImage) {
 
   <Header />
   
-  <main class="container py-12" transition:name="main-content">
-    <article class="max-w-3xl mx-auto" transition:name={`post-preview-${post.id}`}>
+  <main class="container py-12">
+    <article class="max-w-3xl mx-auto">
       <!-- Post Header -->
       <header class="mb-12">
         <!-- Breadcrumb -->
@@ -141,16 +139,16 @@ if (post.data.heroImage) {
           </a>
         </nav>
 
-        <div class="post-meta mb-6" transition:name="post-meta">
+        <div class="post-meta mb-6">
           {formatDate(post.data.pubDate)} • {readingTime} min read
         </div>
         
-        <h1 class="text-3xl md:text-5xl font-primary text-white mb-8 leading-tight" transition:name={`post-title-${post.id}`}>
+        <h1 class="text-3xl md:text-5xl font-primary text-white mb-8 leading-tight">
           {post.data.title}
         </h1>
         
         {/* {post.data.heroImage && (
-          <div class="mb-12 rounded-lg overflow-hidden" transition:name={`post-hero-${post.id}`}>
+          <div class="mb-12 rounded-lg overflow-hidden">
             <Image 
               src={post.data.heroImage} 
               alt={post.data.title}
@@ -162,12 +160,12 @@ if (post.data.heroImage) {
       </header>
       
       <!-- Post Content -->
-      <div class="prose-minimal" transition:name={`post-content-${post.id}`}>
+      <div class="prose-minimal">
         <Content />
       </div>
 
       <!-- Share Component -->
-      <div class="mt-16" transition:name={`post-share-${post.id}`}>
+      <div class="mt-16">
         <Share 
           title={post.data.title}
           url={canonicalURL.toString()}
